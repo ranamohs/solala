@@ -83,6 +83,8 @@ static const String pleaseLogInToContinue = "pleaseLogInToContinue";
 
 static const String getStarted = "getStarted";
 static const String chooseYourFamily = "chooseYourFamily";
+static const String verification = "verification";
+
 
 
 

@@ -30,7 +30,7 @@ abstract class AppColors {
   static const Color iconColor = Color(0xFF4CA5A5);
   static const Color languageButtonSelected = Color(0xFFFDBA42);
   static const Color primaryColor = Color(0xFFBF994B);
-  static const Color secondaryColor = Color(0xFF1E4236);
+  static const Color secondaryColor = Color(0xFF01271C);
   static const Color darkGry = Color(0xFF414141);
   static const Color searchColor = Color(0xFFD9D9D9);
 

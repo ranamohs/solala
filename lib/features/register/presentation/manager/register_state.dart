@@ -1,4 +1,5 @@
 import 'package:solala/core/data/models/auth_failure_model.dart';
+import 'package:solala/features/register/data/models/family_model.dart';
 import 'package:solala/features/register/data/models/register_success_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -26,6 +27,26 @@ class RegisterFailureState extends RegisterState {
   final AuthFailureModel failedModel;
 
   const RegisterFailureState(this.failedModel);
+
+  @override
+  List<Object?> get props => [failedModel];
+}
+
+class GetFamiliesLoadingState extends RegisterState {}
+
+class GetFamiliesSuccessState extends RegisterState {
+  final List<FamilyModel> families;
+
+  const GetFamiliesSuccessState({required this.families});
+
+  @override
+  List<Object?> get props => [families];
+}
+
+class GetFamiliesFailureState extends RegisterState {
+  final AuthFailureModel failedModel;
+
+  const GetFamiliesFailureState(this.failedModel);
 
   @override
   List<Object?> get props => [failedModel];

@@ -19,9 +19,10 @@ class EndPoints {
   static const String defaultPage = '/general/default-pages/';
   static const String toggleWishlist = '/wishlist/toggle';
   static const String addReview = '/addReview';
-
+////////////////////////////////////////////////////////////////////////////
   static const String register = "/register";
   static const String login = "/login";
+  static const String families = "/families";
 }
 
 class ApiKey {
@@ -64,6 +65,7 @@ class ApiKey {
   static const String shopId = 'shop_id';
   static const String rating = 'rating';
   static const String comment = 'comment';
+  static const String familyId = 'family_id';
 }
 
 class Params {

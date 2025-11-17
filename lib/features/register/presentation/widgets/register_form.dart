@@ -5,6 +5,7 @@ import 'package:solala/core/routes/app_router.dart';
 import 'package:solala/core/widgets/spacing.dart';
 import 'package:solala/features/register/data/models/register_data_model.dart';
 import 'package:solala/features/register/presentation/manager/register_cubit.dart';
+import 'package:solala/features/register/presentation/manager/register_state.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,8 +28,9 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _familyController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+  TextEditingController();
+  int? _selectedFamilyId;
 
   @override
   Widget build(BuildContext context) {
@@ -77,15 +79,46 @@ class _RegisterFormState extends State<RegisterForm> {
             },
           ),
           const VerticalSpace(16),
-          PrimaryTextFormField(
-            hintText: AppStrings.chooseYourFamily.tr(),
-            textInputType: TextInputType.text,
-            controller: _familyController,
-            validation: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your family';
+          BlocBuilder<RegisterCubit, RegisterState>(
+            builder: (context, state) {
+              if (state is GetFamiliesSuccessState) {
+                return DropdownButtonFormField<int>(
+                  decoration: InputDecoration(
+                    hintText: AppStrings.chooseYourFamily.tr(),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  value: _selectedFamilyId,
+                  items: state.families.map((family) {
+                    return DropdownMenuItem<int>(
+                      value: family.id,
+                      child: Text(family.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedFamilyId = value;
+                    });
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Please select a family';
+                    }
+                    return null;
+                  },
+                );
+              } else if (state is GetFamiliesLoadingState) {
+                return const Center(child: CircularProgressIndicator());
+              } else {
+                return PrimaryTextFormField(
+                  hintText: AppStrings.chooseYourFamily.tr(),
+                  enabled: false,
+                );
               }
-              return null;
             },
           ),
           const VerticalSpace(16),
@@ -121,7 +154,6 @@ class _RegisterFormState extends State<RegisterForm> {
             },
           ),
           const VerticalSpace(32),
-
           PrimaryButton(
             text: AppStrings.createAccount.tr(),
             onPressed: () {
@@ -134,6 +166,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   phoneNumber: _phoneController.text,
                   password: _passwordController.text,
                   confirmPassword: _confirmPasswordController.text,
+                  familyId: _selectedFamilyId!,
                 );
 
                 context.read<RegisterCubit>().register(registerData);

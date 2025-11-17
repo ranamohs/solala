@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/home/presentation/views/home_page.dart';
 import '../../features/home/presentation/views/recent_shops_view.dart';
 import '../../features/login/presentation/views/login_view.dart';
+import '../../features/register/presentation/views/verfication_view.dart';
 import '../../features/search/presentation/manager/search_cubit.dart';
 import '../../features/settings/views/change_language_view.dart';
 import '../../features/account/presentation/views/update_profile_view.dart';
@@ -49,9 +50,10 @@ abstract class AppRouter {
 
   //////////////////
 
-  //FiXIT
+  //Solala
 
   static const introView = '/introView';
+  static const verificationView = '/verificationView';
 
 
   static final router = GoRouter(
@@ -100,6 +102,7 @@ abstract class AppRouter {
       GoRoute(path: privacyPolicyView, builder: (context, state) => const PrivacyPolicyView()),
       GoRoute(path: changeLanguageView, builder: (context, state) => const ChangeLanguageView()),
       GoRoute(path: updateProfileView, builder: (context, state) => const UpdateProfileView()),
+      GoRoute(path: verificationView, builder: (context, state) => const VerificationView()),
       GoRoute(
           path: rating,
           builder: (context, state) {

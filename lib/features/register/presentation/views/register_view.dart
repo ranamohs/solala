@@ -13,10 +13,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
+import '../../../../core/functions/fixed_snack_bar.dart';
 import '../widgets/register_form.dart';
 
-class RegisterView extends StatelessWidget {
+class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
+
+  @override
+  State<RegisterView> createState() => _RegisterViewState();
+}
+
+class _RegisterViewState extends State<RegisterView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<RegisterCubit>().getFamilies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +41,16 @@ class RegisterView extends StatelessWidget {
               content: Text('Registration Successful!'),
             ),
           );
-          customPush(context, AppRouter.homePage);
+          customPush(context, AppRouter.verificationView);
         } else if (state is RegisterFailureState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content:
-              Text(state.failedModel.message ?? 'Registration Failed!'),
-            ),
+          fixedSnackBar(
+            context,
+            message: state.failedModel.message,
+            icon: Icons.error,
+            iconColor: Colors.red,
+            iconBgColor: Colors.red.withOpacity(0.1),
+            boxColor: Colors.red.withOpacity(0.1),
+            durationInSeconds: 3,
           );
         }
       },
@@ -52,7 +67,7 @@ class RegisterView extends StatelessWidget {
               //   ),
               // ),
               child: Container(
-                // طبقة جرين شفافة فوق الخلفية
+
                 decoration: BoxDecoration(
                   color: AppColors.secondaryColor.withOpacity(0.88),
                 ),
@@ -67,7 +82,7 @@ class RegisterView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // العنوان زي الصورة
+
                           Text(
                             '${AppStrings.getStarted.tr()} 👋',
                             style: AppStyles.styleSemiBold16(context).copyWith(

@@ -97,6 +97,11 @@ static const String homeBackground = "assets/images/home_bg.png";
 /// splashBackground
 static const String splashBackground = "assets/images/splash_bg.png";
 
+/// verificationImage
+static const String verificationImage = "assets/images/verification_image.png";
+
+
+
 
 
 

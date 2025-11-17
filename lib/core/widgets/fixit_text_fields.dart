@@ -24,6 +24,7 @@ class PrimaryTextFormField extends StatefulWidget {
   final void Function()? onTap;
   final TextInputType? textInputType;
   final String? Function(String?)? validation;
+  final bool? enabled;
 
   const PrimaryTextFormField({
     super.key,
@@ -46,6 +47,7 @@ class PrimaryTextFormField extends StatefulWidget {
     this.svgPath,
     this.textInputType,
     this.validation,
+    this.enabled,
   });
 
   @override
@@ -78,6 +80,7 @@ class _PrimaryTextFormFieldState extends State<PrimaryTextFormField> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: TextFormField(
+              enabled: widget.enabled,
               readOnly: widget.readOnly ?? false,
               onTap: widget.onTap,
               autovalidateMode: AutovalidateMode.onUserInteraction,
