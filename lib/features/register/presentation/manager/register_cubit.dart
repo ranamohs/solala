@@ -33,4 +33,16 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(GetFamiliesSuccessState(families: families));
     });
   }
+
+  Future<void> verifyLoginCode(String code) async {
+    emit(VerifyLoginCodeLoadingState());
+
+    final Either<AuthFailureModel, RegisterSuccessModel> result =
+    await registerRepo.verifyLoginCode(code: code);
+
+    result.fold((failure) => emit(VerifyLoginCodeFailureState(failure)),
+            (register) {
+          emit(VerifyLoginCodeSuccessState(register: register));
+        });
+  }
 }

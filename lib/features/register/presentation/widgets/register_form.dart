@@ -1,7 +1,6 @@
 import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/app_colors.dart';
-import 'package:solala/core/functions/navigation.dart';
-import 'package:solala/core/routes/app_router.dart';
+import 'package:solala/core/constants/app_styles.dart';
 import 'package:solala/core/widgets/spacing.dart';
 import 'package:solala/features/register/data/models/register_data_model.dart';
 import 'package:solala/features/register/presentation/manager/register_cubit.dart';
@@ -22,7 +21,7 @@ class RegisterForm extends StatefulWidget {
 }
 
 class _RegisterFormState extends State<RegisterForm> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -30,180 +29,137 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
   TextEditingController();
+
   int? _selectedFamilyId;
+
+  /// ---------- Field Decoration (Design Only)
+  InputDecoration _fieldDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: AppStyles.styleRegular14(context).copyWith(color: AppColors.white),
+      filled: true,
+      fillColor: Colors.white.withOpacity(.1),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white.withOpacity(.4)),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Colors.white.withOpacity(.7)),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10.r),
+      ),
+      hintStyle: TextStyle(color: Colors.white.withOpacity(.5)),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          PrimaryTextFormField(
-            hintText: AppStrings.name.tr(),
+          /// -------- Name ---------
+          // TextFormField(
+          //   controller: _nameController,
+          //   style: const TextStyle(color: Colors.white),
+          //   decoration: _fieldDecoration(AppStrings.name.tr()),
+          //   validator: (v) => v!.isEmpty ? 'Please enter your name' : null,
+          // ),
+          SecondaryTextFormField(
             controller: _nameController,
-            textInputType: TextInputType.name,
-            validation: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your name';
-              }
-              return null;
-            },
+            labelText: AppStrings.name.tr(),
+            validate: (v) => v!.isEmpty ? 'Please enter your name' : null,
+
           ),
           const VerticalSpace(16),
-          PrimaryTextFormField(
-            maxLength: 11,
-            hintText: AppStrings.phoneNumber.tr(),
-            textInputType: TextInputType.phone,
+
+          /// -------- Phone ---------
+          SecondaryTextFormField(
             controller: _phoneController,
-            validation: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your phone number';
-              }
-              return null;
-            },
+            labelText: AppStrings.phoneNumber.tr(),
+            maxLength: 11,
+            validate: (v) => v!.isEmpty ? 'Please enter your phone number' : null,
           ),
           const VerticalSpace(16),
-          PrimaryTextFormField(
-            hintText: AppStrings.email.tr(),
-            textInputType: TextInputType.emailAddress,
+
+          /// -------- Email ---------
+          SecondaryTextFormField(
             controller: _emailController,
-            validation: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
+            labelText: AppStrings.email.tr(),
+            validate: (v) => v!.isEmpty ? 'Please enter your email' : null,
           ),
           const VerticalSpace(16),
+
+          /// -------- Family Dropdown ---------
           BlocBuilder<RegisterCubit, RegisterState>(
             builder: (context, state) {
               if (state is GetFamiliesSuccessState) {
                 return DropdownButtonFormField<int>(
-                  decoration: InputDecoration(
-                    hintText: AppStrings.chooseYourFamily.tr(),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.r),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
                   value: _selectedFamilyId,
-                  items: state.families.map((family) {
-                    return DropdownMenuItem<int>(
-                      value: family.id,
-                      child: Text(family.name),
+                  dropdownColor: AppColors.pureBlackColor.withOpacity(.7),
+                  icon:  Icon(Icons.arrow_drop_down, color: AppColors.pureWhiteColor),
+                  style: AppStyles.styleRegular14(context).copyWith(color: AppColors.white),
+                  decoration: _fieldDecoration(AppStrings.chooseYourFamily.tr()),
+                  items: state.families.map((f) {
+                    return DropdownMenuItem(
+                      value: f.id,
+                      child: Text(f.name, style: AppStyles.styleRegular14(context).copyWith(color: AppColors.white),)
                     );
                   }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedFamilyId = value;
-                    });
+                  onChanged: (v) {
+                    setState(() => _selectedFamilyId = v);
                   },
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select a family';
-                    }
-                    return null;
-                  },
-                );
-              } else if (state is GetFamiliesLoadingState) {
-                return const Center(child: CircularProgressIndicator());
-              } else {
-                return PrimaryTextFormField(
-                  hintText: AppStrings.chooseYourFamily.tr(),
-                  enabled: false,
+                  validator: (v) =>
+                  v == null ? "Please select a family" : null,
                 );
               }
+              return TextFormField(
+                enabled: false,
+                decoration: _fieldDecoration(AppStrings.chooseYourFamily.tr()),
+              );
             },
           ),
+
           const VerticalSpace(16),
-          PrimaryTextFormField(
-            hintText: AppStrings.password.tr(),
+
+          /// -------- Password ---------
+         SecondaryTextFormField(
+           isPasswordField: true,
+            suffixIcon:    Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor)   ,
             controller: _passwordController,
-            textInputType: TextInputType.visiblePassword,
-            isPasswordField: true,
-            validation: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your password';
-              }
-              if (value.length < 6) {
-                return 'Password must be at least 6 characters';
-              }
-              return null;
-            },
+            labelText: AppStrings.password.tr(),
+            validate: (v) => v!.isEmpty ? 'Please enter your password' : null,
           ),
           const VerticalSpace(16),
-          PrimaryTextFormField(
-            hintText: AppStrings.confirmPassword.tr(),
-            controller: _confirmPasswordController,
-            textInputType: TextInputType.visiblePassword,
+
+          /// -------- Confirm Password ---------
+          SecondaryTextFormField(
             isPasswordField: true,
-            validation: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please confirm your password';
-              }
-              if (value != _passwordController.text) {
-                return 'Passwords do not match';
-              }
-              return null;
-            },
+           suffixIcon: Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor),
+            controller: _confirmPasswordController,
+            labelText: AppStrings.confirmPassword.tr(),
+            validate: (v) => v!.isEmpty ? 'Please enter your confirm password' : null,
           ),
           const VerticalSpace(32),
-          PrimaryButton(
-            text: AppStrings.createAccount.tr(),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                FocusScope.of(context).unfocus();
 
-                final registerData = RegisterDataModel(
-                  name: _nameController.text,
-                  email: _emailController.text,
-                  phoneNumber: _phoneController.text,
-                  password: _passwordController.text,
-                  confirmPassword: _confirmPasswordController.text,
-                  familyId: _selectedFamilyId!,
-                );
 
-                context.read<RegisterCubit>().register(registerData);
-              }
-            },
-          ),
-          const VerticalSpace(50),
-
-          // Sign in link
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppStrings.alreadyHaveAnAccount.tr(),
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                  ),
-                ),
-                const HorizontalSpace(8),
-                GestureDetector(
-                  onTap: () {
-                    customPush(context, AppRouter.loginView);
-                  },
-                  child: Text(
-                    AppStrings.login.tr(),
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: AppColors.iconColor,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const VerticalSpace(24),
+          PrimaryButton( onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              final data = RegisterDataModel(
+                name: _nameController.text,
+                phoneNumber: _phoneController.text,
+                email: _emailController.text,
+                password: _passwordController.text,
+                confirmPassword: _confirmPasswordController.text,
+                familyId: _selectedFamilyId!,
+              );
+              context.read<RegisterCubit>().register(data);
+            }
+          },
+            text: AppStrings.signUp.tr(),
+          )
         ],
       ),
     );

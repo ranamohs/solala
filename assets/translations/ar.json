@@ -20,7 +20,7 @@
   "next": "التالي",
   "didNotGetTheCode": "لم يصلك الرمز؟",
   "resend": "إعادة الإرسال ",
-  "verificationHasDone": "تم التحقق",
+  "verificationHasDone": "تم التحقق بنجاح",
   "thankYou": "شكرا لك",
 
   "home": "الرئيسية",
@@ -139,5 +139,9 @@
 
   "getStarted": "هيا نبدأ الان",
   "chooseYourFamily": "اختر عائلتك",
-  "verification": "إرسال الكود"
+  "verification": "إرسال الكود",
+  "accountVerifiedSuccessfully": "تم تفعيل الحساب بنجاح !",
+  "pleaseEnterVerificationCode": "برجاء ادخال الكود الصحيح",
+  "or": "أو"
+
 }

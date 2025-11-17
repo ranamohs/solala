@@ -7,4 +7,5 @@ import 'package:dartz/dartz.dart';
 abstract class RegisterRepo {
   Future<Either<AuthFailureModel, RegisterSuccessModel>> register({required RegisterDataModel registerData});
   Future<Either<AuthFailureModel, List<FamilyModel>>> getFamilies();
+  Future<Either<AuthFailureModel, RegisterSuccessModel>> verifyLoginCode({required String code});
 }

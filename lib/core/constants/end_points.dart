@@ -23,6 +23,7 @@ class EndPoints {
   static const String register = "/register";
   static const String login = "/login";
   static const String families = "/families";
+  static const String verifyLoginCode = "/verify-login-code";
 }
 
 class ApiKey {

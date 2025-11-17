@@ -1,4 +1,5 @@
 import 'package:solala/features/register/presentation/views/register_view.dart';
+import 'package:solala/features/register/presentation/widgets/verification_success_widget.dart';
 import 'package:solala/features/splash/presentation/views/welcome_view.dart';
 import 'package:solala/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,6 +55,7 @@ abstract class AppRouter {
 
   static const introView = '/introView';
   static const verificationView = '/verificationView';
+  static const verificationSuccessView = '/verificationSuccessView';
 
 
   static final router = GoRouter(
@@ -64,6 +66,9 @@ abstract class AppRouter {
       GoRoute(path: introViewWithButton,builder: (context, state) => const IntroWithButton()),
       GoRoute(path: loginView, builder: (context, state) => LoginView()),
       GoRoute(path: allCategoriesView,builder: (context, state) => const AllCategoriesView()),
+
+      GoRoute(path: verificationSuccessView, builder: (context, state) => const VerificationSuccessWidget()),
+
       GoRoute(
           path: allRecentShopsView,
           builder: (context, state) => BlocProvider(
@@ -102,7 +107,10 @@ abstract class AppRouter {
       GoRoute(path: privacyPolicyView, builder: (context, state) => const PrivacyPolicyView()),
       GoRoute(path: changeLanguageView, builder: (context, state) => const ChangeLanguageView()),
       GoRoute(path: updateProfileView, builder: (context, state) => const UpdateProfileView()),
-      GoRoute(path: verificationView, builder: (context, state) => const VerificationView()),
+      GoRoute(path: verificationView, builder: (context, state) => BlocProvider(
+        create: (context) => getIt<RegisterCubit>(),
+        child: const VerificationView(),
+      )),
       GoRoute(
           path: rating,
           builder: (context, state) {

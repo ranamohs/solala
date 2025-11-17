@@ -84,6 +84,16 @@ static const String pleaseLogInToContinue = "pleaseLogInToContinue";
 static const String getStarted = "getStarted";
 static const String chooseYourFamily = "chooseYourFamily";
 static const String verification = "verification";
+static const String accountVerifiedSuccessfully = "accountVerifiedSuccessfully";
+static const String pleaseEnterVerificationCode = "pleaseEnterVerificationCode";
+static const String verificationCode = "verificationCode";
+static const String thankYou = "thankYou";
+static const String verificationHasDone = "verificationHasDone";
+static const String or = "or";
+
+
+
+
 
 
 

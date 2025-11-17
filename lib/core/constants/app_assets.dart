@@ -100,6 +100,14 @@ static const String splashBackground = "assets/images/splash_bg.png";
 /// verificationImage
 static const String verificationImage = "assets/images/verification_image.png";
 
+/// verificationImage
+static const String otpCheckIcon = "assets/images/otp_check.png";
+
+/// verificationImage
+static const String authBackground = "assets/images/auth_bg.png";
+
+
+
 
 
 

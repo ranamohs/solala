@@ -189,7 +189,12 @@
 
 "getStarted": "Get Started Now",
   "chooseYourFamily": "Choose Your Family",
-  "verification": "Verification"
+  "verification": "Verification",
+  "accountVerifiedSuccessfully": "Account Verified Successfully",
+  "pleaseEnterVerificationCode": "Please Enter Verification Code",
+  "verificationCode": "Verification Code",
+  "or": "OR"
+
 
 
 

@@ -80,6 +80,65 @@ class RegisterRepoImpl implements RegisterRepo {
   }
 
   @override
+  Future<Either<AuthFailureModel, RegisterSuccessModel>> verifyLoginCode(
+      {required String code}) async {
+    final isConnected = await networkCubit.networkInfo.isConnected;
+
+    if (!isConnected) {
+      return Left(AuthFailureModel(
+          message: AppStrings.noInternetConnection.tr(),
+          errors: {
+            ApiKey.errors: [
+              AppStrings.noInternetConnection.tr(),
+            ]
+          }));
+    }
+
+    try {
+      final response = await dioConsumer.post(
+        EndPoints.verifyLoginCode,
+        data: {
+          'login_code': code,
+        },
+        isFormData: true,
+      );
+
+      if (response != null && response is Map<String, dynamic>) {
+        if (response.containsKey(ApiKey.token)) {
+          final registerSuccessModel = RegisterSuccessModel.fromJson(response);
+          String token = response[ApiKey.token];
+          await secureStorageHelper.saveToken(token: token);
+          return Right(registerSuccessModel);
+        } else {
+          return Left(AuthFailureModel.fromJson(response));
+        }
+      } else {
+        return Left(
+          AuthFailureModel(
+            message: AppStrings.serverConnectionFailed.tr(),
+            errors: {
+              ApiKey.errors: [
+                AppStrings.noInternetConnection.tr(),
+              ]
+            },
+          ),
+        );
+      }
+    } catch (e) {
+      return Left(
+        AuthFailureModel(
+          message: AppStrings.unexpectedError.tr(),
+          errors: {
+            ApiKey.errors: [
+              AppStrings.noInternetConnection.tr(),
+            ]
+          },
+        ),
+      );
+    }
+  }
+
+  @override
   Future<Either<AuthFailureModel, List<FamilyModel>>> getFamilies() async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 

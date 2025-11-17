@@ -3,7 +3,9 @@ import 'package:solala/core/constants/app_styles.dart';
 import 'package:solala/core/widgets/spacing.dart';
 import 'package:flutter/material.dart';
 
-void floatingSnackBar(BuildContext context, String message,
+void floatingSnackBar(
+    BuildContext context,
+    String message,
     {IconData? icon,
     double? iconSize,
     Color? boxColor,

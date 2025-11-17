@@ -32,6 +32,26 @@ class RegisterFailureState extends RegisterState {
   List<Object?> get props => [failedModel];
 }
 
+class VerifyLoginCodeLoadingState extends RegisterState {}
+
+class VerifyLoginCodeSuccessState extends RegisterState {
+  final RegisterSuccessModel register;
+
+  const VerifyLoginCodeSuccessState({required this.register});
+
+  @override
+  List<Object?> get props => [register];
+}
+
+class VerifyLoginCodeFailureState extends RegisterState {
+  final AuthFailureModel failedModel;
+
+  const VerifyLoginCodeFailureState(this.failedModel);
+
+  @override
+  List<Object?> get props => [failedModel];
+}
+
 class GetFamiliesLoadingState extends RegisterState {}
 
 class GetFamiliesSuccessState extends RegisterState {
