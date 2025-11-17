@@ -1,7 +1,7 @@
 class EndPoints {
-  static const String baserUrl = "https://fiixit.net/api";
+  static const String baserUrl = "http://alsulala.com/api";
 
-  static const String IMAGE_BASE_URL = 'https://fiixit.net';
+  static const String IMAGE_BASE_URL = 'http://alsulala.com';
   static const String banners = "/banners";
   static const String categories = "/categories";
   static const String recentShops = "/shops/recent";
