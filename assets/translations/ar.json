@@ -1,0 +1,142 @@
+{
+  "welcome": "مرحبا بك",
+  "selectYourLanguage": "اختر لغتك",
+  "letsGo": "هيا بنا",
+
+  "loginTofixtit_app": "تسجيل الدخول إلى الريادة",
+  "phoneNumber": "رقم الجوال",
+  "password": "كلمة المرور",
+  "login": "تسجيل الدخول",
+   "doNotHaveAnAccount": "ليس لديك حساب؟",
+
+  "signUpToJoinfixtit_app": "سجّل للانضمام إلى الريادة",
+  "signUp": "إنشاء حساب",
+  "name": "الاسم",
+  "email": "البريد الإلكتروني",
+  "skip": "تخطي",
+  "confirm": "تأكيد",
+  "alreadyHaveAnAccount": "لديك حساب بالفعل؟",
+  "pleaseEnterTheOtpSentTo": "يرجى إدخال رمز التحقق المرسل إلى",
+  "next": "التالي",
+  "didNotGetTheCode": "لم يصلك الرمز؟",
+  "resend": "إعادة الإرسال ",
+  "verificationHasDone": "تم التحقق",
+  "thankYou": "شكرا لك",
+
+  "home": "الرئيسية",
+  "categories": "أبرز المجموعات",
+  "recentShops": "أحدث المتاجر",
+  "notifications": "الإشعارات",
+  "myAccount": "حسابي",
+  "retry": "إعادة المحاولة",
+  "favouriteCategories": "الأقسام المميزة",
+  "viewAll": "عرض الكل",
+  "viewLess": "عرض اقل",
+  "seemsYouHaveNotAddedAnythingToYourFavouriteYet": "يبدو أنك لم تقم بإضافة أي شيء إلى المفضلة حتى الآن!",
+  "allServices": "كل الخدمات",
+  "serviceDetail": "تفاصيل الخدمة",
+  "contact": "اتصل",
+  "description": "الوصف",
+
+  "requestNow": "اطلب الآن",
+  "cancelTheService": "إلغاء الخدمة",
+  "orderTheService": "اطلب الخدمة",
+  "selectedService": "الخدمة المختارة",
+
+  "profile": "الملف الشخصي",
+  "accountInfo": "معلومات الحساب",
+  "changePassword": "تغيير كلمة المرور",
+  "deleteAccount": "حذف الحساب",
+  "deleteAccountTitle": "هل أنت متأكد أنك تريد حذف حسابك؟",
+  "deleteAccountMessage": "لا يمكن استعادة حسابك بعد الآن.",
+  "cancel": "إلغاء",
+  "confirmDeleteAccount": "نعم، احذف الحساب",
+  "updateProfile": "تحديث الملف الشخصي",
+  "profileUpdatedSuccessfully": "تم تحديث الملف الشخصي بنجاح",
+  "newPassword": "كلمة المرور الجديدة",
+  "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+  "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح",
+
+  "settings": "الإعدادات",
+  "contactUs": "اتصل بنا",
+  "termsAndConditions": "الشروط والأحكام",
+  "privacyPolicy": "سياسة الخصوصية",
+  "yourMessage": "رسالتك",
+  "send": "إرسال",
+  "aboutUs": "من نحن",
+  "callUs": "اتصل بنا",
+  "rate": "تقييم",
+  "changeLanguage": "تغيير اللغة",
+  "logout": "تسجيل الخروج",
+  "areYouSureLogout": "هل تريد تسجيل الخروج؟",
+  "logoutMessage": "هل تريد بالتأكيد تسجيل الخروج؟",
+
+  "back": "رجوع",
+  "logoutFailed": "!فشل تسجيل الخروج",
+
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+  "serverConnectionFailed": "تعذر الاتصال بالخادم",
+  "timeoutError": "انتهت مهلة الاتصال بالخادم. الرجاء المحاولة لاحقاً.",
+  "unexpectedError": "حدث خطأ غير متوقع. الرجاء المحاولة لاحقاً.",
+  "loginRequired": "يرجي تسجيل الدخول للمتابعة",
+
+  "details": "التفاصيل",
+  "selectLocation": "العنوان",
+
+  "writeHere": "اكتب هنا",
+  "save": "حفظ",
+
+  "helpAndSupport": "الدعم والمساعدة",
+  "subject": "الموضوع",
+  "editProfile": "تعديل الملف الشخصي",
+
+
+
+
+
+
+  "subtitle": "وسباكين بالقرب منك بسهولة. يوصلك تطبيقنا بالمتخصصين المهرة المستعدين للمساعدة في الإصلاحات والتركيبات وحالات الطوارئ - في أي وقت وفي أي مكان",
+  "introTitle": "اعثر على كهربائيين موثوقين",
+  "welcomeBackSubtitle": "مرحباً، يرجى تسجيل الدخول للمتابعة",
+  "welcomeBack": "مرحبا بك ",
+  "createAccount": "انشاء حساب",
+  "fillFormToProceed": "مرحباً، يرجى ملء النموذج للانتقال إلى التطبيق",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "introWithButton": "يربطك Fixit بالمتخصصين المهرة والموثوقين لجميع احتياجات صيانة منزلك",
+  "rateService": "تقييم الخدمة",
+  "requestSentSuccessfully": "تم ارسال طلبك بنجاح",
+  "success": "تم بنجاج",
+  "myFavourite": "المفضلة",
+  "accountInformation": "المعلومات الشخصيه",
+  "edit": "تعديل",
+  "allShops": "جميع المحلات",
+  "searchForShops": "جاري البحث ....",
+  "noRecentShopsFound": "لا يوجد محلات",
+  "noShopsFoundMatchingYourSearch": "لم يتم العثور على أي متاجر تطابق بحثك.",
+  "searchForSomthing": "البحث عن اي شئ",
+  "general": "عام",
+  "account": "الحساب",
+  "noFavoritesYet": "لا يوجد مفضلة لك حتي الان",
+
+  "requestService": "اطلب الخدمة",
+
+
+  "enjoyYourExperience": "استمتع بتجربتك",
+  "pleaseLeaveUsARate": "من فضلك اترك لنا تقييمًا",
+  "leaveAFeedback": "اترك تعليقًا",
+  "ratingAddedSuccessfully": "تمت إضافة التقييم بنجاح",
+  "submit": "إرسال",
+  "leaveARating": "ترك تقييم",
+  "ourServices": "خدماتنا",
+  "loginIsRequired": "تسجيل الدخول مطلوب",
+  "pleaseLogInToContinue": "يرجى تسجيل الدخول للمتابعة",
+
+
+
+
+
+
+
+  "getStarted": "هيا نبدأ الان",
+  "chooseYourFamily": "اختر عائلتك"
+}
