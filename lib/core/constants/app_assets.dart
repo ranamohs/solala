@@ -106,6 +106,14 @@ static const String otpCheckIcon = "assets/images/otp_check.png";
 /// verificationImage
 static const String authBackground = "assets/images/auth_bg.png";
 
+/// homeIcon
+static const String eventsIcon = "assets/images/event_icon.png";
+
+static const String treeImage = "assets/images/tree_image.png";
+
+
+
+
 
 
 

@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/constants/app_strings.dart';
-import '../../../../core/widgets/fixit_app_bars.dart';
+import '../../../../core/widgets/fixed_app_bars.dart';
 import '../../../../core/widgets/spacing.dart';
 import '../widgets/update_profile_form.dart';
 

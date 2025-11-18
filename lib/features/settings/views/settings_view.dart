@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:solala/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +10,14 @@ import '../../../core/constants/app_styles.dart';
 import '../../../core/functions/navigation.dart';
 import '../../../core/routes/app_router.dart';
 import '../../../core/services/service_locator.dart';
+import '../../../core/state_management/user_cubit/user_cubit.dart';
+import '../../../core/state_management/user_cubit/user_state.dart';
 import '../../account/data/repos/delete_account_repo/delete_account_repo_impl.dart';
+import '../../account/data/repos/logout_repo/logout_repo_impl.dart';
 import '../../account/presentation/manager/delete_account_cubit/delete_account_cubit.dart';
+import '../../account/presentation/manager/logout_cubit/logout_cubit.dart';
 import '../../account/presentation/widgets/delete_account_dialog.dart';
+import '../../account/presentation/widgets/logout_dialog.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -67,6 +73,35 @@ class SettingsView extends StatelessWidget {
               customPush(context, AppRouter.termsAndConditionsView);
             },
           ),
+          BlocBuilder<UserCubit, UserState>(
+            builder: (context, state) {
+              return _buildSettingItem(
+                context: context,
+                icon: Icons.logout,
+                title: state.isGuest
+                    ? AppStrings.login.tr()
+                    : AppStrings.logout.tr(),
+                isLogout: true,
+                onTap: () {
+                  if (state.isGuest) {
+                    GoRouter.of(context).go(AppRouter.loginView);
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return BlocProvider(
+                          create: (_) => LogoutCubit(
+                            logoutRepo: getIt<LogoutRepoImpl>(),
+                          ),
+                          child: LogoutDialog(),
+                        );
+                      },
+                    );
+                  }
+                },
+              );
+            },
+          ),
           _buildSettingItem(
             context: context,
             icon: Icons.delete_outline,
@@ -107,6 +142,7 @@ class SettingsView extends StatelessWidget {
     required String title,
     Color titleColor = Colors.black,
     required VoidCallback onTap,
+    bool isLogout = false,
 
   }) {
     return Card(

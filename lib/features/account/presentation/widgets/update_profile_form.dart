@@ -13,9 +13,9 @@ import '../../../../core/functions/is_arabic.dart';
 import '../../../../core/services/service_locator.dart';
 import '../../../../core/state_management/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
 
-import '../../../../core/widgets/fixit_buttons.dart';
-import '../../../../core/widgets/fixit_indicators.dart';
-import '../../../../core/widgets/fixit_text_fields.dart';
+import '../../../../core/widgets/app_buttons.dart';
+import '../../../../core/widgets/fixed_indicators.dart';
+import '../../../../core/widgets/fixed_text_fields.dart';
 import '../../../../core/widgets/spacing.dart';
 import '../manager/update_profile_cubit/update_profile_cubit.dart';
 import '../manager/update_profile_cubit/update_profile_state.dart';

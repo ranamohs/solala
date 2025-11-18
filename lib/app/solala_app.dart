@@ -4,13 +4,11 @@ import 'package:solala/core/services/service_locator.dart' show getIt;
 import 'package:solala/core/state_management/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart' show BottomNavigationBarCubit;
 import 'package:solala/core/state_management/network_connection_cubit/network_connection_cubit.dart' show NetworkConnectionCubit;
 import 'package:solala/core/state_management/user_cubit/user_cubit.dart' show UserCubit;
-import 'package:solala/features/home/presentation/manager/categories_cubit/categories_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, MultiBlocProvider;
-import 'package:flutter_screenutil/flutter_screenutil.dart'; // أضف هذا الاستيراد
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../features/home/presentation/manager/banners_cubit/banners_cubit.dart';
-import '../features/home/presentation/manager/recent_shops_cubit/recent_shops_cubit.dart';
 
 class SolalaApp extends StatelessWidget {
   const SolalaApp({super.key});
@@ -37,12 +35,7 @@ class SolalaApp extends StatelessWidget {
             BlocProvider<BannersCubit>(
               create: (_) => getIt<BannersCubit>()..getBanners(),
             ),
-            BlocProvider<CategoriesCubit>(
-              create: (_) => getIt<CategoriesCubit>()..getCategories(),
-            ),
-            BlocProvider<RcenetShopsCubit>(
-              create: (_) => getIt<RcenetShopsCubit>()..getRcenetShops(),
-            ),
+
 
 
           ],

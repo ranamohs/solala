@@ -98,36 +98,7 @@ class HomeDrawer extends StatelessWidget {
                         },
                       ),
                       // Logout Button
-                      BlocBuilder<UserCubit, UserState>(
-                        builder: (context, state) {
-                          return _buildDrawerItem(
-                            icon: Icons.logout,
-                            title: state.isGuest
-                                ? AppStrings.login.tr()
-                                : AppStrings.logout.tr(),
-                            isLogout: true,
-                            onTap: () {
-                              if (state.isGuest) {
-                                Navigator.of(context).pop();
-                                GoRouter.of(context).go(AppRouter.loginView);
-                              } else {
-                                Navigator.of(context).pop();
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return BlocProvider(
-                                      create: (_) => LogoutCubit(
-                                        logoutRepo: getIt<LogoutRepoImpl>(),
-                                      ),
-                                      child: LogoutDialog(),
-                                    );
-                                  },
-                                );
-                              }
-                            },
-                          );
-                        },
-                      ),
+
                     ],
                   ),
                 ),

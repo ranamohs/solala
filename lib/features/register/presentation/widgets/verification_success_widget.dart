@@ -7,7 +7,7 @@ import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/routes/app_router.dart';
-import '../../../../core/widgets/fixit_buttons.dart';
+import '../../../../core/widgets/app_buttons.dart';
 
 class VerificationSuccessWidget extends StatelessWidget {
   const VerificationSuccessWidget({super.key});

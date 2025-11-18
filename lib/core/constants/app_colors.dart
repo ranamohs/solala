@@ -6,7 +6,6 @@ abstract class AppColors {
   static Color pureBlackColor = const Color(0xff000000);
   static Color offBlackColor = const Color(0xff302B29);
   static Color notPrimaryColor = const Color(0xff2B4C59);
-  static Color greenColor = const Color(0xff15BC83);
   static Color lightGreyColor = const Color(0xff757575);
   static Color offGreyColor = const Color(0xff404040);
   static Color lightBlackColor = const Color(0xff5A5A5A);
@@ -31,6 +30,7 @@ abstract class AppColors {
   static const Color languageButtonSelected = Color(0xFFFDBA42);
   static const Color primaryColor = Color(0xFFBF994B);
   static const Color secondaryColor = Color(0xFF01271C);
+  static const Color greenColor = Color(0xFF06793A);
   static const Color darkGry = Color(0xFF414141);
   static const Color searchColor = Color(0xFFD9D9D9);
 

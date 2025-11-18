@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../account/presentation/views/update_profile_view.dart';
 import '../../../app_info/presentation/views/contact_us_view.dart';
+import '../../../family_tree/presentation/views/family_tree_view.dart';
 import '../../../settings/views/settings_view.dart';
 
 class AppLayout extends StatefulWidget {
@@ -21,8 +22,9 @@ class _AppLayoutState extends State<AppLayout> {
 
   final List<Widget> _screens = [
     const HomeView(),
-    const SettingsView(),
     const ContactUsView(),
+    const FamilyTreeView(),
+    const SettingsView(),
     const UpdateProfileView(),
   ];
 
@@ -64,19 +66,25 @@ class _AppLayoutState extends State<AppLayout> {
             isSelected: _currentIndex == 0,
           ),
           _buildNavItem(
-            iconPath: AppAssets.settingsIcon,
-            label: AppStrings.settings.tr(),
+            iconPath: AppAssets.eventsIcon ,
+            label: AppStrings.events.tr(),
             isSelected: _currentIndex == 1,
           ),
           _buildNavItem(
-            iconPath: AppAssets.supportIcon ,
-            label: AppStrings.helpAndSupport.tr(),
+            iconPath: AppAssets.treeImage ,
+            label: AppStrings.familyTree.tr(),
             isSelected: _currentIndex == 2,
           ),
           _buildNavItem(
+            iconPath: AppAssets.settingsIcon,
+            label: AppStrings.settings.tr(),
+            isSelected: _currentIndex == 3,
+          ),
+
+          _buildNavItem(
             iconPath: AppAssets.accountIcon,
             label: AppStrings.myAccount.tr(),
-            isSelected: _currentIndex == 3,
+            isSelected: _currentIndex == 4,
           ),
         ],
       ),
@@ -92,10 +100,8 @@ class _AppLayoutState extends State<AppLayout> {
       icon: Image.asset(
         iconPath,
         height: 24,
-        // colorFilter: ColorFilter.mode(
-        //   isSelected ? AppColors.primaryColor : AppColors.lightGreyColor,
-        //   BlendMode.srcIn,
-        // ),
+        color: isSelected ? AppColors.primaryColor : AppColors.greenColor,
+
       ),
       label: label,
     );

@@ -90,6 +90,20 @@ static const String verificationCode = "verificationCode";
 static const String thankYou = "thankYou";
 static const String verificationHasDone = "verificationHasDone";
 static const String or = "or";
+static const String welcomeToTheFamilyTree = "welcomeToTheFamilyTree";
+static const String events = "events";
+static const String familyTree = "familyTree";
+static const String pleaseEnterTheOtpSentTo = "pleaseEnterTheOtpSentTo";
+static const String yourNumber = "yourNumber";
+static const String didNotGetTheCode = "didNotGetTheCode";
+static const String resend = "resend";
+
+
+
+
+
+
+
 
 
 

@@ -9,7 +9,7 @@ import '../constants/app_strings.dart';
 import '../constants/app_styles.dart';
 import '../functions/navigation.dart';
 import '../routes/app_router.dart';
-import 'fixit_buttons.dart';
+import 'app_buttons.dart';
 
 class GuestWidget extends StatelessWidget {
   const GuestWidget({

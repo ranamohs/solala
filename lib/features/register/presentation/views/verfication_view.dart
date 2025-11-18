@@ -12,8 +12,8 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/functions/fixed_snack_bar.dart';
 import '../../../../core/routes/app_router.dart';
-import '../../../../core/widgets/fixit_buttons.dart';
-import '../../../../core/widgets/fixit_text_fields.dart';
+import '../../../../core/widgets/app_buttons.dart';
+import '../../../../core/widgets/fixed_text_fields.dart';
 import '../manager/register_cubit.dart';
 import '../manager/register_state.dart';
 
@@ -96,14 +96,11 @@ class _VerificationViewState extends State<VerificationView> {
                               bottomRight: Radius.circular(12.r),
                             ),
                           ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AppStrings.verification,
-                              style:
-                              AppStyles.styleSemiBold18(context).copyWith(
-                                color: AppColors.white,
-                              ),
+                          child: Text(
+                            AppStrings.verification.tr(),
+                            style:
+                            AppStyles.styleSemiBold18(context).copyWith(
+                              color: AppColors.white,
                             ),
                           ),
                         ),
@@ -145,7 +142,7 @@ class _VerificationViewState extends State<VerificationView> {
                           child: Column(
                             children: [
                               Text(
-                                'Please enter the OTP sent to',
+                                AppStrings.pleaseEnterTheOtpSentTo.tr(),
                                 textAlign: TextAlign.center,
                                 style:
                                 AppStyles.styleMedium14(context).copyWith(
@@ -154,7 +151,7 @@ class _VerificationViewState extends State<VerificationView> {
                               ),
                               SizedBox(height: 4.h),
                               Text(
-                                'Your Number',
+                              AppStrings.yourNumber.tr(),
                                 textAlign: TextAlign.center,
                                 style:
                                 AppStyles.styleMedium14(context).copyWith(
@@ -186,9 +183,9 @@ class _VerificationViewState extends State<VerificationView> {
                                 color: AppColors.pureBlackColor,
                               ),
                               children: [
-                                const TextSpan(text: "Didn't get the code? "),
+                                 TextSpan(text: AppStrings.didNotGetTheCode.tr() + "  " ),
                                 TextSpan(
-                                  text: 'Resend',
+                                  text: AppStrings.resend.tr(),
                                   style: AppStyles.styleMedium14(context)
                                       .copyWith(
                                     color: AppColors.primaryColor,

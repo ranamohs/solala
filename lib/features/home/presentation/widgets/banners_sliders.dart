@@ -12,7 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/end_points.dart';
 import '../../../../core/functions/open_url.dart';
-import '../../../../core/widgets/fixit_buttons.dart';
+import '../../../../core/widgets/app_buttons.dart';
 import '../../../../core/widgets/image_loading_effect.dart';
 import '../../data/models/banners_models/banners_model.dart';
 

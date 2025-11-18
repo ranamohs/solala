@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
-import '../../../../core/widgets/fixit_buttons.dart';
+import '../../../../core/widgets/app_buttons.dart';
 
 class WelcomeView extends StatefulWidget {
   const WelcomeView({super.key});

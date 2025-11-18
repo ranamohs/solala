@@ -1,7 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:solala/core/constants/app_strings.dart';
 
 import '../../../../core/constants/app_assets.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_styles.dart';
 
 class HomeAppbar extends StatelessWidget {
   final bool isArabic;
@@ -15,33 +19,16 @@ class HomeAppbar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // Logo
-        Image.asset(
-          AppAssets.appLogo,
-          width: 52.w,
-          height: 52.h,
-        ),
 
-        Spacer(),
-        _circleIconButton(
-          Icons.menu,
-          onTap: () {
-            if (isArabic) {
-              Scaffold.of(context).openEndDrawer();
-            } else {
-              Scaffold.of(context).openDrawer();
-            }
-          },
-        ),
+     Text(
+      AppStrings.welcomeToTheFamilyTree.tr(),
+      style: AppStyles.styleBold18( context).copyWith(color: AppColors.greenColor),
+     ),
+
+
       ],
     );
   }
 
-  static Widget _circleIconButton(IconData icon, {VoidCallback? onTap}) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Icon(icon, size: 24.sp),
-    );
-  }
+
 }

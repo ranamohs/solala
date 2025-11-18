@@ -6,7 +6,7 @@ import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_styles.dart';
 import '../../../core/databases/cache/cache_helper.dart';
 import '../../../core/services/service_locator.dart';
-import '../../../core/widgets/fixit_app_bars.dart';
+import '../../../core/widgets/fixed_app_bars.dart';
 import '../../../core/widgets/language_selection_tile.dart';
 import '../../../core/widgets/spacing.dart';
 

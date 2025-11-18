@@ -4,7 +4,7 @@ import 'package:solala/core/widgets/spacing.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import 'fixit_buttons.dart';
+import 'app_buttons.dart';
 
 class RetryWidget extends StatelessWidget {
   const RetryWidget({

@@ -130,6 +130,8 @@
   "ourServices": "خدماتنا",
   "loginIsRequired": "تسجيل الدخول مطلوب",
   "pleaseLogInToContinue": "يرجى تسجيل الدخول للمتابعة",
+  "yourNumber": "رقمك",
+
 
 
 
@@ -142,6 +144,9 @@
   "verification": "إرسال الكود",
   "accountVerifiedSuccessfully": "تم تفعيل الحساب بنجاح !",
   "pleaseEnterVerificationCode": "برجاء ادخال الكود الصحيح",
-  "or": "أو"
-
+  "or": "أو",
+  "welcomeToTheFamilyTree": "اهلا بك في شجرة العائلة",
+  "events": "الاحداث",
+  "familyTree": "شجرة العائلة",
+  "verificationCode": "كود الارسال"
 }

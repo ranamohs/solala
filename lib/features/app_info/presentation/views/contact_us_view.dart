@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_styles.dart';
-import '../../../../core/widgets/fixit_app_bars.dart';
+import '../../../../core/widgets/fixed_app_bars.dart';
 import '../../../../core/widgets/spacing.dart';
 import 'help_and_support_view.dart';
 

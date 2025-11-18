@@ -5,7 +5,7 @@ import 'package:solala/core/functions/navigation.dart';
 import 'package:solala/core/routes/app_router.dart';
 import 'package:solala/core/services/service_locator.dart';
 import 'package:solala/core/state_management/user_cubit/user_cubit.dart';
-import 'package:solala/core/widgets/fixit_buttons.dart';
+import 'package:solala/core/widgets/app_buttons.dart';
 import 'package:solala/features/login/presentation/manager/login_cubit.dart';
 import 'package:solala/features/login/presentation/manager/login_state.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,7 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/constants/app_styles.dart';
-import '../../../../core/widgets/fixit_text_fields.dart';
+import '../../../../core/widgets/fixed_text_fields.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});

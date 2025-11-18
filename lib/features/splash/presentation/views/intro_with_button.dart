@@ -9,7 +9,7 @@ import '../../../../core/constants/app_strings.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/functions/navigation.dart';
 import '../../../../core/routes/app_router.dart';
-import '../../../../core/widgets/fixit_buttons.dart';
+import '../../../../core/widgets/app_buttons.dart';
 
 
 class IntroWithButton extends StatelessWidget {

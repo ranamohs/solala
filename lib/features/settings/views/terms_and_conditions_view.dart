@@ -8,7 +8,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/functions/is_arabic.dart';
 import '../../../../core/services/service_locator.dart';
-import '../../../../core/widgets/fixit_app_bars.dart';
+import '../../../../core/widgets/fixed_app_bars.dart';
 import '../../../../core/widgets/error_container.dart';
 import '../../../core/constants/app_assets.dart';
 import '../../app_info/presentation/manager/terms_cubit/terms_cubit.dart';
