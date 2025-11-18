@@ -24,6 +24,9 @@ class EndPoints {
   static const String login = "/login";
   static const String families = "/families";
   static const String verifyLoginCode = "/verify-login-code";
+  static const String familyTree = "/family/tree";
+  static const String addFamilyMember = "/family/tree-add-member";
+
 }
 
 class ApiKey {

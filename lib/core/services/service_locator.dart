@@ -35,6 +35,9 @@ import '../../features/app_info/presentation/manager/contact_us_cubit/contact_us
 import '../../features/app_info/presentation/manager/default_page_cubit/default_page_cubit.dart';
 import '../../features/app_info/presentation/manager/privacy_cubit/privacy_cubit.dart';
 import '../../features/app_info/presentation/manager/terms_cubit/terms_cubit.dart';
+import '../../features/family_tree/data/repos/family_repo.dart';
+import '../../features/family_tree/data/repos/family_repo_impl.dart';
+import '../../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
 import '../../features/home/data/repos/recent_shops_repo/recent_shops_repo.dart';
 import '../../features/home/data/repos/recent_shops_repo/recent_shops_repo_impl.dart';
 
@@ -201,6 +204,13 @@ void setupServiceLocator() {
   getIt.registerFactory<ContactUsCubit>(
           () => ContactUsCubit(contactUsRepo: getIt<ContactUsRepoImpl>()));
 
-
+  // FamilyTree dependencies
+  getIt.registerLazySingleton<FamilyTreeRepo>(() => FamilyTreeRepoImpl(
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+      dioConsumer: getIt<DioConsumer>(),
+      networkCubit: getIt<NetworkConnectionCubit>()));
+  getIt.registerFactory<FamilyTreeCubit>(() => FamilyTreeCubit(
+    familyTreeRepo: getIt<FamilyTreeRepo>(),
+  ));
 
 }

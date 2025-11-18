@@ -74,7 +74,7 @@ class Data {
     id = json['id'];
     name = json['name'] != null ? new Message.fromJson(json['name']) : null;
     url = json['url'];
-    image = json['image'] != null ? '${EndPoints.IMAGE_BASE_URL}${json['image']}' : null;
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {

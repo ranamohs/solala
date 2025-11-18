@@ -8,6 +8,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, MultiBlocProvider;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
 import '../features/home/presentation/manager/banners_cubit/banners_cubit.dart';
 
 class SolalaApp extends StatelessWidget {
@@ -35,9 +36,9 @@ class SolalaApp extends StatelessWidget {
             BlocProvider<BannersCubit>(
               create: (_) => getIt<BannersCubit>()..getBanners(),
             ),
-
-
-
+            BlocProvider<FamilyTreeCubit>(
+              create: (_) => getIt<FamilyTreeCubit>(),
+            ),
           ],
           child: MaterialApp.router(
             localizationsDelegates: context.localizationDelegates,

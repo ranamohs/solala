@@ -21,7 +21,7 @@ class HomeAppbar extends StatelessWidget {
       children: [
 
      Text(
-      AppStrings.welcomeToTheFamilyTree.tr(),
+      AppStrings.welcomeToTheFamilyTree.tr() + ' ' + "👋" ,
       style: AppStyles.styleBold18( context).copyWith(color: AppColors.greenColor),
      ),
 
