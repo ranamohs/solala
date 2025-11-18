@@ -46,7 +46,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           backgroundColor: Colors.transparent,
           title: Text(
             AppStrings.familyTree.tr(),
-            style: AppStyles.styleBold18(context)
+            style: AppStyles.styleBold25(context)
                 .copyWith(color: AppColors.greenColor),
           ),
         ),
@@ -57,67 +57,83 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
               context.read<FamilyTreeCubit>().getFamilyTree();
             }
           },
-          child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
-            buildWhen: (previous, current) {
-              return current is! AddFamilyMemberLoading &&
-                  current is! AddFamilyMemberFailure;
+          child: RefreshIndicator(
+            backgroundColor: AppColors.primaryColor,
+            color: AppColors.greenColor,
+            onRefresh: () async {
+              context.read<FamilyTreeCubit>().getFamilyTree();
             },
-            builder: (context, state) {
-              if (state is FamilyTreeLoading) {
-                return Center(
-                  child: LoadingAnimationWidget.flickr(
-                    leftDotColor: AppColors.primaryColor,
-                    rightDotColor: AppColors.greenColor,
-                    size: 64,
-                  ),
-                );
-              } else if (state is FamilyTreeFailure) {
-                return Center(
-                  child: RetryWidget(
-                    message: state.failure.errMessage,
-                    onPressed: () {
-                      context.read<FamilyTreeCubit>().getFamilyTree();
+            child: CustomScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              slivers: [
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
+                    buildWhen: (previous, current) {
+                      return current is! AddFamilyMemberLoading &&
+                          current is! AddFamilyMemberFailure;
+                    },
+                    builder: (context, state) {
+                      if (state is FamilyTreeLoading) {
+                        return Center(
+                          child: LoadingAnimationWidget.flickr(
+                            leftDotColor: AppColors.primaryColor,
+                            rightDotColor: AppColors.greenColor,
+                            size: 64,
+                          ),
+                        );
+                      } else if (state is FamilyTreeFailure) {
+                        return Center(
+                          child: RetryWidget(
+                            message: state.failure.errMessage,
+                            onPressed: () {
+                              context.read<FamilyTreeCubit>().getFamilyTree();
+                            },
+                          ),
+                        );
+                      } else if (state is FamilyTreeSuccess) {
+                        final graph = Graph();
+                        final BuchheimWalkerConfiguration builder =
+                        BuchheimWalkerConfiguration()
+                          ..siblingSeparation = (50)
+                          ..levelSeparation = (50)
+                          ..subtreeSeparation = (50)
+                          ..orientation = (BuchheimWalkerConfiguration
+                              .ORIENTATION_TOP_BOTTOM);
+
+                        if (state.familyTreeModel.data != null) {
+                          for (var member in state.familyTreeModel.data!) {
+                            _buildGraph(graph, member, null);
+                          }
+                        }
+
+                        return InteractiveViewer(
+                          constrained: false,
+                          boundaryMargin: const EdgeInsets.all(100),
+                          minScale: 0.01,
+                          maxScale: 5.6,
+                          child: GraphView(
+                            graph: graph,
+                            algorithm: BuchheimWalkerAlgorithm(
+                                builder, TreeEdgeRenderer(builder)),
+                            paint: Paint()
+                              ..color = Colors.green
+                              ..strokeWidth = 1
+                              ..style = PaintingStyle.stroke,
+                            builder: (Node node) {
+                              final familyMember =
+                              node.key!.value as FamilyMember;
+                              return _buildMemberNode(familyMember);
+                            },
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
                     },
                   ),
-                );
-              } else if (state is FamilyTreeSuccess) {
-                final graph = Graph();
-                final BuchheimWalkerConfiguration builder =
-                BuchheimWalkerConfiguration()
-                  ..siblingSeparation = (50)
-                  ..levelSeparation = (50)
-                  ..subtreeSeparation = (50)
-                  ..orientation =
-                  (BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM);
-
-                if (state.familyTreeModel.data != null) {
-                  for (var member in state.familyTreeModel.data!) {
-                    _buildGraph(graph, member, null);
-                  }
-                }
-
-                return InteractiveViewer(
-                  constrained: false,
-                  boundaryMargin: const EdgeInsets.all(100),
-                  minScale: 0.01,
-                  maxScale: 5.6,
-                  child: GraphView(
-                    graph: graph,
-                    algorithm:
-                    BuchheimWalkerAlgorithm(builder, TreeEdgeRenderer(builder)),
-                    paint: Paint()
-                      ..color = Colors.green
-                      ..strokeWidth = 1
-                      ..style = PaintingStyle.stroke,
-                    builder: (Node node) {
-                      final familyMember = node.key!.value as FamilyMember;
-                      return _buildMemberNode(familyMember);
-                    },
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
+                ),
+              ],
+            ),
           ),
         ),
       ),

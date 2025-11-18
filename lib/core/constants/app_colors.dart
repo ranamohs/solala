@@ -33,6 +33,7 @@ abstract class AppColors {
   static const Color greenColor = Color(0xFF06793A);
   static const Color darkGry = Color(0xFF414141);
   static const Color searchColor = Color(0xFFD9D9D9);
+  static const Color bottomColor = Color(0xFFE9E8DA);
 
 
   static const splashColor =  Color(0xFfF2CDAC);

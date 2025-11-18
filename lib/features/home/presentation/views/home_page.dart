@@ -51,7 +51,7 @@ class _AppLayoutState extends State<AppLayout> {
         children: _screens,
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.splashBackgroundStart.withOpacity(0.9),
+        backgroundColor: AppColors.bottomColor,
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
         type: BottomNavigationBarType.fixed,
