@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../account/presentation/views/update_profile_view.dart';
 import '../../../app_info/presentation/views/contact_us_view.dart';
+import '../../../events/presentation/views/events_view.dart';
 import '../../../family_tree/presentation/views/family_tree_view.dart';
 import '../../../settings/views/settings_view.dart';
 
@@ -22,7 +23,7 @@ class _AppLayoutState extends State<AppLayout> {
 
   final List<Widget> _screens = [
     const HomeView(),
-    const ContactUsView(),
+    const EventsView(),
     const FamilyTreeView(),
     const SettingsView(),
     const UpdateProfileView(),

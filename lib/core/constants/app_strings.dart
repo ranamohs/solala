@@ -97,6 +97,12 @@ static const String pleaseEnterTheOtpSentTo = "pleaseEnterTheOtpSentTo";
 static const String yourNumber = "yourNumber";
 static const String didNotGetTheCode = "didNotGetTheCode";
 static const String resend = "resend";
+static const String delete = "delete";
+static const String deleteMemberTitle = "deleteMemberTitle";
+static const String deleteMember = "deleteMember";
+
+
+
 
 
 

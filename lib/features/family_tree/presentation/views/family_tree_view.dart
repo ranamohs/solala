@@ -2,20 +2,21 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:graphview/GraphView.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:solala/core/constants/app_assets.dart';
 import 'package:solala/core/constants/app_colors.dart';
 import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/app_styles.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:solala/core/widgets/error_container.dart';
 import 'package:solala/features/family_tree/presentation/widgets/add_member_dialog.dart';
 
+import '../../../../core/widgets/app_buttons.dart';
 import '../../../../core/widgets/retry_widget.dart';
 import '../../data/models/family_model.dart';
 import '../manager/family_cubit/family_cubit.dart';
 import '../manager/family_cubit/family_state.dart';
+import '../widgets/update_menmber_dialog.dart';
 
 
 class FamilyTreeView extends StatefulWidget {
@@ -46,14 +47,16 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           backgroundColor: Colors.transparent,
           title: Text(
             AppStrings.familyTree.tr(),
-            style: AppStyles.styleBold25(context)
+            style: AppStyles.styleBold20(context)
                 .copyWith(color: AppColors.greenColor),
           ),
         ),
         backgroundColor: Colors.transparent,
         body: BlocListener<FamilyTreeCubit, FamilyTreeState>(
           listener: (context, state) {
-            if (state is AddFamilyMemberSuccess) {
+            if (state is AddFamilyMemberSuccess ||
+                state is UpdateFamilyMemberSuccess ||
+                state is DeleteFamilyMemberSuccess) {
               context.read<FamilyTreeCubit>().getFamilyTree();
             }
           },
@@ -194,9 +197,144 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 size: 20,
               ),
             ),
+             SizedBox(
+              width: 5.w,
+            ),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<FamilyTreeCubit>(),
+                    child: UpdateMemberDialog(
+                      member: member,
+                    ),
+                  ),
+                );
+              },
+              child: const Icon(
+                Icons.edit,
+                color: AppColors.primaryColor,
+                size: 20,
+              ),
+            ),
+             SizedBox(
+              width: 5.w,
+            ),
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext dialogContext) {
+                    return Dialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Icon
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.red.shade50,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.delete_outline,
+                                color: Colors.red.shade400,
+                                size: 32,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // Title
+                            Text(
+                              AppStrings.deleteMember.tr(),
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade800,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Content
+                            Text(
+                             AppStrings.deleteMemberTitle.tr(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.grey.shade600,
+                                height: 1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+
+                            // Buttons
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextButton(
+                                    onPressed: () {
+                                      Navigator.of(dialogContext).pop();
+                                    },
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(vertical: 14),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        side: BorderSide(color: Colors.grey.shade300),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      AppStrings.cancel.tr(),
+                                      style: TextStyle(
+                                        fontSize: 15.sp,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.grey.shade700,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                 SizedBox(width: 12.w),
+                                Expanded(
+                                  child:   PrimaryButton(
+                                    onPressed: () {
+                                      context
+                                          .read<FamilyTreeCubit>()
+                                          .deleteFamilyMember(memberId: member.id!);
+                                      Navigator.of(dialogContext).pop();
+                                    },
+                                    text: AppStrings.delete.tr(),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },
+              child: Icon(
+                Icons.delete,
+                color: Colors.red,
+                size: 16.sp,
+              ),
+            ),
           ],
         ),
       ],
     );
   }
+
 }

@@ -36,6 +36,46 @@ class FamilyTreeFailure extends FamilyTreeState {
   List<Object> get props => [failure];
 }
 
+class UpdateFamilyMemberLoading extends FamilyTreeState {}
+
+class UpdateFamilyMemberSuccess extends FamilyTreeState {
+  final FamilyMember familyMember;
+
+  const UpdateFamilyMemberSuccess(this.familyMember);
+
+  @override
+  List<Object> get props => [familyMember];
+}
+
+class UpdateFamilyMemberFailure extends FamilyTreeState {
+  final Failure failure;
+
+  const UpdateFamilyMemberFailure(this.failure);
+
+  @override
+  List<Object> get props => [failure];
+}
+
+class DeleteFamilyMemberLoading extends FamilyTreeState {}
+
+class DeleteFamilyMemberSuccess extends FamilyTreeState {
+  final BasicModel basicModel;
+
+  const DeleteFamilyMemberSuccess(this.basicModel);
+
+  @override
+  List<Object> get props => [basicModel];
+}
+
+class DeleteFamilyMemberFailure extends FamilyTreeState {
+  final Failure failure;
+
+  const DeleteFamilyMemberFailure(this.failure);
+
+  @override
+  List<Object> get props => [failure];
+}
+
 class AddFamilyMemberLoading extends FamilyTreeState {}
 
 class AddFamilyMemberSuccess extends FamilyTreeState {

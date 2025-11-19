@@ -37,5 +37,7 @@ abstract class AppColors {
 
 
   static const splashColor =  Color(0xFfF2CDAC);
+  static const Color beigeColor = Color(0xFFD2CCB0);
+  static const Color lightGreenColor = Color(0xFFB6D2BD);
 
 }

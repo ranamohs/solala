@@ -48,4 +48,38 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
           (basicModel) => emit(AddFamilyMemberSuccess(basicModel)),
     );
   }
+
+  Future<void> updateFamilyMember({
+    required int memberId,
+    required String name,
+    required String gender,
+    required String relation,
+    required String avatar,
+  }) async {
+    emit(UpdateFamilyMemberLoading());
+
+    final result = await familyTreeRepo.updateFamilyMember(
+      memberId: memberId,
+      name: name,
+      gender: gender,
+      relation: relation,
+      avatar: avatar,
+    );
+
+    result.fold(
+          (failure) => emit(UpdateFamilyMemberFailure(failure)),
+          (familyMember) => emit(UpdateFamilyMemberSuccess(familyMember)),
+    );
+  }
+
+  Future<void> deleteFamilyMember({required int memberId}) async {
+    emit(DeleteFamilyMemberLoading());
+
+    final result = await familyTreeRepo.deleteFamilyMember(memberId: memberId);
+
+    result.fold(
+          (failure) => emit(DeleteFamilyMemberFailure(failure)),
+          (basicModel) => emit(DeleteFamilyMemberSuccess(basicModel)),
+    );
+  }
 }

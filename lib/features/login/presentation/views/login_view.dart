@@ -38,6 +38,7 @@ class _LoginViewBody extends StatefulWidget {
 class _LoginViewState extends State<_LoginViewBody> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
 
 
@@ -76,106 +77,113 @@ class _LoginViewState extends State<_LoginViewBody> {
                         color: Colors.white.withOpacity(0.15),
                       ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          AppStrings.welcomeBack.tr() + " 👋",
-                          style: AppStyles.styleBold24(context).copyWith(color: AppColors.pureWhiteColor),
-                        ),
-                        SizedBox(height: 6.h),
-                        Text(
-                          AppStrings.welcomeBackSubtitle.tr(),
-                          style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor),
-                        ),
-                        SizedBox(height: 30.h),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            AppStrings.welcomeBack.tr() + " 👋",
+                            style: AppStyles.styleBold24(context).copyWith(color: AppColors.pureWhiteColor),
+                          ),
+                          SizedBox(height: 6.h),
+                          Text(
+                            AppStrings.welcomeBackSubtitle.tr(),
+                            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor),
+                          ),
+                          SizedBox(height: 30.h),
 
-                        /// Phone
-                        SecondaryTextFormField(
-                          controller: _phoneController,
-                          labelText: AppStrings.phoneNumber.tr(),
-                          maxLength: 11,
-                          validate: (v) => v!.isEmpty ? 'Please enter your phone number' : null,
-                        ),
+                          /// Phone
+                          SecondaryTextFormField(
+                            controller: _phoneController,
+                            labelText: AppStrings.phoneNumber.tr(),
+                            maxLength: 11,
+                            validate: (v) => v!.isEmpty ? 'Please enter your phone number' : null,
+                          ),
 
-                        SizedBox(height: 16.h),
+                          SizedBox(height: 16.h),
 
-                        /// Password
-                        SecondaryTextFormField(
-                          isPasswordField: true,
-                          suffixIcon:    Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor)   ,
-                          controller: _passwordController,
-                          labelText: AppStrings.password.tr(),
-                          validate: (v) => v!.isEmpty ? 'Please enter your password' : null,
-                        ),
+                          /// Password
+                          SecondaryTextFormField(
+                            isPasswordField: true,
+                            suffixIcon:    Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor)   ,
+                            controller: _passwordController,
+                            labelText: AppStrings.password.tr(),
+                            validate: (v) => v!.isEmpty ? 'Please enter your password' : null,
+                          ),
 
 
-                        SizedBox(height: 20.h),
+                          SizedBox(height: 20.h),
 
-                        /// Login Button
-                        PrimaryButton(onPressed: () {
-                          customPush(
-                              context, AppRouter.homePage);
-                        },
-                        text: AppStrings.login.tr(),
-                        ),
+                          /// Login Button
+                          PrimaryButton(onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<LoginCubit>().login(
+                                phoneNumber: _phoneController.text,
+                                password: _passwordController.text,
+                              );
+                            }
+                          },
+                            text: AppStrings.login.tr(),
+                          ),
 
-                        SizedBox(height: 26.h),
+                          SizedBox(height: 26.h),
 
-                        /// OR Separator
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                height: 1,
-                                color: Colors.white.withOpacity(.3),
-                              ),
-                            ),
-                            Padding(
-                              padding:
-                               EdgeInsets.symmetric(horizontal: 8.h),
-                              child: Text(AppStrings.or.tr(),
-                                  style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)),
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 1,
-                                color: Colors.white.withOpacity(.3),
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        SizedBox(height: 20.h),
-
-                        Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                          /// OR Separator
+                          Row(
                             children: [
-                              Text(
-                                  AppStrings.doNotHaveAnAccount.tr(),
-                                  style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
+                              Expanded(
+                                child: Container(
+                                  height: 1,
+                                  color: Colors.white.withOpacity(.3),
+                                ),
                               ),
-                              const SizedBox(width: 6),
-                              GestureDetector(
-                                onTap: () {
-                                  customPush(
-                                      context, AppRouter.registerView);
-                                },
-                                child:  Text(
-                                    AppStrings.signUp.tr(),
-                                    style: AppStyles.styleMedium14(context).copyWith(color: AppColors.primaryColor)
+                              Padding(
+                                padding:
+                                EdgeInsets.symmetric(horizontal: 8.h),
+                                child: Text(AppStrings.or.tr(),
+                                    style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)),
+                              ),
+                              Expanded(
+                                child: Container(
+                                  height: 1,
+                                  color: Colors.white.withOpacity(.3),
                                 ),
                               ),
                             ],
                           ),
-                        ),
 
-                        SizedBox(height: 10.h),
+                          SizedBox(height: 20.h),
+
+                          Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                    AppStrings.doNotHaveAnAccount.tr(),
+                                    style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
+                                ),
+                                const SizedBox(width: 6),
+                                GestureDetector(
+                                  onTap: () {
+                                    customPush(
+                                        context, AppRouter.registerView);
+                                  },
+                                  child:  Text(
+                                      AppStrings.signUp.tr(),
+                                      style: AppStyles.styleMedium14(context).copyWith(color: AppColors.primaryColor)
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(height: 10.h),
 
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

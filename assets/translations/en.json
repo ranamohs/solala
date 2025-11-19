@@ -198,6 +198,10 @@
   "events": "Events",
   "familyTree": "Family Tree",
   "yourNumber": "Your Number",
+  "delete": "Delete",
+  "deleteMemberTitle": "Are you sue to delete this member?",
+  "deleteMember": "Delete Member"
+
 
 
 

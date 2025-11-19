@@ -121,4 +121,103 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
       return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
     }
   }
+
+  @override
+  Future<Either<Failure, FamilyMember>> updateFamilyMember({
+    required int memberId,
+    required String name,
+    required String gender,
+    required String relation,
+    required String avatar,
+  }) async {
+    final isConnected = await networkCubit.networkInfo.isConnected;
+
+    if (!isConnected) {
+      return Left(
+          NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+    }
+
+    try {
+      final token = await secureStorageHelper?.getToken();
+      final formData = FormData.fromMap({
+        'name': name,
+        'gender': gender,
+        'relation': relation,
+        if (avatar.isNotEmpty)
+          'avatar': await MultipartFile.fromFile(avatar,
+              filename: avatar.split('/').last),
+      });
+
+      final response = await dioConsumer.post(
+        '${EndPoints.updateFamilyMember}$memberId',
+        data: formData,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response != null && response is Map<String, dynamic>) {
+        if (response.containsKey('data') && response['status'] == true) {
+          final familyMember = FamilyMember.fromJson(response['data']);
+          return Right(familyMember);
+        } else {
+          String errorMessage = AppStrings.unexpectedError.tr();
+          if (response['message'] is Map) {
+            errorMessage = response['message']['ar'] ?? errorMessage;
+          }
+          return Left(UnexpectedFailure(
+            errMessage: errorMessage,
+          ));
+        }
+      } else {
+        return Left(
+            ServerFailure(errMessage: AppStrings.serverConnectionFailed.tr()));
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, BasicModel>> deleteFamilyMember(
+      {required int memberId}) async {
+    final isConnected = await networkCubit.networkInfo.isConnected;
+
+    if (!isConnected) {
+      return Left(
+          NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+    }
+
+    try {
+      final token = await secureStorageHelper?.getToken();
+      final response = await dioConsumer.delete(
+        '${EndPoints.deleteFamilyMember}$memberId',
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response != null && response is Map<String, dynamic>) {
+        if (response.containsKey('status') && response['status'] == true) {
+          final basicModel = BasicModel.fromJson(response);
+          return Right(basicModel);
+        } else {
+          String errorMessage = AppStrings.unexpectedError.tr();
+          if (response['message'] is Map) {
+            errorMessage = response['message']['ar'] ?? errorMessage;
+          }
+          return Left(UnexpectedFailure(
+            errMessage: errorMessage,
+          ));
+        }
+      } else {
+        return Left(
+            ServerFailure(errMessage: AppStrings.serverConnectionFailed.tr()));
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
+    }
+  }
 }

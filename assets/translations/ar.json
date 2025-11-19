@@ -148,5 +148,8 @@
   "welcomeToTheFamilyTree": "اهلا بك في شجرة العائلة",
   "events": "الاحداث",
   "familyTree": "شجرة العائلة",
-  "verificationCode": "كود الارسال"
+  "verificationCode": "كود الارسال",
+  "delete": "حذف",
+  "deleteMemberTitle": "هل متأكد انك تريد حذف هذا العضو؟",
+  "deleteMember": "حذف العضو"
 }
