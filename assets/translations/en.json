@@ -200,7 +200,11 @@
   "yourNumber": "Your Number",
   "delete": "Delete",
   "deleteMemberTitle": "Are you sue to delete this member?",
-  "deleteMember": "Delete Member"
+  "deleteMember": "Delete Member",
+  "invitees": "Invitees",
+  "date": "Date",
+  "place": "Place",
+  "inviter": "Inviter"
 
 
 

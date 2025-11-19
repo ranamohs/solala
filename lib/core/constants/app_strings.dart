@@ -100,6 +100,14 @@ static const String resend = "resend";
 static const String delete = "delete";
 static const String deleteMemberTitle = "deleteMemberTitle";
 static const String deleteMember = "deleteMember";
+static const String inviter = "inviter";
+static const String date = "date";
+static const String place = "place";
+static const String invitees = "invitees";
+
+
+
+
 
 
 

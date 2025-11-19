@@ -35,8 +35,11 @@ import '../../features/app_info/presentation/manager/contact_us_cubit/contact_us
 import '../../features/app_info/presentation/manager/default_page_cubit/default_page_cubit.dart';
 import '../../features/app_info/presentation/manager/privacy_cubit/privacy_cubit.dart';
 import '../../features/app_info/presentation/manager/terms_cubit/terms_cubit.dart';
+import '../../features/events/presentation/manager/events_cuibt/events_cubit.dart';
 import '../../features/family_tree/data/repos/family_repo.dart';
 import '../../features/family_tree/data/repos/family_repo_impl.dart';
+import '../../features/events/data/repos/events_repo.dart';
+import '../../features/events/data/repos/events_repo_impl.dart';
 import '../../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
 import '../../features/home/data/repos/recent_shops_repo/recent_shops_repo.dart';
 import '../../features/home/data/repos/recent_shops_repo/recent_shops_repo_impl.dart';
@@ -213,4 +216,12 @@ void setupServiceLocator() {
     familyTreeRepo: getIt<FamilyTreeRepo>(),
   ));
 
+  // Events dependencies
+  getIt.registerLazySingleton<EventsRepo>(() => EventsRepoImpl(
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+      dioConsumer: getIt<DioConsumer>(),
+      networkCubit: getIt<NetworkConnectionCubit>()));
+  getIt.registerFactory<EventsCubit>(() => EventsCubit(
+    eventsRepo: getIt<EventsRepo>(),
+  ));
 }

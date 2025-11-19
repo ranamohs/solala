@@ -28,6 +28,8 @@ class EndPoints {
   static const String addFamilyMember = "/family/tree-add-member";
   static const String updateFamilyMember = "/family/tree-update/";
   static const String deleteFamilyMember = "/family/tree-delete/";
+  static const String events = "/events";
+  static const String eventDetails = "/events/";
 }
 
 class ApiKey {

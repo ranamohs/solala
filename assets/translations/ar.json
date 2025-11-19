@@ -151,5 +151,9 @@
   "verificationCode": "كود الارسال",
   "delete": "حذف",
   "deleteMemberTitle": "هل متأكد انك تريد حذف هذا العضو؟",
-  "deleteMember": "حذف العضو"
+  "deleteMember": "حذف العضو",
+  "invitees": "المدعووين",
+  "date": "التاريخ",
+  "place": "المكان",
+  "inviter": "الداعي"
 }

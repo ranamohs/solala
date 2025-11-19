@@ -3,6 +3,7 @@ import 'package:solala/core/functions/dummy_lists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:solala/core/widgets/retry_widget.dart';
 
 import '../manager/banners_cubit/banners_cubit.dart';
 import '../manager/banners_cubit/banners_state.dart';
@@ -24,7 +25,9 @@ class BannersSection extends StatelessWidget {
             ),
           );
         } else if (state is BannersFailure) {
-          return const SliverToBoxAdapter(child: SizedBox.shrink());
+          return RetryWidget(message: state.failure.errMessage  , onPressed: () {
+            context.read<BannersCubit>().getBanners();
+          });
         } else if (state is BannersSuccess) {
           final banners = state.bannersModel.data ?? [];
           if (banners.isEmpty) {

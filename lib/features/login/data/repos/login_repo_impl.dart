@@ -52,9 +52,9 @@ class LoginRepoImpl implements LoginRepo {
       );
 
       if (response != null && response is Map<String, dynamic>) {
-        if (response.containsKey(ApiKey.token)) {
+        if (response['status'] == true && response.containsKey(ApiKey.token)) {
           final loginSuccessModel = LoginSuccessModel.fromJson(response);
-          await _cacheUserData(response);
+          await _cacheUserData(loginSuccessModel);
           return Right(loginSuccessModel);
         } else {
           return Left(AuthFailureModel.fromJson(response));
@@ -85,15 +85,19 @@ class LoginRepoImpl implements LoginRepo {
     }
   }
 
-  Future<void> _cacheUserData(Map<String, dynamic> response) async {
-    await secureStorageHelper.saveToken(token: response[ApiKey.token]);
-    final userData = response[ApiKey.user];
-    userDataManager.saveUserId(id: userData[ApiKey.id]);
-    userDataManager.saveUserName(name: userData[ApiKey.name]);
-    userDataManager.saveUserEmail(email: userData[ApiKey.email]);
-    userDataManager.saveUserPhoneNumber(
-        phoneNumber: userData[ApiKey.phoneNumber]);
-    userDataManager.saveUserAvatarUrl(avatar: userData[ApiKey.avatar] ?? '');
-    userDataManager.saveUserStatus(isGuest: false);
+  Future<void> _cacheUserData(LoginSuccessModel model) async {
+    if (model.token != null) {
+      await secureStorageHelper.saveToken(token: model.token!);
+    }
+    final userData = model.user;
+    if (userData != null) {
+      userDataManager.saveUserId(id: userData.id ?? 0);
+      userDataManager.saveUserName(name: userData.name ?? '');
+      userDataManager.saveUserEmail(email: userData.email ?? '');
+      userDataManager.saveUserPhoneNumber(phoneNumber: userData.phone ?? '');
+      userDataManager.saveUserAvatarUrl(avatar: userData.avatar ?? '');
+      userDataManager.saveUserFamilyId(familyId: userData.familyId ?? '');
+      userDataManager.saveUserStatus(isGuest: false);
+    }
   }
 }
