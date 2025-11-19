@@ -41,8 +41,9 @@ import '../../features/family_tree/data/repos/family_repo_impl.dart';
 import '../../features/events/data/repos/events_repo.dart';
 import '../../features/events/data/repos/events_repo_impl.dart';
 import '../../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
-import '../../features/home/data/repos/recent_shops_repo/recent_shops_repo.dart';
-import '../../features/home/data/repos/recent_shops_repo/recent_shops_repo_impl.dart';
+import '../../features/home/data/repos/numbering_events_repo/numbering_events_repo.dart';
+import '../../features/home/data/repos/numbering_events_repo/numbering_events_repo_impl.dart';
+import '../../features/home/presentation/manager/numering_events_cubit/numbering_events_cubit.dart';
 
 
 
@@ -102,12 +103,7 @@ void setupServiceLocator() {
     ),
   );
 
-  // Featured Categories dependencies
-  getIt.registerLazySingleton<RcenetShopsRepo>(
-          () => RcenetShopsRepoImpl(
-        dioConsumer: getIt<DioConsumer>(),
-        networkCubit: getIt<NetworkConnectionCubit>(),
-      ));
+
 
 
   getIt.registerLazySingleton<AboutUsRepo>(
@@ -224,4 +220,12 @@ void setupServiceLocator() {
   getIt.registerFactory<EventsCubit>(() => EventsCubit(
     eventsRepo: getIt<EventsRepo>(),
   ));
+
+  // Numbering Events dependencies
+  getIt.registerLazySingleton<NumberingEventsRepo>(() => NumberingEventsRepoImpl(
+   dioConsumer: getIt<DioConsumer>(),
+      userDataManager: getIt<UserDataManager>(),
+      secureStorageHelper: getIt<SecureStorageHelper>() ));
+  getIt.registerFactory<NumberingEventsCubit>(
+          () => NumberingEventsCubit(getIt<NumberingEventsRepo>()));
 }

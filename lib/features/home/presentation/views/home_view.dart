@@ -10,6 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/fixed_indicators.dart';
+import '../manager/numering_events_cubit/numbering_events_cubit.dart';
+import '../widgets/about_family_section.dart';
 import '../widgets/events_section.dart';
 import '../widgets/home_appbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
             child: PrimaryRefreshIndicator(
               onRefresh: () async {
                 context.read<BannersCubit>().getBanners();
-
+                context.read<NumberingEventsCubit>().getNumberingEvents();
               },
               child: CustomScrollView(
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -72,66 +74,13 @@ class _HomeViewState extends State<HomeView> {
                   const BannersSection(),
                   const SliverToBoxAdapter(child:VerticalSpace(40)),
                   SliverToBoxAdapter(child: EventsSection()),
-                  // SliverToBoxAdapter(
-                  //   child: Column(
-                  //     children: [
-                  //       VerticalSpace(24),
-                  //       TitleAndViewAll(
-                  //         title: AppStrings.categories.tr(),
-                  //         viewAllText: AppStrings.viewAll.tr(),
-                  //         onPressed: () {
-                  //           GoRouter.of(context).push(AppRouter.allCategoriesView);
-                  //         },
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // BlocBuilder<CategoriesCubit, CategoriesState>(
-                  //   builder: (context, state) {
-                  //     if (state is CategoriesLoading) {
-                  //       return SliverSkeletonizer(
-                  //         child: CategoriesSliverGrid(
-                  //           categories: getDummyCategories().take(4).toList(),
-                  //         ),
-                  //       );
-                  //     }
-                  //     if (state is CategoriesSuccess) {
-                  //       final categories = state.categoriesModel.data;
-                  //       if (categories.isEmpty) {
-                  //         return const SliverToBoxAdapter(child: SizedBox.shrink());
-                  //       }
-                  //       final displayedCategories = categories.take(4).toList();
-                  //       return CategoriesSliverGrid(
-                  //         categories: displayedCategories,
-                  //       );
-                  //     } else if (state is CategoriesFailure) {
-                  //       return SliverToBoxAdapter(
-                  //         child: Center(child: Text(state.failure.errMessage)),
-                  //       );
-                  //     } else {
-                  //       return const SliverToBoxAdapter(child: SizedBox.shrink());
-                  //     }
-                  //   },
-                  // ),
-                  // SliverToBoxAdapter(
-                  //   child: Column(
-                  //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //     children: [
-                  //       TitleAndViewAll(
-                  //         title: AppStrings.recentShops.tr(),
-                  //         viewAllText: AppStrings.viewAll.tr(),
-                  //         onPressed: () {
-                  //           GoRouter.of(context)
-                  //               .push(AppRouter.allRecentShopsView);
-                  //         },
-                  //       ),
-                  //       const RecentShopsListViewSection(),
-                  //       SizedBox(
-                  //         height: 24.h,
-                  //       )
-                  //     ],
-                  //   ),
-                  // )
+                  // إضافة AboutFamilySection هنا
+                  const SliverToBoxAdapter(child: VerticalSpace(24)),
+                  SliverToBoxAdapter(
+                    child: AboutFamilySection(),
+                  ),
+                  const SliverToBoxAdapter(child: VerticalSpace(24)),
+
                 ],
               ),
             ),

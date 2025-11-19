@@ -1,5 +1,4 @@
 import 'package:solala/features/home/data/models/banners_models/banners_model.dart';
-import 'package:solala/features/home/data/models/categories_models/categories_model.dart';
 
 List<Data> getDummyBanners() {
   return [
@@ -16,18 +15,4 @@ List<Data> getDummyBanners() {
   ];
 }
 
-List<CategoryData> getDummyCategories() {
-  return [
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-    CategoryData(id: 1, name: CategoryName(ar: 'فني انشاءات', en: 'kkkkkkkkkk')),
-  ];
-}
 

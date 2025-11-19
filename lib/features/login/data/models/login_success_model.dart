@@ -54,7 +54,7 @@ class UserModel {
       longitude: json['longitude'],
       pushNotificationsToken: json['push_notifications_token'],
       accountType: json['account_type'],
-      familyId: json['family_id'],
+      familyId: json['family_id']?.toString(),
     );
   }
 

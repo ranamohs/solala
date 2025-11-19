@@ -30,6 +30,7 @@ class EndPoints {
   static const String deleteFamilyMember = "/family/tree-delete/";
   static const String events = "/events";
   static const String eventDetails = "/events/";
+  static const String numberingEvents = "/family/";
 }
 
 class ApiKey {

@@ -1,46 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
+import '../../../../core/services/service_locator.dart';
+import '../manager/numering_events_cubit/numbering_events_cubit.dart';
+import '../manager/numering_events_cubit/numbering_events_state.dart';
 
 class EventsSection extends StatelessWidget {
   const EventsSection({
     super.key,
-    this.members = 140,
-    this.events = 10,
-    this.news = 5,
   });
-
-  final int members;
-  final int events;
-  final int news;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: _StatCard(
-            title: 'members',
-            value: members.toString(),
-          ),
-        ),
-         SizedBox(width: 12.w),
-        Expanded(
-          child: _StatCard(
-            title: 'Events',
-            value: events.toString(),
-          ),
-        ),
-         SizedBox(width: 12.w),
-        Expanded(
-          child: _StatCard(
-            title: 'News',
-            value: news.toString(),
-          ),
-        ),
-      ],
+    return BlocProvider(
+      create: (context) => getIt<NumberingEventsCubit>()..getNumberingEvents(),
+      child: BlocBuilder<NumberingEventsCubit, NumberingEventsState>(
+        builder: (context, state) {
+          if (state is NumberingEventsSuccess) {
+            return Row(
+              children: [
+                Expanded(
+                  child: _StatCard(
+                    title: 'members',
+                    value: state.numberingEventsModel.data!.familiesMemberCount
+                        .toString(),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: _StatCard(
+                    title: 'Events',
+                    value:
+                    state.numberingEventsModel.data!.eventsCount.toString(),
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Expanded(
+                  child: _StatCard(
+                    title: 'News',
+                    value:
+                    state.numberingEventsModel.data!.newsCount.toString(),
+                  ),
+                ),
+              ],
+            );
+          } else if (state is NumberingEventsFailure) {
+            return Center(
+              child: Text(state.message),
+            );
+          } else {
+            return Center(
+              child: LoadingAnimationWidget.flickr(
+                leftDotColor: AppColors.primaryColor,
+                rightDotColor: AppColors.greenColor,
+                size: 64,
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 }
@@ -65,7 +87,7 @@ class _StatCard extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             AppColors.beigeColor ,
-            AppColors.lightGreenColor, 
+            AppColors.lightGreenColor,
           ],
         ),
         boxShadow: [
@@ -87,7 +109,7 @@ class _StatCard extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-             SizedBox(height: 6.h),
+            SizedBox(height: 6.h),
             Text(
               value,
               style:AppStyles.styleMedium14(context).copyWith(
