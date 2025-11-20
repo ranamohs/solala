@@ -1,19 +1,19 @@
 
 import '../../../data/models/news_model/news_model.dart';
 
-abstract class ReportsState {}
+abstract class NewsState {}
 
-class ReportsInitial extends ReportsState {}
+class ReportsInitial extends NewsState {}
 
-class ReportsLoading extends ReportsState {}
+class ReportsLoading extends NewsState {}
 
-class ReportsSuccess extends ReportsState {
-  final ReportModel reportModel;
+class ReportsSuccess extends NewsState {
+  final NewsModel reportModel;
 
   ReportsSuccess({required this.reportModel});
 }
 
-class ReportsFailure extends ReportsState {
+class ReportsFailure extends NewsState {
   final String message;
 
   ReportsFailure({required this.message});

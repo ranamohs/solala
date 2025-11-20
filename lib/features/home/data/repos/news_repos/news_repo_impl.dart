@@ -13,14 +13,14 @@ import '../../../../../core/databases/cache/secure_storage_helper.dart';
 import '../../../../../core/state_management/network_connection_cubit/network_connection_cubit.dart';
 
 
-class ReportsRepoImpl implements ReportsRepo {
+class NewsRepoImpl implements NewsRepo {
   final DioConsumer dioConsumer;
   final NetworkConnectionCubit networkCubit;
   final SecureStorageHelper? secureStorageHelper;
 
-  ReportsRepoImpl({required this.dioConsumer , required this.networkCubit, required this.secureStorageHelper});
+  NewsRepoImpl({required this.dioConsumer , required this.networkCubit, required this.secureStorageHelper});
   @override
-  Future<Either<Failure, ReportModel>> getReports() async {
+  Future<Either<Failure, NewsModel>> getReports() async {
     try {
       final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -34,7 +34,7 @@ class ReportsRepoImpl implements ReportsRepo {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
       },);
-      return right(ReportModel.fromJson(response));
+      return right(NewsModel.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure( errMessage: e.response!.data['message'].toString()));
     }

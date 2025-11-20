@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/repos/news_repos/news_repo.dart';
 import 'news_state.dart';
 
-class ReportsCubit extends Cubit<ReportsState> {
-  ReportsCubit(this.reportsRepo) : super(ReportsInitial());
+class NewsCubit extends Cubit<NewsState> {
+  NewsCubit(this.reportsRepo) : super(ReportsInitial());
 
-  final ReportsRepo reportsRepo;
+  final NewsRepo reportsRepo;
 
   Future<void> getReports() async {
     emit(ReportsLoading());

@@ -1,13 +1,13 @@
-class ReportModel {
+class NewsModel {
   bool? status;
   Message? message;
   List<ReportData>? data;
   Links? links;
   Meta? meta;
 
-  ReportModel({this.status, this.message, this.data, this.links, this.meta});
+  NewsModel({this.status, this.message, this.data, this.links, this.meta});
 
-  ReportModel.fromJson(Map<String, dynamic> json) {
+  NewsModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message =
     json['message'] != null ? Message.fromJson(json['message']) : null;
