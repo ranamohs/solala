@@ -79,7 +79,7 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 90.h,
+      height: 80.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18.r),
         gradient:  LinearGradient(
@@ -104,7 +104,7 @@ class _StatCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style:AppStyles.styleMedium14(context).copyWith(
+              style:AppStyles.styleMedium18(context).copyWith(
                 color: AppColors.secondaryColor,
                 fontWeight: FontWeight.w600,
               ),
@@ -112,7 +112,7 @@ class _StatCard extends StatelessWidget {
             SizedBox(height: 6.h),
             Text(
               value,
-              style:AppStyles.styleMedium14(context).copyWith(
+              style:AppStyles.styleMedium16(context).copyWith(
                 color: AppColors.primaryColor,
                 fontWeight: FontWeight.w700,
               ),

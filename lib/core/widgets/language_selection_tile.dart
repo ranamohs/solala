@@ -30,14 +30,14 @@ class LanguageSelectionTile extends StatelessWidget {
               decoration: ShapeDecoration(
                 color:
                 groupValue == 'ar'
-                    ? AppColors.primaryColor
+                    ? AppColors.secondaryColor.withOpacity(0.8)
                     : AppColors.pureWhiteColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                   side: BorderSide(
                     color:
                     groupValue == 'ar'
-                        ? AppColors.primaryColor
+                        ? AppColors.secondaryColor.withOpacity(0.8)
                         : Colors.grey.shade300,
                   ),
                 ),
@@ -56,7 +56,7 @@ class LanguageSelectionTile extends StatelessWidget {
                       color:
                       groupValue == 'ar'
                           ? AppColors.pureWhiteColor
-                          : AppColors.primaryColor,
+                          : AppColors.secondaryColor.withOpacity(0.8),
                     ),
                   ),
                   Spacer(),
@@ -81,14 +81,14 @@ class LanguageSelectionTile extends StatelessWidget {
               decoration: ShapeDecoration(
                 color:
                 groupValue == 'en'
-                    ? AppColors.primaryColor
+                    ? AppColors.secondaryColor.withOpacity(0.8)
                     : AppColors.pureWhiteColor,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                   side: BorderSide(
                     color:
                     groupValue == 'en'
-                        ? AppColors.primaryColor
+                        ? AppColors.secondaryColor.withOpacity(0.8)
                         : Colors.grey.shade300,
                   ),
                 ),
@@ -107,7 +107,7 @@ class LanguageSelectionTile extends StatelessWidget {
                       color:
                       groupValue == 'en'
                           ? AppColors.pureWhiteColor
-                          : AppColors.primaryColor,
+                          : AppColors.secondaryColor.withOpacity(0.8),
                     ),
                   ),
                   Spacer(),

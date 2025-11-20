@@ -41,12 +41,12 @@ import '../../features/family_tree/data/repos/family_repo_impl.dart';
 import '../../features/events/data/repos/events_repo.dart';
 import '../../features/events/data/repos/events_repo_impl.dart';
 import '../../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
+import '../../features/home/data/repos/family_info_repos/family_info_repo.dart';
+import '../../features/home/data/repos/family_info_repos/family_info_repo_impl.dart';
 import '../../features/home/data/repos/numbering_events_repo/numbering_events_repo.dart';
 import '../../features/home/data/repos/numbering_events_repo/numbering_events_repo_impl.dart';
+import '../../features/home/presentation/manager/family_info_cubit/family_info_cubit.dart';
 import '../../features/home/presentation/manager/numering_events_cubit/numbering_events_cubit.dart';
-
-
-
 
 final getIt = GetIt.instance;
 
@@ -223,9 +223,18 @@ void setupServiceLocator() {
 
   // Numbering Events dependencies
   getIt.registerLazySingleton<NumberingEventsRepo>(() => NumberingEventsRepoImpl(
-   dioConsumer: getIt<DioConsumer>(),
+      dioConsumer: getIt<DioConsumer>(),
       userDataManager: getIt<UserDataManager>(),
       secureStorageHelper: getIt<SecureStorageHelper>() ));
   getIt.registerFactory<NumberingEventsCubit>(
           () => NumberingEventsCubit(getIt<NumberingEventsRepo>()));
+
+  // FamilyInfo dependencies
+  getIt.registerLazySingleton<FamilyInfoRepo>(() => FamilyInfoRepoImpl(
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+      dioConsumer: getIt<DioConsumer>(),
+      networkCubit: getIt<NetworkConnectionCubit>()));
+  getIt.registerFactory<FamilyInfoCubit>(() => FamilyInfoCubit(
+    familyInfoRepo: getIt<FamilyInfoRepo>(),
+  ));
 }

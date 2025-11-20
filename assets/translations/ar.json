@@ -1,14 +1,12 @@
 {
   "welcome": "مرحبا بك",
-  "selectYourLanguage": "اختر لغتك",
+  "selectYourLanguage": "اختر لغتك : ",
   "letsGo": "هيا بنا",
-
   "loginTofixtit_app": "تسجيل الدخول إلى الريادة",
   "phoneNumber": "رقم الجوال",
   "password": "كلمة المرور",
   "login": "تسجيل الدخول",
-   "doNotHaveAnAccount": "ليس لديك حساب؟",
-
+  "doNotHaveAnAccount": "ليس لديك حساب؟",
   "signUpToJoinfixtit_app": "سجّل للانضمام إلى الريادة",
   "signUp": "إنشاء حساب",
   "name": "الاسم",
@@ -22,7 +20,6 @@
   "resend": "إعادة الإرسال ",
   "verificationHasDone": "تم التحقق بنجاح",
   "thankYou": "شكرا لك",
-
   "home": "الرئيسية",
   "categories": "أبرز المجموعات",
   "recentShops": "أحدث المتاجر",
@@ -37,12 +34,10 @@
   "serviceDetail": "تفاصيل الخدمة",
   "contact": "اتصل",
   "description": "الوصف",
-
   "requestNow": "اطلب الآن",
   "cancelTheService": "إلغاء الخدمة",
   "orderTheService": "اطلب الخدمة",
   "selectedService": "الخدمة المختارة",
-
   "profile": "الملف الشخصي",
   "accountInfo": "معلومات الحساب",
   "changePassword": "تغيير كلمة المرور",
@@ -56,7 +51,6 @@
   "newPassword": "كلمة المرور الجديدة",
   "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
   "passwordChangedSuccessfully": "تم تغيير كلمة المرور بنجاح",
-
   "settings": "الإعدادات",
   "contactUs": "اتصل بنا",
   "termsAndConditions": "الشروط والأحكام",
@@ -70,31 +64,20 @@
   "logout": "تسجيل الخروج",
   "areYouSureLogout": "هل تريد تسجيل الخروج؟",
   "logoutMessage": "هل تريد بالتأكيد تسجيل الخروج؟",
-
   "back": "رجوع",
   "logoutFailed": "!فشل تسجيل الخروج",
-
   "noInternetConnection": "لا يوجد اتصال بالإنترنت",
   "serverConnectionFailed": "تعذر الاتصال بالخادم",
   "timeoutError": "انتهت مهلة الاتصال بالخادم. الرجاء المحاولة لاحقاً.",
   "unexpectedError": "حدث خطأ غير متوقع. الرجاء المحاولة لاحقاً.",
   "loginRequired": "يرجي تسجيل الدخول للمتابعة",
-
   "details": "التفاصيل",
   "selectLocation": "العنوان",
-
   "writeHere": "اكتب هنا",
   "save": "حفظ",
-
   "helpAndSupport": "الدعم والمساعدة",
   "subject": "الموضوع",
   "editProfile": "تعديل الملف الشخصي",
-
-
-
-
-
-
   "subtitle": "وسباكين بالقرب منك بسهولة. يوصلك تطبيقنا بالمتخصصين المهرة المستعدين للمساعدة في الإصلاحات والتركيبات وحالات الطوارئ - في أي وقت وفي أي مكان",
   "introTitle": "اعثر على كهربائيين موثوقين",
   "welcomeBackSubtitle": "مرحباً، يرجى تسجيل الدخول للمتابعة",
@@ -117,10 +100,7 @@
   "general": "عام",
   "account": "الحساب",
   "noFavoritesYet": "لا يوجد مفضلة لك حتي الان",
-
   "requestService": "اطلب الخدمة",
-
-
   "enjoyYourExperience": "استمتع بتجربتك",
   "pleaseLeaveUsARate": "من فضلك اترك لنا تقييمًا",
   "leaveAFeedback": "اترك تعليقًا",
@@ -131,14 +111,6 @@
   "loginIsRequired": "تسجيل الدخول مطلوب",
   "pleaseLogInToContinue": "يرجى تسجيل الدخول للمتابعة",
   "yourNumber": "رقمك",
-
-
-
-
-
-
-
-
   "getStarted": "هيا نبدأ الان",
   "chooseYourFamily": "اختر عائلتك",
   "verification": "إرسال الكود",
@@ -155,5 +127,11 @@
   "invitees": "المدعووين",
   "date": "التاريخ",
   "place": "المكان",
-  "inviter": "الداعي"
+  "inviter": "الداعي",
+  "familyName": "اسم العائلة",
+  "familyCode": "كود العائلة",
+  "about": "عن ",
+  "ourFamily": "عائلتنا",
+  "news": "أخبار "
+
 }

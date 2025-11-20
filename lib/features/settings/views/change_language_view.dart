@@ -1,7 +1,9 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../core/constants/app_assets.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/constants/app_styles.dart';
 import '../../../core/databases/cache/cache_helper.dart';
@@ -43,43 +45,59 @@ class _ChangeLanguageViewState extends State<ChangeLanguageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar:AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Spacer(flex: 1),
-            Text(
-              AppStrings.selectYourLanguage.tr(),
-              style: AppStyles.styleLight20(context),
-            ),
-           Spacer(flex: 2),
-            LanguageSelectionTile(
-              groupValue: selectedLanguage,
-              onChangEnglish: (value) {
-                if (value != null) {
-                  setState(() {
-                    selectedLanguage = value;
-                    context.setLocale(const Locale('en'));
-                    saveLanguage('en');
-                  });
-                }
-              },
-              onChangArabic: (value) {
-                if (value != null) {
-                  setState(() {
-                    selectedLanguage = value;
-                    context.setLocale(const Locale('ar'));
-                    saveLanguage('ar');
-                  });
-                }
-              },
-            ),
-            Spacer(flex: 8),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(AppAssets.homeBackground),
+          fit: BoxFit.cover,
+        )
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar:AppBar(
+          title: Text(
+            AppStrings.changeLanguage.tr(),
+            style: AppStyles.styleMedium22(context),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        body: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Spacer(flex: 1),
+              Text(
+                AppStrings.selectYourLanguage.tr(),
+                style: AppStyles.styleLight20(context),
+              ),
+             Spacer(flex: 1),
+              LanguageSelectionTile(
+                groupValue: selectedLanguage,
+                onChangEnglish: (value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedLanguage = value;
+                      context.setLocale(const Locale('en'));
+                      saveLanguage('en');
+                    });
+                  }
+                },
+                onChangArabic: (value) {
+                  if (value != null) {
+                    setState(() {
+                      selectedLanguage = value;
+                      context.setLocale(const Locale('ar'));
+                      saveLanguage('ar');
+                    });
+                  }
+                },
+              ),
+              Spacer(flex: 8),
+            ],
+          ),
         ),
       ),
     );

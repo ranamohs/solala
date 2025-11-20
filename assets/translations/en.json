@@ -204,7 +204,12 @@
   "invitees": "Invitees",
   "date": "Date",
   "place": "Place",
-  "inviter": "Inviter"
+  "inviter": "Inviter",
+  "familyName": "Family Name",
+  "familyCode": "Family Code",
+  "about": "About Our",
+  "ourFamily": " Family",
+  "news": "News "
 
 
 

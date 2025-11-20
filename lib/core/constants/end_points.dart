@@ -31,6 +31,8 @@ class EndPoints {
   static const String events = "/events";
   static const String eventDetails = "/events/";
   static const String numberingEvents = "/family/";
+  static const String familyInfo = "/families/";
+  static const String news = "/reports";
 }
 
 class ApiKey {

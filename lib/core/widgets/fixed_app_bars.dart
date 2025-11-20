@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:solala/core/constants/app_colors.dart';
 import 'package:solala/core/constants/app_styles.dart';
 import 'package:solala/core/state_management/bottom_navigation_bar_cubit/bottom_navigation_bar_cubit.dart';
@@ -58,7 +59,7 @@ class HomePageAppBar extends StatelessWidget implements PreferredSizeWidget {
               )),
       title: Text(
         title ?? '',
-        style: AppStyles.styleBold18(context),
+        style: AppStyles.styleBold18(context).copyWith(color: AppColors.secondaryColor , fontSize: 22.sp ) ,
       ),
       titleSpacing: -12,
       scrolledUnderElevation: 0,

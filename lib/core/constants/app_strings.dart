@@ -104,6 +104,17 @@ static const String inviter = "inviter";
 static const String date = "date";
 static const String place = "place";
 static const String invitees = "invitees";
+static const String familyName = "familyName";
+static const String familyCode = "familyCode";
+static const String about = "about";
+static const String ourFamily = "ourFamily";
+static const String news = "news";
+
+
+
+
+
+
 
 
 

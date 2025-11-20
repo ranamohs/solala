@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:solala/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -24,111 +25,121 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:  Text(
-          AppStrings.settings.tr(),
-          style: AppStyles.styleMedium22(context),
-        ),
-        elevation: 0,
-        centerTitle: true,
+    return Container(
+      decoration:  BoxDecoration(
+       image: DecorationImage(
+         image: AssetImage(AppAssets.homeBackground),
+         fit: BoxFit.cover,
+       )
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          _buildSectionHeader(AppStrings.general.tr() , context),
-          _buildSettingItem(
-            context: context,
-            icon: Icons.language,
-            title: AppStrings.changeLanguage.tr(),
-            onTap: () {
-              customPush(context, AppRouter.changeLanguageView);
-            },
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title:  Text(
+            AppStrings.settings.tr(),
+            style: AppStyles.styleMedium22(context),
           ),
-          _buildSettingItem(
-            context: context,
-            icon: Icons.privacy_tip_outlined,
-            title: AppStrings.privacyPolicy.tr(),
-            onTap: () {
-              customPush(context, AppRouter.privacyPolicyView);
-            },
-          ),
-          _buildSettingItem(
-            context: context,
-            icon: Icons.info_outline,
-            title: AppStrings.aboutUs.tr(),
-            onTap: () {
-              customPush(context, AppRouter.aboutUsView);
-            },
-          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
 
-          const SizedBox(height: 24),
+        ),
+        body: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            _buildSectionHeader(AppStrings.general.tr() , context),
+            _buildSettingItem(
+              context: context,
+              icon: Icons.language,
+              title: AppStrings.changeLanguage.tr(),
+              onTap: () {
+                customPush(context, AppRouter.changeLanguageView);
+              },
+            ),
+            _buildSettingItem(
+              context: context,
+              icon: Icons.privacy_tip_outlined,
+              title: AppStrings.privacyPolicy.tr(),
+              onTap: () {
+                customPush(context, AppRouter.privacyPolicyView);
+              },
+            ),
+            _buildSettingItem(
+              context: context,
+              icon: Icons.info_outline,
+              title: AppStrings.aboutUs.tr(),
+              onTap: () {
+                customPush(context, AppRouter.aboutUsView);
+              },
+            ),
 
-          _buildSectionHeader(AppStrings.account.tr() , context),
-          _buildSettingItem(
-            context: context,
-            icon: Icons.description_outlined,
-            title: AppStrings.termsAndConditions.tr(),
-            onTap: () {
-              customPush(context, AppRouter.termsAndConditionsView);
-            },
-          ),
-          BlocBuilder<UserCubit, UserState>(
-            builder: (context, state) {
-              return _buildSettingItem(
-                context: context,
-                icon: Icons.logout,
-                title: state.isGuest
-                    ? AppStrings.login.tr()
-                    : AppStrings.logout.tr(),
-                isLogout: true,
-                onTap: () {
-                  if (state.isGuest) {
-                    GoRouter.of(context).go(AppRouter.loginView);
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return BlocProvider(
-                          create: (_) => LogoutCubit(
-                            logoutRepo: getIt<LogoutRepoImpl>(),
-                          ),
-                          child: LogoutDialog(),
-                        );
-                      },
+            const SizedBox(height: 24),
+
+            _buildSectionHeader(AppStrings.account.tr() , context),
+            _buildSettingItem(
+              context: context,
+              icon: Icons.description_outlined,
+              title: AppStrings.termsAndConditions.tr(),
+              onTap: () {
+                customPush(context, AppRouter.termsAndConditionsView);
+              },
+            ),
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                return _buildSettingItem(
+                  context: context,
+                  icon: Icons.logout,
+                  title: state.isGuest
+                      ? AppStrings.login.tr()
+                      : AppStrings.logout.tr(),
+                  isLogout: true,
+                  onTap: () {
+                    if (state.isGuest) {
+                      GoRouter.of(context).go(AppRouter.loginView);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return BlocProvider(
+                            create: (_) => LogoutCubit(
+                              logoutRepo: getIt<LogoutRepoImpl>(),
+                            ),
+                            child: LogoutDialog(),
+                          );
+                        },
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+            _buildSettingItem(
+              context: context,
+              icon: Icons.delete_outline,
+              title: AppStrings.deleteAccount.tr(),
+              titleColor: Colors.red,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return BlocProvider(
+                      create: (_) => DeleteAccountCubit(
+                        deleteAccountRepo: getIt<DeleteAccountRepoImpl>(),
+                      ),
+                      child: DeleteAccountDialog(),
                     );
-                  }
-                },
-              );
-            },
-          ),
-          _buildSettingItem(
-            context: context,
-            icon: Icons.delete_outline,
-            title: AppStrings.deleteAccount.tr(),
-            titleColor: Colors.red,
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return BlocProvider(
-                    create: (_) => DeleteAccountCubit(
-                      deleteAccountRepo: getIt<DeleteAccountRepoImpl>(),
-                    ),
-                    child: DeleteAccountDialog(),
-                  );
-                },
-              );
-            },
-          ),
-        ],
+                  },
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildSectionHeader(String title  , BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16),
+      padding:  EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
       child: Text(
         title,
         style: AppStyles.styleSemiBold18(context),
@@ -146,23 +157,29 @@ class SettingsView extends StatelessWidget {
 
   }) {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4),
+      margin:  EdgeInsets.symmetric(vertical: 4.h),
       elevation: 0,
       color: Colors.white,
       child: ListTile(
-        leading: Icon(icon, color: Colors.grey[700]),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.secondaryColor.withOpacity(0.8),
+          ),
+          child: Icon(icon, color: AppColors.pureWhiteColor)),
         title: Text(
           title,
           style: AppStyles.styleSemiBold16(context),
 
         ),
-        trailing: const Icon(
+        trailing:  Icon(
           Icons.arrow_forward_ios,
-          size: 16,
-          color: Colors.grey,
+          size: 18.sp,
+          color: AppColors.secondaryColor.withOpacity(0.8),
         ),
         onTap: onTap,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        contentPadding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
       ),
     );
   }

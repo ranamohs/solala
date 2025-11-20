@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -37,7 +36,11 @@ class TermsAndConditionsView extends StatelessWidget {
 
           if (state is TermsLoadingState) {
             body = Center(
-              child: CircularProgressIndicator()
+              child: LoadingAnimationWidget.flickr(
+                leftDotColor: AppColors.primaryColor,
+                rightDotColor: AppColors.greenColor,
+                size: 64,
+              ),
             );
           } else if (state is TermsCachedLoadingState) {
             final info = state.cachedData;
@@ -50,15 +53,22 @@ class TermsAndConditionsView extends StatelessWidget {
             body = Stack(
               children: [
                 RefreshIndicator(
-                  onRefresh: () async => context.read<TermsCubit>().fetchTerms(),
+                  onRefresh: () async =>
+                      context.read<TermsCubit>().fetchTerms(),
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 24,
+                    ),
                     child: Text(
-                      text.isNotEmpty ? text : (isAr ? 'لا توجد بيانات' : 'No Data'),
+                      text.isNotEmpty
+                          ? text
+                          : (isAr ? 'لا توجد بيانات' : 'No Data'),
                       textAlign: TextAlign.start,
-                      style: AppStyles.styleMedium18(context)
-                          .copyWith(color: AppColors.greyColor),
+                      style: AppStyles.styleMedium18(
+                        context,
+                      ).copyWith(color: AppColors.greyColor),
                     ),
                   ),
                 ),
@@ -69,7 +79,8 @@ class TermsAndConditionsView extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: SizedBox(
-                          height: 28, width: 28,
+                          height: 28,
+                          width: 28,
                           child: CircularProgressIndicator(
                             strokeWidth: 3,
                             color: AppColors.primaryColor,
@@ -82,7 +93,6 @@ class TermsAndConditionsView extends StatelessWidget {
               ],
             );
           }
-
           // ===== Failure =====
           else if (state is TermsFailureState) {
             appBarTitle = '';
@@ -90,11 +100,12 @@ class TermsAndConditionsView extends StatelessWidget {
               child: ErrorContainer(
                 message: state.message.isNotEmpty
                     ? state.message
-                    : (isArabic(context) ? 'حدث خطأ غير متوقع' : 'Unexpected error'),
+                    : (isArabic(context)
+                          ? 'حدث خطأ غير متوقع'
+                          : 'Unexpected error'),
               ),
             );
           }
-
           // ===== Success =====
           else if (state is TermsSuccessState) {
             final info = state.info;
@@ -108,46 +119,57 @@ class TermsAndConditionsView extends StatelessWidget {
               onRefresh: () async => context.read<TermsCubit>().fetchTerms(),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 24,
+                ),
                 child: Text(
-                  text.isNotEmpty ? text : (isAr ? 'لا توجد بيانات' : 'No Data'),
+                  text.isNotEmpty
+                      ? text
+                      : (isAr ? 'لا توجد بيانات' : 'No Data'),
                   textAlign: TextAlign.start,
-                  style: AppStyles.styleMedium22(context).copyWith(color: AppColors.greyColor),
+                  style: AppStyles.styleMedium22(
+                    context,
+                  ).copyWith(color: AppColors.greyColor),
                 ),
               ),
             );
           }
 
           return Scaffold(
-
             body: Center(
               child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-                  decoration:  BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(AppAssets.settingsBackground), fit: BoxFit.cover,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 24,
+                ),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AppAssets.homeBackground),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        HomePageAppBar(
+                          title: appBarTitle,
+                          leading: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: AppColors.secondaryColor,
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                        ),
+                        SizedBox(height: 10.h),
+                        body,
+                      ],
                     ),
                   ),
-
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          HomePageAppBar(
-                      
-                            leading: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                              onPressed: () => Navigator.pop(context),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          body
-                        ],
-                      ),
-                    ),
-                  )
+                ),
               ),
             ),
           );

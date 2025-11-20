@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, MultiBlocProv
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
 import '../features/home/presentation/manager/banners_cubit/banners_cubit.dart';
+import '../features/home/presentation/manager/family_info_cubit/family_info_cubit.dart';
 
 class SolalaApp extends StatelessWidget {
   const SolalaApp({super.key});
@@ -38,6 +39,9 @@ class SolalaApp extends StatelessWidget {
             ),
             BlocProvider<FamilyTreeCubit>(
               create: (_) => getIt<FamilyTreeCubit>(),
+            ),
+            BlocProvider<FamilyInfoCubit>(
+              create: (_) => getIt<FamilyInfoCubit>(),
             ),
           ],
           child: MaterialApp.router(

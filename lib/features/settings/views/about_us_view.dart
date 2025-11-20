@@ -37,7 +37,13 @@ class AboutUsView extends StatelessWidget {
           Widget body = const SizedBox.shrink();
 
           if (state is AboutUsLoadingState) {
-            body = Center(child: CircularProgressIndicator());
+            body =      Center(
+              child: LoadingAnimationWidget.flickr(
+                leftDotColor: AppColors.primaryColor,
+                rightDotColor: AppColors.greenColor,
+                size: 64,
+              ),
+            );;
           } else if (state is AboutUsCachedLoadingState) {
             final info = state.cachedData;
             final isAr = isArabic(context);
@@ -71,12 +77,9 @@ class AboutUsView extends StatelessWidget {
                                 ? plain
                                 : (isAr ? 'لا توجد بيانات' : 'No Data'),
                             textAlign: TextAlign.start,
-                            style: TextStyle(
-                              fontSize: 16,
-                              height: 1.6,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            style: AppStyles.styleMedium18(
+                              context,
+                            ).copyWith(color: AppColors.secondaryColor ),
                           ),
                         ],
                       ),
@@ -133,21 +136,15 @@ class AboutUsView extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name ?? '...',
-                        style: AppStyles.styleBold20(context).copyWith(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
+
                       Text(
                         plain.isNotEmpty
                             ? plain
                             : (isAr ? 'لا توجد بيانات' : 'No Data'),
                         textAlign: TextAlign.start,
-                        style: AppStyles.styleMedium20(context)
-                            .copyWith(color: AppColors.greyColor),
+                        style: AppStyles.styleMedium22(
+                          context,
+                        ).copyWith(color: AppColors.greyColor),
                       ),
                     ],
                   ),
@@ -163,7 +160,7 @@ class AboutUsView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
                   decoration:  BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage(AppAssets.settingsBackground), fit: BoxFit.cover,
+                      image: AssetImage(AppAssets.homeBackground), fit: BoxFit.cover,
                     ),
                   ),
 
@@ -172,8 +169,9 @@ class AboutUsView extends StatelessWidget {
                       child: Column(
                         children: [
                           HomePageAppBar(
+                            title: appBarTitle,
                             leading: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+                              icon:  Icon(Icons.arrow_back_ios, color: AppColors.secondaryColor),
                               onPressed: () => Navigator.pop(context),
                             ),
                           ),

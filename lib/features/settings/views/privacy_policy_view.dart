@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,7 +28,7 @@ class PrivacyPolicyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<PrivacyCubit>()..fetchPrivacy(), // ✅
+      create: (_) => getIt<PrivacyCubit>()..fetchPrivacy(),
       child: BlocBuilder<PrivacyCubit, PrivacyState>(
         builder: (context, state) {
           String appBarTitle = '...';
@@ -37,29 +36,40 @@ class PrivacyPolicyView extends StatelessWidget {
 
           // ===== Loading / CachedLoading =====
           if (state is PrivacyLoadingState) {
-            body = Center(
-              child:CircularProgressIndicator()
+            body =      Center(
+              child: LoadingAnimationWidget.flickr(
+                leftDotColor: AppColors.primaryColor,
+                rightDotColor: AppColors.greenColor,
+                size: 64,
+              ),
             );
           } else if (state is PrivacyCachedLoadingState) {
             final info = state.cachedData;
             final isAr = isArabic(context);
             final name = isAr ? info.data?.name?.ar : info.data?.name?.en;
-            final raw  = isAr ? info.data?.body?.ar : info.data?.body?.en;
+            final raw = isAr ? info.data?.body?.ar : info.data?.body?.en;
             final text = _htmlToPlain(raw);
 
             appBarTitle = (name ?? '').trim().isEmpty ? '...' : name!;
             body = Stack(
               children: [
                 RefreshIndicator(
-                  onRefresh: () async => context.read<PrivacyCubit>().fetchPrivacy(),
+                  onRefresh: () async =>
+                      context.read<PrivacyCubit>().fetchPrivacy(),
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 24,
+                    ),
                     child: Text(
-                      text.isNotEmpty ? text : (isAr ? 'لا توجد بيانات' : 'No Data'),
+                      text.isNotEmpty
+                          ? text
+                          : (isAr ? 'لا توجد بيانات' : 'No Data'),
                       textAlign: TextAlign.start,
-                      style: AppStyles.styleMedium18(context)
-                          .copyWith(color: AppColors.greyColor),
+                      style: AppStyles.styleMedium18(
+                        context,
+                      ).copyWith(color: AppColors.secondaryColor),
                     ),
                   ),
                 ),
@@ -83,7 +93,6 @@ class PrivacyPolicyView extends StatelessWidget {
               ],
             );
           }
-
           // ===== Failure =====
           else if (state is PrivacyFailureState) {
             appBarTitle = '';
@@ -91,66 +100,78 @@ class PrivacyPolicyView extends StatelessWidget {
               child: ErrorContainer(
                 message: state.message.isNotEmpty
                     ? state.message
-                    : (isArabic(context) ? 'حدث خطأ غير متوقع' : 'Unexpected error'),
+                    : (isArabic(context)
+                          ? 'حدث خطأ غير متوقع'
+                          : 'Unexpected error'),
                 // onRetry: () => context.read<PrivacyCubit>().fetchPrivacy(), // لو مدعوم
               ),
             );
           }
-
           // ===== Success =====
           else if (state is PrivacySuccessState) {
             final info = state.info;
             final isAr = isArabic(context);
             final name = isAr ? info.data?.name?.ar : info.data?.name?.en;
-            final raw  = isAr ? info.data?.body?.ar : info.data?.body?.en;
+            final raw = isAr ? info.data?.body?.ar : info.data?.body?.en;
             final text = _htmlToPlain(raw);
 
             appBarTitle = (name ?? '').trim().isEmpty ? '...' : name!;
             body = RefreshIndicator(
-              onRefresh: () async => context.read<PrivacyCubit>().fetchPrivacy(),
+              onRefresh: () async =>
+                  context.read<PrivacyCubit>().fetchPrivacy(),
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 24,
+                ),
                 child: Text(
-                  text.isNotEmpty ? text : (isAr ? 'لا توجد بيانات' : 'No Data'),
+                  text.isNotEmpty
+                      ? text
+                      : (isAr ? 'لا توجد بيانات' : 'No Data'),
                   textAlign: TextAlign.start,
-                  style: AppStyles.styleMedium22(context)
-                      .copyWith(color: AppColors.greyColor),
+                  style: AppStyles.styleMedium22(
+                    context,
+                  ).copyWith(color: AppColors.greyColor),
                 ),
               ),
             );
           }
 
           return Scaffold(
-
             body: Center(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24),
-                decoration:  BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(AppAssets.settingsBackground), fit: BoxFit.cover,
-                    ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 24,
+                ),
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(AppAssets.homeBackground),
+                    fit: BoxFit.cover,
+                  ),
                 ),
 
-                  child: Center(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          HomePageAppBar(
-                            title: appBarTitle,
-                            leading: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                              onPressed: () => Navigator.pop(context),
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        HomePageAppBar(
+                          title: appBarTitle,
+                          leading: IconButton(
+                            icon: Icon(
+                              Icons.arrow_back_ios,
+                              color: AppColors.secondaryColor,
                             ),
+                            onPressed: () => Navigator.pop(context),
                           ),
-                        SizedBox(
-                          height: 10.h,
                         ),
-                          body
-                        ],
-                      ),
+                        SizedBox(height: 10.h),
+                        body,
+                      ],
                     ),
-                  )
+                  ),
+                ),
               ),
             ),
           );
