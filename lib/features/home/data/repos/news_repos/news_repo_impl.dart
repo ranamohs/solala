@@ -30,13 +30,36 @@ class NewsRepoImpl implements NewsRepo {
       }
       final token = await secureStorageHelper?.getToken();
       final response = await dioConsumer.get(EndPoints.news ,
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      },);
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },);
       return right(NewsModel.fromJson(response));
     } on DioException catch (e) {
       return left(ServerFailure( errMessage: e.response!.data['message'].toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, NewsDetailsModel>> getReportDetails(int reportId) async {
+    try {
+      final isConnected = await networkCubit.networkInfo.isConnected;
+
+      if (!isConnected) {
+        return Left(
+            NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+      }
+      final token = await secureStorageHelper?.getToken();
+      final response = await dioConsumer.get(
+        '${EndPoints.news}/$reportId',
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+      return right(NewsDetailsModel.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure(errMessage: e.response!.data['message'].toString()));
     }
   }
 }

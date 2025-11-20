@@ -16,4 +16,35 @@ class NewsCubit extends Cubit<NewsState> {
           (reportModel) => emit(ReportsSuccess(reportModel: reportModel)),
     );
   }
+
+  Future<void> getReportDetails(int reportId) async {
+    if (state is ReportsSuccess) {
+      final successState = state as ReportsSuccess;
+      emit(
+        successState.copyWith(
+          loadingReports: {...successState.loadingReports, reportId},
+          errorReports: {...successState.errorReports}..remove(reportId),
+        ),
+      );
+      final result = await reportsRepo.getReportDetails(reportId);
+      result.fold(
+            (failure) {
+          emit(
+            successState.copyWith(
+              loadingReports: {...successState.loadingReports}..remove(reportId),
+              errorReports: {...successState.errorReports, reportId: failure.errMessage},
+            ),
+          );
+        },
+            (reportDetailsModel) {
+          emit(
+            successState.copyWith(
+              loadingReports: {...successState.loadingReports}..remove(reportId),
+              reportDetails: {...successState.reportDetails, reportId: reportDetailsModel.data!},
+            ),
+          );
+        },
+      );
+    }
+  }
 }

@@ -5,4 +5,5 @@ import '../../models/news_model/news_model.dart';
 
 abstract class NewsRepo {
   Future<Either<Failure, NewsModel>> getReports();
+  Future<Either<Failure, NewsDetailsModel>> getReportDetails(int reportId);
 }

@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:solala/core/constants/app_strings.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
@@ -25,7 +27,7 @@ class EventsSection extends StatelessWidget {
               children: [
                 Expanded(
                   child: _StatCard(
-                    title: 'members',
+                    title: AppStrings.members.tr(),
                     value: state.numberingEventsModel.data!.familiesMemberCount
                         .toString(),
                   ),
@@ -33,7 +35,7 @@ class EventsSection extends StatelessWidget {
                 SizedBox(width: 12.w),
                 Expanded(
                   child: _StatCard(
-                    title: 'Events',
+                    title: AppStrings.events.tr(),
                     value:
                     state.numberingEventsModel.data!.eventsCount.toString(),
                   ),
@@ -41,7 +43,7 @@ class EventsSection extends StatelessWidget {
                 SizedBox(width: 12.w),
                 Expanded(
                   child: _StatCard(
-                    title: 'News',
+                    title: AppStrings.news.tr(),
                     value:
                     state.numberingEventsModel.data!.newsCount.toString(),
                   ),

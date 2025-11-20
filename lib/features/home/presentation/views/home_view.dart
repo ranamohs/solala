@@ -14,6 +14,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:solala/features/home/presentation/widgets/family_news_section.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/widgets/fixed_indicators.dart';
+import '../manager/news_cubit/news_cubit.dart';
 import '../manager/numering_events_cubit/numbering_events_cubit.dart';
 import '../widgets/about_family_section.dart';
 import '../widgets/events_section.dart';
@@ -71,7 +72,9 @@ class _HomeViewState extends State<HomeView> {
               onRefresh: () async {
                 context.read<BannersCubit>().getBanners();
                 context.read<NumberingEventsCubit>().getNumberingEvents();
-                _getFamilyInfo();
+                context.read<FamilyInfoCubit>().getFamilyInfo(familyId: getIt<UserDataManager>().getUserFamilyId()!);
+                context.read<NewsCubit>().getReports();
+
               },
               child: CustomScrollView(
                 keyboardDismissBehavior:
@@ -99,8 +102,11 @@ class _HomeViewState extends State<HomeView> {
                     child: AboutFamilySection(),
                   ),
                   const SliverToBoxAdapter(child: VerticalSpace(24)),
-                  const SliverToBoxAdapter(
-                    child: FamilyNewsSection(),
+                  SliverToBoxAdapter(
+                    child: BlocProvider(
+                      create: (context) => getIt<NewsCubit>(),
+                      child: const FamilyNewsSection(),
+                    ),
                   ),
                 ],
               ),

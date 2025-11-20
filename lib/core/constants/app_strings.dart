@@ -109,6 +109,10 @@ static const String familyCode = "familyCode";
 static const String about = "about";
 static const String ourFamily = "ourFamily";
 static const String news = "news";
+static const String newsFamily = "newsFamily";
+static const String members = "members";
+
+
 
 
 

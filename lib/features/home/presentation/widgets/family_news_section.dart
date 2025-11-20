@@ -1,98 +1,126 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:solala/core/widgets/retry_widget.dart';
+import 'package:solala/features/home/data/models/news_model/news_model.dart';
+import 'package:solala/features/home/presentation/manager/news_cubit/news_cubit.dart';
+import 'package:solala/features/home/presentation/manager/news_cubit/news_state.dart';
 
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/constants/app_styles.dart';
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_strings.dart';
+import '../../../../../core/constants/app_styles.dart';
+import '../views/all_news_view.dart';
 
-class FamilyNewsSection extends StatelessWidget {
+class FamilyNewsSection extends StatefulWidget {
   const FamilyNewsSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<_FamilyNewsItem> items = [
-      const _FamilyNewsItem(
-        date: '5 Nov',
-        title: 'Annual Family Reunion',
-        placeAndTime: 'At the Riverside Park • 4:00 PM',
-        description: 'Potluck style—bring a dish!.',
-      ),
-      const _FamilyNewsItem(
-        date: '12 Dec',
-        title: 'Family Meeting',
-        placeAndTime: 'Grandma’s House • 7:30 PM',
-        description: 'Discuss holiday plans together.',
-      ),
-      const _FamilyNewsItem(
-        date: '1 Jan',
-        title: 'New Year Celebration',
-        placeAndTime: 'City Center • 9:00 PM',
-        description: 'Fireworks and family gathering.',
-      ),
-    ];
+  State<FamilyNewsSection> createState() => _FamilyNewsSectionState();
+}
 
+class _FamilyNewsSectionState extends State<FamilyNewsSection> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<NewsCubit>().getReports();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text.rich(
-          TextSpan(
-            children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text.rich(
               TextSpan(
-                text: AppStrings.news.tr(),
-                style: AppStyles.styleBold16(context)
-                    .copyWith(color: AppColors.pureBlackColor),
+                children: [
+                  TextSpan(
+                    text: AppStrings.news.tr(),
+                    style: AppStyles.styleBold16(context)
+                        .copyWith(color: AppColors.pureBlackColor),
+                  ),
+                  TextSpan(
+                    text: AppStrings.ourFamily.tr(),
+                    style: AppStyles.styleBold16(context)
+                        .copyWith(color: AppColors.greenColor),
+                  ),
+                ],
               ),
-              TextSpan(
-                text: AppStrings.ourFamily.tr(),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AllNewsView(),
+                  ),
+                );
+              },
+              child: Text(
+                AppStrings.viewAll.tr(),
                 style: AppStyles.styleBold16(context)
                     .copyWith(color: AppColors.greenColor),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         SizedBox(height: 8.h),
-
-        SizedBox(
-          height: 100.h,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              return _FamilyNewsCard(item: item);
-            },
-            separatorBuilder: (context, index) => SizedBox(width: 12.w),
-            itemCount: items.length,
-          ),
+        BlocBuilder<NewsCubit, NewsState>(
+          builder: (context, state) {
+            if (state is ReportsSuccess) {
+              final reports = state.reportModel.data ?? [];
+              return SizedBox(
+                height: 80.h,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    final item = reports[index];
+                    return _FamilyNewsCard(item: item);
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 12.w),
+                  itemCount: reports.length,
+                ),
+              );
+            } else if (state is ReportsFailure) {
+              return RetryWidget(message: state.message  , onPressed: () {
+                context.read<NewsCubit>().getReports();
+              });
+            } else {
+              return Center(
+                child: LoadingAnimationWidget.flickr(
+                  leftDotColor: AppColors.primaryColor,
+                  rightDotColor: AppColors.greenColor,
+                  size: 64,
+                ),
+              );
+            }
+          },
         ),
       ],
     );
   }
 }
 
-class _FamilyNewsItem {
-  final String date;
-  final String title;
-  final String placeAndTime;
-  final String description;
-
-  const _FamilyNewsItem({
-    required this.date,
-    required this.title,
-    required this.placeAndTime,
-    required this.description,
-  });
-}
-
 class _FamilyNewsCard extends StatelessWidget {
-  final _FamilyNewsItem item;
+  final ReportData item;
 
   const _FamilyNewsCard({required this.item});
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.locale.languageCode == 'ar';
+    final title = isArabic ? item.title?.ar : item.title?.en;
+    final description =
+    isArabic ? item.decription?.ar : item.decription?.en;
+    final familyName =
+    isArabic ? item.familyDetails?.name?.ar : item.familyDetails?.name?.en;
+
     return Container(
-      width: 200.w,
+      width: 140.w,
       decoration: BoxDecoration(
         color: AppColors.primaryColor,
         borderRadius: BorderRadius.circular(16.r),
@@ -109,33 +137,26 @@ class _FamilyNewsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-
+          // Text(
+          //   familyName ?? '',
+          //   style: AppStyles.styleBold16(context)
+          //       .copyWith(color: AppColors.pureWhiteColor),
+          // ),
+          // SizedBox(height: 4.h),
           Text(
-            item.date,
-            style: AppStyles.styleBold16(context).copyWith(color: AppColors.pureWhiteColor),
-          ),
-           SizedBox(height: 4.h),
-
-          Text(
-            item.title,
+            title ?? '',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: AppStyles.styleBold16(context).copyWith(color: AppColors.pureWhiteColor),
+            style: AppStyles.styleBold16(context)
+                .copyWith(color: AppColors.pureWhiteColor),
           ),
-           SizedBox(height: 4.h),
+          SizedBox(height: 4.h),
           Text(
-            item.placeAndTime,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor),
-          ),
-           SizedBox(height: 4.h),
-
-          Text(
-            item.description,
+            description ?? '',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor),
+            style: AppStyles.styleMedium14(context)
+                .copyWith(color: AppColors.pureWhiteColor),
           ),
         ],
       ),

@@ -45,7 +45,10 @@ import '../../features/home/data/repos/family_info_repos/family_info_repo.dart';
 import '../../features/home/data/repos/family_info_repos/family_info_repo_impl.dart';
 import '../../features/home/data/repos/numbering_events_repo/numbering_events_repo.dart';
 import '../../features/home/data/repos/numbering_events_repo/numbering_events_repo_impl.dart';
+import '../../features/home/data/repos/news_repos/news_repo.dart';
+import '../../features/home/data/repos/news_repos/news_repo_impl.dart';
 import '../../features/home/presentation/manager/family_info_cubit/family_info_cubit.dart';
+import '../../features/home/presentation/manager/news_cubit/news_cubit.dart';
 import '../../features/home/presentation/manager/numering_events_cubit/numbering_events_cubit.dart';
 
 final getIt = GetIt.instance;
@@ -236,5 +239,14 @@ void setupServiceLocator() {
       networkCubit: getIt<NetworkConnectionCubit>()));
   getIt.registerFactory<FamilyInfoCubit>(() => FamilyInfoCubit(
     familyInfoRepo: getIt<FamilyInfoRepo>(),
+  ));
+
+  // News dependencies
+  getIt.registerLazySingleton<NewsRepo>(() => NewsRepoImpl(
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+      dioConsumer: getIt<DioConsumer>(),
+      networkCubit: getIt<NetworkConnectionCubit>()));
+  getIt.registerFactory<NewsCubit>(() => NewsCubit(
+    getIt<NewsRepo>(),
   ));
 }

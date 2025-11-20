@@ -10,8 +10,10 @@ class EventsCubit extends Cubit<EventsState> {
   EventsCubit({required this.eventsRepo}) : super(EventsInitial());
 
   Future<void> getEvents() async {
+    if (isClosed) return;
     emit(EventsLoading());
     final result = await eventsRepo.getEvents();
+    if (isClosed) return;
     result.fold(
           (failure) => emit(EventsFailure(errorMessage: failure.errMessage)),
           (events) => emit(EventsSuccess(events: events)),
@@ -22,13 +24,12 @@ class EventsCubit extends Cubit<EventsState> {
     if (state is EventsSuccess) {
       final successState = state as EventsSuccess;
 
-      // Start loading for this specific event
       final loadingEvents = Set<int>.from(successState.loadingEvents)..add(eventId);
+      if (isClosed) return;
       emit(successState.copyWith(loadingEvents: loadingEvents));
 
       final result = await eventsRepo.getEventDetails(eventId);
-
-      // Stop loading for this specific event
+      if (isClosed) return;
       final updatedLoadingEvents = Set<int>.from(successState.loadingEvents)..remove(eventId);
 
       result.fold(

@@ -182,3 +182,18 @@ class MetaLink {
     active = json['active'];
   }
 }
+
+class NewsDetailsModel {
+  bool? status;
+  Message? message;
+  ReportData? data;
+
+  NewsDetailsModel({this.status, this.message, this.data});
+
+  NewsDetailsModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message =
+    json['message'] != null ? Message.fromJson(json['message']) : null;
+    data = json['data'] != null ? ReportData.fromJson(json['data']) : null;
+  }
+}
