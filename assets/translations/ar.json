@@ -134,6 +134,9 @@
   "ourFamily": "عائلتنا",
   "news": "أخبار ",
   "newsFamily": "اخبار العائلة",
-  "members": "الأعضاء"
+  "members": "الأعضاء",
+  "noNewsFoundTillNow": "لا يوجد اخبار في عائلتك حتي الان",
+  "noMembersFoundTillNow": "لم بتم تسجل افراد الي عائلتك حتي الان",
+  "noEventsFoundTillNow": "لا يوجد احداث في عائلتك حتي الان"
 
 }

@@ -30,7 +30,7 @@ class _NewsCardState extends State<NewsCard> {
     final title = isArabic ? widget.report.title?.ar : widget.report.title?.en;
     final description =
     isArabic ? widget.report.decription?.ar : widget.report.decription?.en;
-    final familyImage = widget.report.familyDetails?.image;
+    final newsImage = widget.report.image;
 
     return Padding(
       padding: EdgeInsets.only(bottom: 20.h),
@@ -54,7 +54,7 @@ class _NewsCardState extends State<NewsCard> {
                   CircleAvatar(
                     radius: 32.5,
                     backgroundImage: CachedNetworkImageProvider(
-                      familyImage ?? AppConstants.noImageUrl,
+                      newsImage ?? AppConstants.noImageUrl,
                     ),
                   ),
                   SizedBox(width: 20.w),

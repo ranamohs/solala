@@ -39,8 +39,10 @@ class ReportData {
   Decription? decription;
   Title? title;
   FamilyDetails? familyDetails;
+  String? image;
 
-  ReportData({this.id, this.decription, this.title, this.familyDetails});
+  ReportData(
+      {this.id, this.decription, this.title, this.familyDetails, this.image});
 
   ReportData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -51,6 +53,7 @@ class ReportData {
     familyDetails = json['family_details'] != null
         ? FamilyDetails.fromJson(json['family_details'])
         : null;
+    image = json['image'];
   }
 }
 

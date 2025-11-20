@@ -104,38 +104,48 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                           ..orientation = (BuchheimWalkerConfiguration
                               .ORIENTATION_TOP_BOTTOM);
 
-                        if (state.familyTreeModel.data != null) {
-                          for (var member in state.familyTreeModel.data!) {
-                            _buildGraph(graph, member, null);
-                          }
+                        if (state.familyTreeModel.data == null ||
+                            state.familyTreeModel.data!.isEmpty) {
+                          return Center(
+                            child: Text(
+                              AppStrings.noMembersFoundTillNow.tr(),
+                              style: AppStyles.styleMedium18(context).copyWith(
+                                color: AppColors.secondaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }
+                        for (var member in state.familyTreeModel.data!) {
+                          _buildGraph(graph, member, null);
                         }
 
                         return GestureDetector(
-                            onHorizontalDragStart: (details) {},
-                            child: InteractiveViewer(
-                              constrained: false,
-                              boundaryMargin: const EdgeInsets.all(100),
-                              minScale: 0.01,
-                              maxScale: 5.6,
-                              child: GraphView(
-                                graph: graph,
-                                algorithm: BuchheimWalkerAlgorithm(
-                                    builder, TreeEdgeRenderer(builder)),
-                                paint: Paint()
-                                  ..color = Colors.green
-                                  ..strokeWidth = 1
-                                  ..style = PaintingStyle.stroke,
-                                builder: (Node node) {
-                                  final familyMember =
-                                  node.key!.value as FamilyMember;
-                                  return _buildMemberNode(familyMember);
-                                },
-                              ),
-                            )
-                            );
-                        }
-                            return const SizedBox.shrink();
-                      },
+                          onHorizontalDragStart: (details) {},
+                          child: InteractiveViewer(
+                            constrained: false,
+                            boundaryMargin: const EdgeInsets.all(100),
+                            minScale: 0.01,
+                            maxScale: 5.6,
+                            child: GraphView(
+                              graph: graph,
+                              algorithm: BuchheimWalkerAlgorithm(
+                                  builder, TreeEdgeRenderer(builder)),
+                              paint: Paint()
+                                ..color = Colors.green
+                                ..strokeWidth = 1
+                                ..style = PaintingStyle.stroke,
+                              builder: (Node node) {
+                                final familyMember =
+                                node.key!.value as FamilyMember;
+                                return _buildMemberNode(familyMember);
+                              },
+                            ),
+                          ),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
                   ),
                 ),
               ],

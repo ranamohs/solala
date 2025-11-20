@@ -73,6 +73,17 @@ class _FamilyNewsSectionState extends State<FamilyNewsSection> {
           builder: (context, state) {
             if (state is ReportsSuccess) {
               final reports = state.reportModel.data ?? [];
+              if (reports.isEmpty) {
+                return Center(
+                  child: Text(
+                    AppStrings.noNewsFoundTillNow.tr(),
+                    style: AppStyles.styleMedium18(context).copyWith(
+                      color: AppColors.secondaryColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
+              }
               return SizedBox(
                 height: 80.h,
                 child: ListView.separated(
@@ -86,7 +97,7 @@ class _FamilyNewsSectionState extends State<FamilyNewsSection> {
                 ),
               );
             } else if (state is ReportsFailure) {
-              return RetryWidget(message: state.message  , onPressed: () {
+              return RetryWidget(message: state.message, onPressed: () {
                 context.read<NewsCubit>().getReports();
               });
             } else {

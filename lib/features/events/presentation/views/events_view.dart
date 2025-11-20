@@ -64,6 +64,17 @@ class EventsView extends StatelessWidget {
                   ),
                 );
               } else if (state is EventsSuccess) {
+                if (state.events.isEmpty) {
+                  return Center(
+                    child: Text(
+                      AppStrings.noEventsFoundTillNow.tr(),
+                      style: AppStyles.styleMedium18(context).copyWith(
+                        color: AppColors.secondaryColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }
                 return ListView.builder(
                   padding: const EdgeInsets.all(20),
                   itemCount: state.events.length,

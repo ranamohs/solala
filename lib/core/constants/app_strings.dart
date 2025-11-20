@@ -111,6 +111,12 @@ static const String ourFamily = "ourFamily";
 static const String news = "news";
 static const String newsFamily = "newsFamily";
 static const String members = "members";
+static const String noNewsFoundTillNow = "noNewsFoundTillNow";
+static const String noMembersFoundTillNow = "noMembersFoundTillNow";
+static const String noEventsFoundTillNow = "noEventsFoundTillNow";
+
+
+
 
 
 
