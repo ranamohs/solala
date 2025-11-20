@@ -47,8 +47,23 @@ class _LoginViewState extends State<_LoginViewBody> {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginSuccessState) {
-          context.read<UserCubit>().setGuestStatus(false);
-          customGo(context, AppRouter.homePage);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.green,
+            ),
+          );
+          Future.delayed(const Duration(seconds: 1), () {
+            context.read<UserCubit>().setGuestStatus(false);
+            customGo(context, AppRouter.homePage);
+          });
+        } else if (state is LoginFailureState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -117,15 +132,24 @@ class _LoginViewState extends State<_LoginViewBody> {
                           SizedBox(height: 20.h),
 
                           /// Login Button
-                          PrimaryButton(onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<LoginCubit>().login(
-                                phoneNumber: _phoneController.text,
-                                password: _passwordController.text,
-                              );
-                            }
-                          },
-                            text: AppStrings.login.tr(),
+                          PrimaryButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<LoginCubit>().login(
+                                  phoneNumber: _phoneController.text,
+                                  password: _passwordController.text,
+                                );
+                              }
+                            },
+                            child: state is LoginLoadingState
+                                ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                                : Text(
+                              AppStrings.login.tr(),
+                              style: AppStyles.styleSemiBold18(context)
+                                  .copyWith(color: AppColors.pureWhiteColor),
+                            ),
                           ),
 
                           SizedBox(height: 26.h),

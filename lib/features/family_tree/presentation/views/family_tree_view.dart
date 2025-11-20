@@ -110,29 +110,32 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                           }
                         }
 
-                        return InteractiveViewer(
-                          constrained: false,
-                          boundaryMargin: const EdgeInsets.all(100),
-                          minScale: 0.01,
-                          maxScale: 5.6,
-                          child: GraphView(
-                            graph: graph,
-                            algorithm: BuchheimWalkerAlgorithm(
-                                builder, TreeEdgeRenderer(builder)),
-                            paint: Paint()
-                              ..color = Colors.green
-                              ..strokeWidth = 1
-                              ..style = PaintingStyle.stroke,
-                            builder: (Node node) {
-                              final familyMember =
-                              node.key!.value as FamilyMember;
-                              return _buildMemberNode(familyMember);
-                            },
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
+                        return GestureDetector(
+                            onHorizontalDragStart: (details) {},
+                            child: InteractiveViewer(
+                              constrained: false,
+                              boundaryMargin: const EdgeInsets.all(100),
+                              minScale: 0.01,
+                              maxScale: 5.6,
+                              child: GraphView(
+                                graph: graph,
+                                algorithm: BuchheimWalkerAlgorithm(
+                                    builder, TreeEdgeRenderer(builder)),
+                                paint: Paint()
+                                  ..color = Colors.green
+                                  ..strokeWidth = 1
+                                  ..style = PaintingStyle.stroke,
+                                builder: (Node node) {
+                                  final familyMember =
+                                  node.key!.value as FamilyMember;
+                                  return _buildMemberNode(familyMember);
+                                },
+                              ),
+                            )
+                            );
+                        }
+                            return const SizedBox.shrink();
+                      },
                   ),
                 ),
               ],
@@ -197,7 +200,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 size: 20,
               ),
             ),
-             SizedBox(
+            SizedBox(
               width: 5.w,
             ),
             GestureDetector(
@@ -218,7 +221,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 size: 20,
               ),
             ),
-             SizedBox(
+            SizedBox(
               width: 5.w,
             ),
             GestureDetector(
@@ -268,7 +271,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
 
                             // Content
                             Text(
-                             AppStrings.deleteMemberTitle.tr(),
+                              AppStrings.deleteMemberTitle.tr(),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 14.sp,
@@ -303,7 +306,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                     ),
                                   ),
                                 ),
-                                 SizedBox(width: 12.w),
+                                SizedBox(width: 12.w),
                                 Expanded(
                                   child:   PrimaryButton(
                                     onPressed: () {

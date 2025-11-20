@@ -16,12 +16,13 @@ class LoginCubit extends Cubit<LoginState> {
     final Either<AuthFailureModel, LoginSuccessModel> result =
     await loginRepo.login(
         phoneNumber: phoneNumber,
-      password: password
+        password: password
     );
 
-    result.fold((failure) => emit(LoginFailureState(failure)),
-            (login) {
-      emit(LoginSuccessState(login: login));
-    });
+    result.fold(
+            (failure) => emit(LoginFailureState(
+            errMessage: failure.message ?? 'An unknown error occurred')),
+            (login) =>
+            emit(const LoginSuccessState(message: 'Login Successful')));
   }
 }
