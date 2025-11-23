@@ -30,27 +30,12 @@ class AllNewsView extends StatelessWidget {
         ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(90.h),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(25.r),
-                  bottomRight: Radius.circular(25.r),
-                ),
-              ),
-              child: SafeArea(
-                child: Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                  child: Text(
-                    AppStrings.newsFamily.tr(),
-                    style: AppStyles.styleBold20(context)
-                        .copyWith(color: Colors.white),
-                  ),
-                ),
-              ),
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: Text(
+              AppStrings.newsFamily.tr(),
+              style: AppStyles.styleBold20(context)
+                  .copyWith(color: AppColors.secondaryColor),
             ),
           ),
           body: BlocBuilder<NewsCubit, NewsState>(
