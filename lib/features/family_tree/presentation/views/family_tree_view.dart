@@ -173,13 +173,17 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   Widget _buildMemberNode(FamilyMember member) {
+    ImageProvider backgroundImage;
+    if (member.avatar != null && member.avatar!.isNotEmpty) {
+      backgroundImage = CachedNetworkImageProvider(member.avatar!);
+    } else {
+      backgroundImage = AssetImage(AppAssets.accountIcon);
+    }
     return Column(
       children: [
         CircleAvatar(
           radius: 40,
-          backgroundImage: CachedNetworkImageProvider(
-            member.avatar ?? '',
-          ),
+          backgroundImage: backgroundImage,
         ),
         const SizedBox(height: 8),
         Row(

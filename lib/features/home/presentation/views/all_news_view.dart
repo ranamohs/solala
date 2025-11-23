@@ -49,6 +49,16 @@ class AllNewsView extends StatelessWidget {
                   ),
                 );
               } else if (state is ReportsSuccess) {
+                if (state.reportModel.data!.isEmpty) {
+                  return Center(
+                    child: Text(
+                      AppStrings.noNewsFoundTillNow.tr(),
+                      style: AppStyles.styleBold20(context).copyWith(
+                        color: AppColors.secondaryColor,
+                      ),
+                    ),
+                  );
+                }
                 return ListView.builder(
                   padding: const EdgeInsets.all(20),
                   itemCount: state.reportModel.data!.length,

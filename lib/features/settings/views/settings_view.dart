@@ -35,13 +35,12 @@ class SettingsView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title:  Text(
-            AppStrings.settings.tr(),
-            style: AppStyles.styleMedium22(context),
-          ),
-          elevation: 0,
           backgroundColor: Colors.transparent,
-
+          title: Text(
+            AppStrings.settings.tr(),
+            style: AppStyles.styleBold25(context)
+                .copyWith(color: AppColors.greenColor),
+          ),
         ),
         body: ListView(
           padding: const EdgeInsets.all(16),

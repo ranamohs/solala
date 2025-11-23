@@ -96,7 +96,6 @@ class _HomeViewState extends State<HomeView> {
                   const BannersSection(),
                   const SliverToBoxAdapter(child: VerticalSpace(40)),
                   SliverToBoxAdapter(child: EventsSection()),
-                  // إضافة AboutFamilySection هنا
                   const SliverToBoxAdapter(child: VerticalSpace(24)),
                   const SliverToBoxAdapter(
                     child: AboutFamilySection(),

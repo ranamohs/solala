@@ -33,7 +33,7 @@ Future<void> _checkUserStatusAndNavigate() async {
   Future.delayed(const Duration(seconds: 5), () {
     if (!mounted) return;
     if (userCubit.state.isGuest) {
-      customGo(context, AppRouter.registerView);
+      customGo(context, AppRouter.loginView);
     } else {
       customGo(context, AppRouter.homePage);
     }

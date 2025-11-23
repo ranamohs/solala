@@ -21,14 +21,6 @@ class _AppLayoutState extends State<AppLayout> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
-  final List<Widget> _screens = [
-    const HomeView(),
-    const EventsView(),
-    const FamilyTreeView(),
-    const SettingsView(),
-    const UpdateProfileView(),
-  ];
-
   void _onPageChanged(int index) {
     setState(() {
       _currentIndex = index;
@@ -45,6 +37,13 @@ class _AppLayoutState extends State<AppLayout> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _screens = [
+      HomeView(),
+      EventsView(),
+      FamilyTreeView(),
+      SettingsView(),
+      UpdateProfileView(),
+    ];
     return Scaffold(
       body: PageView(
         controller: _pageController,
