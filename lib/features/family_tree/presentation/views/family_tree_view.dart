@@ -18,7 +18,6 @@ import '../manager/family_cubit/family_cubit.dart';
 import '../manager/family_cubit/family_state.dart';
 import '../widgets/update_menmber_dialog.dart';
 
-
 class FamilyTreeView extends StatefulWidget {
   const FamilyTreeView({super.key});
 
@@ -27,11 +26,26 @@ class FamilyTreeView extends StatefulWidget {
 }
 
 class _FamilyTreeViewState extends State<FamilyTreeView> {
+  final GlobalKey _graphKey = GlobalKey();
+  final TransformationController _transformationController =
+  TransformationController();
+
   @override
   void initState() {
     super.initState();
     context.read<FamilyTreeCubit>().getFamilyTree();
   }
+
+  void _centerGraph(Size? graphSize, Size viewportSize) {
+    if (graphSize == null) return;
+    final double scale = viewportSize.width / graphSize.width;
+    final double xOffset = (viewportSize.width - graphSize.width * scale) / 2;
+    final double yOffset = (viewportSize.height - graphSize.height * scale) / 2;
+    _transformationController.value = Matrix4.identity()
+      ..translate(xOffset, yOffset)
+      ..scale(scale);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,89 +80,94 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             onRefresh: () async {
               context.read<FamilyTreeCubit>().getFamilyTree();
             },
-            child: CustomScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              slivers: [
-                SliverFillRemaining(
-                  hasScrollBody: false,
-                  child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
-                    buildWhen: (previous, current) {
-                      return current is! AddFamilyMemberLoading &&
-                          current is! AddFamilyMemberFailure;
-                    },
-                    builder: (context, state) {
-                      if (state is FamilyTreeLoading) {
-                        return Center(
-                          child: LoadingAnimationWidget.flickr(
-                            leftDotColor: AppColors.primaryColor,
-                            rightDotColor: AppColors.greenColor,
-                            size: 64,
-                          ),
-                        );
-                      } else if (state is FamilyTreeFailure) {
-                        return Center(
-                          child: RetryWidget(
-                            message: state.failure.errMessage,
-                            onPressed: () {
-                              context.read<FamilyTreeCubit>().getFamilyTree();
-                            },
-                          ),
-                        );
-                      } else if (state is FamilyTreeSuccess) {
-                        final graph = Graph();
-                        final BuchheimWalkerConfiguration builder =
-                        BuchheimWalkerConfiguration()
-                          ..siblingSeparation = (50)
-                          ..levelSeparation = (50)
-                          ..subtreeSeparation = (50)
-                          ..orientation = (BuchheimWalkerConfiguration
-                              .ORIENTATION_TOP_BOTTOM);
+            child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
+              buildWhen: (previous, current) {
+                return current is! AddFamilyMemberLoading &&
+                    current is! AddFamilyMemberFailure;
+              },
+              builder: (context, state) {
+                if (state is FamilyTreeLoading) {
+                  return Center(
+                    child: LoadingAnimationWidget.flickr(
+                      leftDotColor: AppColors.primaryColor,
+                      rightDotColor: AppColors.greenColor,
+                      size: 64,
+                    ),
+                  );
+                } else if (state is FamilyTreeFailure) {
+                  return Center(
+                    child: RetryWidget(
+                      message: state.failure.errMessage,
+                      onPressed: () {
+                        context.read<FamilyTreeCubit>().getFamilyTree();
+                      },
+                    ),
+                  );
+                } else if (state is FamilyTreeSuccess) {
+                  if (state.familyTreeModel.data == null ||
+                      state.familyTreeModel.data!.isEmpty) {
+                    return Center(
+                      child: Text(
+                        AppStrings.noMembersFoundTillNow.tr(),
+                        style: AppStyles.styleMedium18(context).copyWith(
+                          color: AppColors.secondaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    );
+                  }
 
-                        if (state.familyTreeModel.data == null ||
-                            state.familyTreeModel.data!.isEmpty) {
-                          return Center(
-                            child: Text(
-                              AppStrings.noMembersFoundTillNow.tr(),
-                              style: AppStyles.styleMedium18(context).copyWith(
-                                color: AppColors.secondaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        }
-                        for (var member in state.familyTreeModel.data!) {
-                          _buildGraph(graph, member, null);
-                        }
+                  final graph = Graph();
+                  final BuchheimWalkerConfiguration builder =
+                  BuchheimWalkerConfiguration()
+                    ..siblingSeparation = (100)
+                    ..levelSeparation = (150)
+                    ..subtreeSeparation = (150)
+                    ..orientation =
+                    (BuchheimWalkerConfiguration.ORIENTATION_TOP_BOTTOM);
 
-                        return GestureDetector(
-                          onHorizontalDragStart: (details) {},
-                          child: InteractiveViewer(
-                            constrained: false,
-                            boundaryMargin: const EdgeInsets.all(100),
-                            minScale: 0.01,
-                            maxScale: 5.6,
-                            child: GraphView(
-                              graph: graph,
-                              algorithm: BuchheimWalkerAlgorithm(
-                                  builder, TreeEdgeRenderer(builder)),
-                              paint: Paint()
-                                ..color = Colors.green
-                                ..strokeWidth = 1
-                                ..style = PaintingStyle.stroke,
-                              builder: (Node node) {
-                                final familyMember =
-                                node.key!.value as FamilyMember;
-                                return _buildMemberNode(familyMember);
-                              },
-                            ),
-                          ),
-                        );
-                      }
+                  for (var member in state.familyTreeModel.data!) {
+                    _buildGraph(graph, member, null);
+                  }
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    final RenderBox? graphRenderBox =
+                    _graphKey.currentContext?.findRenderObject() as RenderBox?;
+                    final RenderBox? viewportRenderBox =
+                    context.findRenderObject() as RenderBox?;
+
+                    if (graphRenderBox != null && viewportRenderBox != null) {
+                      _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                    }
+                  });
+
+
+                  return GestureDetector(
+                      onHorizontalDragStart: (details) {},
+                      child: InteractiveViewer(
+                        transformationController: _transformationController,
+                        constrained: false,
+                        boundaryMargin: const EdgeInsets.all(double.infinity),
+                        minScale: 0.01,
+                        maxScale: 5.6,
+                        child: GraphView(
+                          key: _graphKey,
+                          graph: graph,
+                          algorithm: BuchheimWalkerAlgorithm(
+                              builder, TreeEdgeRenderer(builder)),
+                          paint: Paint()
+                            ..color = Colors.green
+                            ..strokeWidth = 1
+                            ..style = PaintingStyle.stroke,
+                          builder: (Node node) {
+                            final familyMember = node.key!.value as FamilyMember;
+                            return _buildMemberNode(familyMember);
+                          },
+                        ),
+                          )
+                      );
+                  }
                       return const SizedBox.shrink();
-                    },
-                  ),
-                ),
-              ],
+                },
             ),
           ),
         ),
@@ -353,5 +372,4 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
       ],
     );
   }
-
 }
