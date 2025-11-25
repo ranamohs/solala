@@ -64,7 +64,6 @@ dependencies:
 
 
 dev_dependencies:
-  flutter_launcher_icons: "^0.14.4"
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
@@ -96,14 +95,3 @@ flutter:
         - asset: assets/fonts/Cairo-Regular.ttf
         - asset: assets/fonts/Cairo-Bold.ttf
 
-flutter_launcher_icons:
-  android: true
-  ios: true
-  image_path: "assets/images/solala_app_icon.png"
-
-
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/images/solala_app_icon.png"
-
-
-  remove_alpha_ios: true
