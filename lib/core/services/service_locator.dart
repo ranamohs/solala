@@ -84,7 +84,6 @@ void setupServiceLocator() {
     RegisterRepoImpl(
       dioConsumer: getIt.get<DioConsumer>(),
       secureStorageHelper: getIt<SecureStorageHelper>(),
-      networkCubit: getIt<NetworkConnectionCubit>(),
     ),
   );
   getIt.registerFactory<RegisterCubit>(
@@ -95,9 +94,7 @@ void setupServiceLocator() {
     LoginRepoImpl(
       dioConsumer: getIt.get<DioConsumer>(),
       secureStorageHelper: getIt<SecureStorageHelper>(),
-      networkCubit: getIt<NetworkConnectionCubit>(),
       userDataManager: getIt<UserDataManager>(),
-
     ),
   );
   getIt.registerFactory<LoginCubit>(
