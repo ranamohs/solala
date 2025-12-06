@@ -23,29 +23,32 @@ class EventsSection extends StatelessWidget {
       child: BlocBuilder<NumberingEventsCubit, NumberingEventsState>(
         builder: (context, state) {
           if (state is NumberingEventsSuccess) {
+            final data = state.numberingEventsModel.data;
+            if (data == null) {
+              return Center(
+                child: Text(AppStrings.noEventsFoundTillNow.tr(), style: AppStyles.styleBold16(context).copyWith(color: AppColors.secondaryColor),),
+              );
+            }
             return Row(
               children: [
                 Expanded(
                   child: _StatCard(
                     title: AppStrings.members.tr(),
-                    value: state.numberingEventsModel.data!.familiesMemberCount
-                        .toString(),
+                    value: data.familiesMemberCount.toString(),
                   ),
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: _StatCard(
                     title: AppStrings.events.tr(),
-                    value:
-                    state.numberingEventsModel.data!.eventsCount.toString(),
+                    value: data.eventsCount.toString(),
                   ),
                 ),
                 SizedBox(width: 12.w),
                 Expanded(
                   child: _StatCard(
                     title: AppStrings.news.tr(),
-                    value:
-                    state.numberingEventsModel.data!.newsCount.toString(),
+                    value: data.newsCount.toString(),
                   ),
                 ),
               ],

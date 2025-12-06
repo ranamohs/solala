@@ -36,7 +36,7 @@ class NewsRepoImpl implements NewsRepo {
         },);
       return right(NewsModel.fromJson(response));
     } on DioException catch (e) {
-      return left(ServerFailure( errMessage: e.response!.data['message'].toString()));
+      return left(ServerFailure.fromDioException(e));
     }
   }
 
@@ -59,7 +59,7 @@ class NewsRepoImpl implements NewsRepo {
       );
       return right(NewsDetailsModel.fromJson(response));
     } on DioException catch (e) {
-      return left(ServerFailure(errMessage: e.response!.data['message'].toString()));
+      return left(ServerFailure.fromDioException(e));
     }
   }
 }
