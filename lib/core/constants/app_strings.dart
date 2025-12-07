@@ -114,6 +114,8 @@ static const String members = "members";
 static const String noNewsFoundTillNow = "noNewsFoundTillNow";
 static const String noMembersFoundTillNow = "noMembersFoundTillNow";
 static const String noEventsFoundTillNow = "noEventsFoundTillNow";
+static const String addMember = "addMember";
+
 
 
 

@@ -102,6 +102,7 @@ class LoginRepoImpl implements LoginRepo {
       userDataManager.saveUserPhoneNumber(phoneNumber: userData.phone ?? '');
       userDataManager.saveUserAvatarUrl(avatar: userData.avatar ?? '');
       userDataManager.saveUserFamilyId(familyId: userData.familyId ?? '');
+      userDataManager.saveUserFamilyName(familyName: userData.familyName ?? '');
       userDataManager.saveUserStatus(isGuest: false);
     }
   }

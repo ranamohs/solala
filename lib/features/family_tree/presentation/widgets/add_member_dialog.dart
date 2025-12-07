@@ -1,10 +1,11 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:solala/core/services/service_locator.dart';
+import 'package:solala/core/databases/cache/user_data_manager.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
@@ -13,6 +14,7 @@ import '../manager/family_cubit/family_state.dart';
 
 class AddMemberDialog extends StatefulWidget {
   final int parentId;
+
   final bool isEditMode;
   final String? existingName;
   final String? existingGender;
@@ -23,6 +25,7 @@ class AddMemberDialog extends StatefulWidget {
   const AddMemberDialog({
     super.key,
     required this.parentId,
+
     this.isEditMode = false,
     this.existingName,
     this.existingGender,
@@ -89,8 +92,8 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
               ),
               child: Icon(Icons.delete_outline, color: Colors.red.shade700, size: 24.sp),
             ),
-             SizedBox(width: 12.sp),
-             Text('تأكيد الحذف', style: AppStyles.styleBold16(context)),
+            SizedBox(width: 12.sp),
+            Text('تأكيد الحذف', style: AppStyles.styleBold16(context)),
           ],
         ),
         content:  Text(
@@ -133,7 +136,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
               content: Row(
                 children: [
                   const Icon(Icons.check_circle, color: Colors.white),
-                   SizedBox(width: 12.w),
+                  SizedBox(width: 12.w),
                   Expanded(child: Text(state.basicModel.message.ar)),
                 ],
               ),
@@ -149,7 +152,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
               content: Row(
                 children: [
                   const Icon(Icons.error_outline, color: Colors.white),
-                   SizedBox(width: 12.w),
+                  SizedBox(width: 12.w),
                   Expanded(child: Text(state.failure.errMessage)),
                 ],
               ),
@@ -202,7 +205,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                           size: 28.sp,
                         ),
                       ),
-                       SizedBox(width: 12.w),
+                      SizedBox(width: 12.w),
                       Expanded(
                         child: Text(
                           widget.isEditMode ? 'تعديل بيانات العضو' : 'إضافة عضو جديد',
@@ -237,7 +240,6 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                               Container(
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-
                                 ),
                                 child: CircleAvatar(
                                   radius: 55.r,
@@ -263,7 +265,6 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                                       color: AppColors.primaryColor,
                                       shape: BoxShape.circle,
                                       border: Border.all(color: Colors.white, width: 3),
-
                                     ),
                                     child:  Icon(
                                       Icons.camera_alt,
@@ -330,7 +331,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                                   child: Row(
                                     children: [
                                       Icon(Icons.female, color: Colors.pink.shade700, size: 20.sp),
-                                       SizedBox(width: 8.w),
+                                      SizedBox(width: 8.w),
                                       const Text('أنثى'),
                                     ],
                                   ),
@@ -350,7 +351,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                             ),
                           ),
 
-                           SizedBox(height: 16.h),
+                          SizedBox(height: 16.h),
 
                           // Relation field
                           _buildTextField(
@@ -440,7 +441,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(widget.isEditMode ? Icons.check : Icons.add , color: AppColors.primaryColor),
-                               SizedBox(width: 8.w),
+                              SizedBox(width: 8.w),
                               Text(
                                 widget.isEditMode ? 'حفظ التعديلات' : 'إضافة',
                                 style: AppStyles.styleBold20(context).copyWith(color: AppColors.primaryColor),
@@ -449,7 +450,6 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                           ),
                         ),
                       ),
-
                     ],
                   ),
                 ),

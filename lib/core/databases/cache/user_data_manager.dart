@@ -11,6 +11,7 @@ class UserDataManager {
   String? _cachedUserLogoUrl;
   int? _cachedUserId;
   String? _cachedUserFamilyId;
+  String? _cachedUserFamilyName;
 
   UserDataManager(this._cacheHelper);
 
@@ -97,6 +98,7 @@ class UserDataManager {
     _cachedUserPhoneNumber = null;
     _cachedUserLogoUrl = null;
     _cachedUserFamilyId = null;
+    _cachedUserFamilyName = null;
   }
 
   void saveUserFamilyId({required String familyId}) {
@@ -107,5 +109,15 @@ class UserDataManager {
   String? getUserFamilyId() {
     _cachedUserFamilyId ??= _cacheHelper.getData(key: 'familyId');
     return _cachedUserFamilyId;
+  }
+
+  void saveUserFamilyName({required String familyName}) {
+    _cacheHelper.saveData(key: 'familyName', value: familyName);
+    _cachedUserFamilyName = familyName;
+  }
+
+  String? getUserFamilyName() {
+    _cachedUserFamilyName ??= _cacheHelper.getData(key: 'familyName');
+    return _cachedUserFamilyName;
   }
 }

@@ -7,8 +7,6 @@ import '../../../data/models/family_model.dart';
 import '../../../data/repos/family_repo.dart';
 import 'family_state.dart';
 
-
-
 class FamilyTreeCubit extends Cubit<FamilyTreeState> {
   final FamilyTreeRepo familyTreeRepo;
 

@@ -27,6 +27,7 @@ class UserModel {
   final dynamic pushNotificationsToken;
   final dynamic accountType;
   final String? familyId;
+  final String? familyName;
 
   UserModel({
     this.id,
@@ -40,6 +41,7 @@ class UserModel {
     this.pushNotificationsToken,
     this.accountType,
     this.familyId,
+    this.familyName,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -55,6 +57,7 @@ class UserModel {
       pushNotificationsToken: json['push_notifications_token'],
       accountType: json['account_type'],
       familyId: json['family_id']?.toString(),
+      familyName: json['family_name'],
     );
   }
 
@@ -71,6 +74,7 @@ class UserModel {
       'push_notifications_token': pushNotificationsToken,
       'account_type': accountType,
       'family_id': familyId,
+      'family_name': familyName,
     };
   }
 }
