@@ -64,12 +64,13 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
       return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
     }
   }
+// في FamilyTreeRepoImpl
   @override
   Future<Either<Failure, BasicModel>> addFamilyMember({
     required String name,
     required String gender,
     required String relation,
-    required int parentId,
+    int? parentId, // تغيير إلى nullable
     required String avatar,
   }) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
@@ -81,15 +82,28 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
 
     try {
       final token = await secureStorageHelper?.getToken();
-      final formData = FormData.fromMap({
+
+      // إنشاء FormData مع parentId إذا كان غير null
+      final formDataMap = <String, dynamic>{
         'name': name,
         'gender': gender,
         'relation': relation,
-        'parent_id': parentId,
-        if (avatar.isNotEmpty)
-          'avatar': await MultipartFile.fromFile(avatar,
-              filename: avatar.split('/').last),
-      });
+      };
+
+      // إضافة parent_id فقط إذا كان له قيمة
+      if (parentId != null) {
+        formDataMap['parent_id'] = parentId;
+      }
+
+      // إضافة الصورة إذا كانت موجودة
+      if (avatar.isNotEmpty) {
+        formDataMap['avatar'] = await MultipartFile.fromFile(
+          avatar,
+          filename: avatar.split('/').last,
+        );
+      }
+
+      final formData = FormData.fromMap(formDataMap);
 
       final response = await dioConsumer.post(
         EndPoints.addFamilyMember,
@@ -121,7 +135,6 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
       return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
     }
   }
-
   @override
   Future<Either<Failure, FamilyMember>> updateFamilyMember({
     required int memberId,

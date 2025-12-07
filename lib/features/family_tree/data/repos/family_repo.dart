@@ -10,7 +10,7 @@ abstract class FamilyTreeRepo {
     required String name,
     required String gender,
     required String relation,
-    required int parentId,
+     int? parentId,
     required String avatar,
   });
   Future<Either<Failure, FamilyMember>> updateFamilyMember({

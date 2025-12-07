@@ -28,7 +28,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     required String name,
     required String gender,
     required String relation,
-    required int parentId,
+     int? parentId,
     required String avatar,
   }) async {
     emit(AddFamilyMemberLoading());

@@ -13,7 +13,7 @@ import '../manager/family_cubit/family_cubit.dart';
 import '../manager/family_cubit/family_state.dart';
 
 class AddMemberDialog extends StatefulWidget {
-  final int parentId;
+  final int? parentId;
 
   final bool isEditMode;
   final String? existingName;
@@ -24,7 +24,7 @@ class AddMemberDialog extends StatefulWidget {
 
   const AddMemberDialog({
     super.key,
-    required this.parentId,
+     this.parentId,
 
     this.isEditMode = false,
     this.existingName,

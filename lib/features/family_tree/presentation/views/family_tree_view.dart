@@ -321,15 +321,17 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<FamilyTreeCubit>(),
-                          child: AddMemberDialog(
-                            parentId: member.id!,
+                      if (familyId != null) {
+                        showDialog(
+                          context: context,
+                          builder: (_) => BlocProvider.value(
+                            value: context.read<FamilyTreeCubit>(),
+                            child: AddMemberDialog(
+                              parentId:null,
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     },
                     child: Icon(
                       Icons.add_circle,
