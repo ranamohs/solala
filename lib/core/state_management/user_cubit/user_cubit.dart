@@ -15,9 +15,7 @@ class UserCubit extends Cubit<UserState> {
     final token = await _secureStorageHelper.getToken();
     final isGuest = token == null || token.isEmpty;
 
-    if (isGuest != state.isGuest) {
-      emit(UserState(isGuest: isGuest));
-    }
+    emit(UserState(isGuest: isGuest));
   }
 
   void setGuestStatus(bool status) {

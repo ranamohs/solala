@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solala/core/databases/cache/secure_storage_helper.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -21,9 +22,11 @@ class LogoutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserDataManager userDataManager = getIt<UserDataManager>();
+    final SecureStorageHelper secureStorageHelper = getIt<SecureStorageHelper>();
     return BlocConsumer<LogoutCubit, LogoutState>(
       listener: (context, state) {
         if (state is LogoutSuccessState) {
+          secureStorageHelper.deleteToken();
           context.read<UserCubit>().setGuestStatus(true);
           GoRouter.of(context).go(AppRouter.loginView);
           fixedSnackBar(
@@ -36,7 +39,9 @@ class LogoutDialog extends StatelessWidget {
           );
           userDataManager.clearAllUserData();
         } else if (state is LogoutFailureState) {
-          GoRouter.of(context).pop();
+          secureStorageHelper.deleteToken();
+          context.read<UserCubit>().setGuestStatus(true);
+          GoRouter.of(context).go(AppRouter.loginView);
           fixedSnackBar(
             context,
             message: isArabic(context)
@@ -158,3 +163,4 @@ class LogoutDialog extends StatelessWidget {
     );
   }
 }
+
