@@ -14,16 +14,17 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 import '../../../../core/constants/app_styles.dart';
 import '../../../../core/functions/fixed_snack_bar.dart';
+import '../widgets/provider_register_form.dart';
 import '../widgets/register_form.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+class ProviderRegisterView extends StatefulWidget {
+  const ProviderRegisterView({super.key});
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  State<ProviderRegisterView> createState() => _RegisterViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _RegisterViewState extends State<ProviderRegisterView> {
   @override
   void initState() {
     super.initState();
@@ -36,7 +37,7 @@ class _RegisterViewState extends State<RegisterView> {
       listener: (context, state) {
         if (state is RegisterSuccessState) {
           context.read<UserCubit>().setGuestStatus(false);
-          customPush(context, AppRouter.verificationView);
+          customPush(context, AppRouter.homePage);
         } else if (state is RegisterFailureState) {
           fixedSnackBar(
             context,
@@ -86,11 +87,11 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                             SizedBox(height: 10.h),
                             Text(
-                              AppStrings.fillFormToProceed.tr(),
-                              style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
+                                AppStrings.fillFormToProceed.tr(),
+                                style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
                             ),
                             SizedBox(height: 30.h),
-                            const RegisterForm(),
+                            const ProviderRegisterForm(),
                             SizedBox(height: 25.h),
 
                             Row(
@@ -126,8 +127,8 @@ class _RegisterViewState extends State<RegisterView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    AppStrings.alreadyHaveAnAccount.tr(),
-                                    style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
+                                      AppStrings.alreadyHaveAnAccount.tr(),
+                                      style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
                                   ),
                                   const SizedBox(width: 6),
                                   GestureDetector(
@@ -136,8 +137,8 @@ class _RegisterViewState extends State<RegisterView> {
                                           context, AppRouter.loginView);
                                     },
                                     child:  Text(
-                                      AppStrings.login.tr(),
-                                      style: AppStyles.styleMedium14(context).copyWith(color: AppColors.primaryColor)
+                                        AppStrings.login.tr(),
+                                        style: AppStyles.styleMedium14(context).copyWith(color: AppColors.primaryColor)
                                     ),
                                   ),
                                 ],

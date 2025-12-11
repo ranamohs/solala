@@ -193,7 +193,7 @@ class _LoginViewState extends State<_LoginViewBody> {
                                   GestureDetector(
                                     onTap: () {
                                       customPush(
-                                          context, AppRouter.registerView);
+                                          context, AppRouter.chooseRoleView);
                                     },
                                     child:  Text(
                                         AppStrings.signUp.tr(),
