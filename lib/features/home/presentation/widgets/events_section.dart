@@ -25,50 +25,48 @@ class _EventsSectionState extends State<EventsSection> {
   @override
   void initState() {
     super.initState();
-    final accountType = getIt<UserDataManager>().getAccountType();
-    if (accountType != 'provider') {
-      context.read<NumberingEventsCubit>().getNumberingEvents();
-    }
+    context.read<NumberingEventsCubit>().getNumberingEvents();
   }
 
   @override
   Widget build(BuildContext context) {
     final accountType = getIt<UserDataManager>().getAccountType();
-    if (accountType == 'provider') {
-      return Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppStrings.events.tr(),
-                  style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.secondaryColor)),
-              TextButton(
-                onPressed: () {
-                  // TODO: Implement create event
-                },
-                child: Text(
-                  AppStrings.create.tr(),
-                  style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.greenColor),
-                ),
-              ),
-            ],
-          ),
-          Center(
-            child: Text(
-              AppStrings.createEventForYourFamily.tr(),
-              style: AppStyles.styleBold16(context)
-                  .copyWith(color: AppColors.secondaryColor),
-            ),
-          ),
-        ],
-      );
-    }
     return BlocBuilder<NumberingEventsCubit, NumberingEventsState>(
       builder: (context, state) {
         if (state is NumberingEventsSuccess) {
           final data = state.numberingEventsModel.data;
+          if (accountType == 'provider' &&
+              (data == null || (data.eventsCount ?? 0) == 0)) {
+            return Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(AppStrings.events.tr(),
+                        style: AppStyles.styleBold16(context)
+                            .copyWith(color: AppColors.secondaryColor)),
+                    TextButton(
+                      onPressed: () {
+                        // TODO: Implement create event
+                      },
+                      child: Text(
+                        AppStrings.create.tr(),
+                        style: AppStyles.styleBold16(context)
+                            .copyWith(color: AppColors.greenColor),
+                      ),
+                    ),
+                  ],
+                ),
+                Center(
+                  child: Text(
+                    AppStrings.createEventForYourFamily.tr(),
+                    style: AppStyles.styleBold16(context)
+                        .copyWith(color: AppColors.secondaryColor),
+                  ),
+                ),
+              ],
+            );
+          }
           if (data == null) {
             return Center(
               child: Text(

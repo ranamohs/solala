@@ -70,9 +70,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           ),
         ),
         backgroundColor: Colors.transparent,
-        body: accountType == 'provider'
-            ? const ProviderFamilyView()
-            : BlocListener<FamilyTreeCubit, FamilyTreeState>(
+        body: BlocListener<FamilyTreeCubit, FamilyTreeState>(
           listener: (context, state) {
             if (state is AddFamilyMemberSuccess ||
                 state is UpdateFamilyMemberSuccess ||
@@ -112,6 +110,10 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 } else if (state is FamilyTreeSuccess) {
                   List<FamilyMember> members =
                   List.from(state.familyTreeModel.data ?? []);
+
+                  if (accountType == 'provider' && members.isEmpty) {
+                    return const ProviderFamilyView();
+                  }
 
                   if (members.isEmpty) {
                     final familyName =
