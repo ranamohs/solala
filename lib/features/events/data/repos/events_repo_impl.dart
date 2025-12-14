@@ -109,7 +109,7 @@ class EventsRepoImpl implements EventsRepo {
       final token = await secureStorageHelper?.getToken();
       final response = await dioConsumer.post(
         EndPoints.addEvent,
-        data: await createEventModel.toJson(),
+        data: createEventModel,
         isFormData: true,
         headers: {
           'Authorization': 'Bearer $token',

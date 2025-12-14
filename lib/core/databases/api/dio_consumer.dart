@@ -36,12 +36,12 @@ class DioConsumer extends ApiConsumer {
     try {
       final res = await dio.post(
         path,
-        data: data,
+        data: isFormData ? FormData.fromMap(await data.toJson()) : data,
         queryParameters: queryParameters,
         options: Options(
           headers: headers ??
               (isFormData
-                  ? {'accept': 'application/json'}
+                  ? ({'accept': 'application/json'}..remove('Content-Type'))
                   : defaultHeaders),
         ),
       );
@@ -61,9 +61,14 @@ class DioConsumer extends ApiConsumer {
     try {
       final res = await dio.put(
         path,
-        data: data,
+        data: isFormData ? FormData.fromMap(await data.toJson()) : data,
         queryParameters: queryParameters,
-        options: Options(headers: headers ?? defaultHeaders),
+        options: Options(
+          headers: headers ??
+              (isFormData
+                  ? ({'accept': 'application/json'}..remove('Content-Type'))
+                  : defaultHeaders),
+        ),
       );
       return res.data;
     } on DioException catch (e) {

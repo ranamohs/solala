@@ -34,27 +34,25 @@ class PrimaryButton extends StatelessWidget {
           backgroundColor: AppColors.primaryColor,
           foregroundColor: AppColors.offWhiteColor,
           shape: RoundedRectangleBorder(
-            // side: BorderSide(
-            //   color: AppColors.pureWhiteColor,
-            // ),
             borderRadius: BorderRadius.circular(12),
           ),
         ),
-        onPressed: ()=> runIfConnected(
+        onPressed: isLoading ? null : ()=> runIfConnected(
             context: context,
             onConnected: onPressed
         ),
-        child: FittedBox(
-          child:
-              child ??
-              Text(
-                text!,
-                style: AppStyles.styleBold18(context).copyWith(color: AppColors.pureWhiteColor),
-                textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-        ),
+        child: isLoading
+            ? const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        )
+            : (child ??
+            Text(
+              text!,
+              style: AppStyles.styleBold18(context).copyWith(color: AppColors.pureWhiteColor),
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            )),
       ),
     );
   }
@@ -143,7 +141,7 @@ class ActionButton extends StatelessWidget {
       onPressed: onPressed,
       child: FittedBox(
         child:
-            child ??
+        child ??
             FittedBox(
               child: Text(
                 text!,
@@ -191,7 +189,7 @@ class SecondaryButton extends StatelessWidget {
       onPressed: onPressed,
       child: FittedBox(
         child:
-            child ??
+        child ??
             Text(
               text ?? '',
               style: AppStyles.styleSemiBold14(
@@ -205,7 +203,7 @@ class SecondaryButton extends StatelessWidget {
 
 class RetryButton extends StatelessWidget {
   const RetryButton({super.key, this.text, required this.onPressed, this.child})
-    : assert(text != null || child != null, 'Provide either text or child');
+      : assert(text != null || child != null, 'Provide either text or child');
 
   final String? text;
   final Widget? child;
@@ -223,7 +221,7 @@ class RetryButton extends StatelessWidget {
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child:
-            child ??
+        child ??
             Text(
               text!,
               style: AppStyles.styleSemiBold18(
@@ -240,7 +238,7 @@ class RetryButton extends StatelessWidget {
 
 class CallButton extends StatelessWidget {
   const CallButton({super.key, this.text, required this.onPressed, this.child})
-    : assert(text != null || child != null, 'Provide either text or child');
+      : assert(text != null || child != null, 'Provide either text or child');
 
   final String? text;
   final Widget? child;
@@ -259,7 +257,7 @@ class CallButton extends StatelessWidget {
         onPressed: onPressed,
         child: FittedBox(
           child:
-              child ??
+          child ??
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -316,7 +314,7 @@ class CancelButton extends StatelessWidget {
         onPressed: onPressed,
         child: FittedBox(
           child:
-              child ??
+          child ??
               Text(
                 text ?? '',
                 style: AppStyles.styleRegular14(

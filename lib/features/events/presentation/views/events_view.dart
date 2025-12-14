@@ -52,9 +52,10 @@ class EventsView extends StatelessWidget {
                     ),
                   ).then((_) => context.read<EventsCubit>().getEvents());
                 },
-                icon: const Icon(
+                icon:  Icon(
                   Icons.add_circle_outline,
                   color: AppColors.greenColor,
+                  size: 32.sp,
                 ),
               ),
           ],
