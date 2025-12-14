@@ -144,6 +144,16 @@
   "useFamilyCodeToJoin": "استخدم كود العائلة للانضمام",
   "addFamily": "إضافة عائلة",
   "createNewFamily": "إنشاء عائلة جديدة",
-  "addMember": "إضافة فرد"
-
+  "addMember": "إضافة فرد",
+  "create_event": "إنشاء مناسبة",
+  "title_ar": "العنوان (بالعربية)",
+  "title_en": "العنوان (بالانجليزية)",
+  "type_ar": "النوع (بالعربية)",
+  "type_en": "النوع (بالانجليزية)",
+  "description_ar": "الوصف (بالعربية)",
+  "description_en": "الوصف (بالانجليزية)",
+  "address_ar": "العنوان (بالعربية)",
+  "address_en": "العنوان (بالانجليزية)",
+  "event_date": "تاريخ المناسبة",
+  "please_select_image": "الرجاء اختيار صورة"
 }

@@ -36,7 +36,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   @override
   void initState() {
     super.initState();
-    context.read<FamilyTreeCubit>().getFamilyTree();
+    final accountType = getIt<UserDataManager>().getAccountType();
+    final familyId = getIt<UserDataManager>().getUserFamilyId();
+    if (accountType != 'provider' || (familyId != null && familyId.isNotEmpty)) {
+      context.read<FamilyTreeCubit>().getFamilyTree();
+    }
   }
 
   void _centerGraph(Size? graphSize, Size viewportSize) {
@@ -52,6 +56,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   @override
   Widget build(BuildContext context) {
     final accountType = getIt<UserDataManager>().getAccountType();
+    final familyId = getIt<UserDataManager>().getUserFamilyId();
 
     return Container(
       decoration: BoxDecoration(
@@ -70,7 +75,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           ),
         ),
         backgroundColor: Colors.transparent,
-        body: BlocListener<FamilyTreeCubit, FamilyTreeState>(
+        body: (accountType == 'provider' && (familyId == null || familyId.isEmpty))
+            ? const ProviderFamilyView()
+            : BlocListener<FamilyTreeCubit, FamilyTreeState>(
           listener: (context, state) {
             if (state is AddFamilyMemberSuccess ||
                 state is UpdateFamilyMemberSuccess ||
@@ -90,6 +97,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                     current is! AddFamilyMemberFailure;
               },
               builder: (context, state) {
+                if (state is FamilyTreeInitial) {
+                  return const SizedBox.shrink();
+                }
                 if (state is FamilyTreeLoading) {
                   return Center(
                     child: LoadingAnimationWidget.flickr(
@@ -110,10 +120,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 } else if (state is FamilyTreeSuccess) {
                   List<FamilyMember> members =
                   List.from(state.familyTreeModel.data ?? []);
-
-                  if (accountType == 'provider' && members.isEmpty) {
-                    return const ProviderFamilyView();
-                  }
 
                   if (members.isEmpty) {
                     final familyName =

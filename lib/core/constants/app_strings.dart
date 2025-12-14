@@ -121,6 +121,17 @@ class AppStrings {
   static const String addFamily = "addFamily";
   static const String createNewFamily = "createNewFamily";
   static const String addMember = "addMember";
+  static const String createEvent = 'create_event';
+  static const String titleAr = 'title_ar';
+  static const String titleEn = 'title_en';
+  static const String typeAr = 'type_ar';
+  static const String typeEn = 'type_en';
+  static const String descriptionAr = 'description_ar';
+  static const String descriptionEn = 'description_en';
+  static const String addressAr = 'address_ar';
+  static const String addressEn = 'address_en';
+  static const String eventDate = 'event_date';
+  static const String pleaseSelectImage = 'please_select_image';
 
 
 

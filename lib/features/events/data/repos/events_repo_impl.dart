@@ -1,4 +1,6 @@
+import 'package:solala/features/events/data/models/create_event_model.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/end_points.dart';
@@ -97,6 +99,28 @@ class EventsRepoImpl implements EventsRepo {
       }
     } on ServerException catch (e) {
       return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
+    }
+  }
+
+  @override
+  Future<Either<Failure, Map<String, dynamic>>> createEvent(
+      {required CreateEventModel createEventModel}) async {
+    try {
+      final token = await secureStorageHelper?.getToken();
+      final response = await dioConsumer.post(
+        EndPoints.addEvent,
+        data: await createEventModel.toJson(),
+        isFormData: true,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioException(e));
+    } catch (e) {
+      return Left(ServerFailure(errMessage: AppStrings.unexpectedError.tr()));
     }
   }
 }
