@@ -33,6 +33,8 @@ class EndPoints {
   static const String numberingEvents = "/family/";
   static const String familyInfo = "/families/";
   static const String news = "/reports";
+  static const String addFamily = "/family/add";
+
 }
 
 class ApiKey {
@@ -76,6 +78,7 @@ class ApiKey {
   static const String rating = 'rating';
   static const String comment = 'comment';
   static const String familyId = 'family_id';
+  static const String type = 'type';
 }
 
 class Params {

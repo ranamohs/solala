@@ -1,6 +1,6 @@
 class NumberingEventsModel {
   final bool? status;
-  final String? message;
+  final Message? message;
   final Data? data;
 
   NumberingEventsModel({
@@ -12,8 +12,26 @@ class NumberingEventsModel {
   factory NumberingEventsModel.fromJson(Map<String, dynamic> json) {
     return NumberingEventsModel(
       status: json['status'],
-      message: json['message']?['en'],
+      message:
+      json['message'] != null ? Message.fromJson(json['message']) : null,
       data: json['data'] != null ? Data.fromJson(json['data']) : null,
+    );
+  }
+}
+
+class Message {
+  final String? en;
+  final String? ar;
+
+  Message({
+    this.en,
+    this.ar,
+  });
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      en: json['en'],
+      ar: json['ar'],
     );
   }
 }

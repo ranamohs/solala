@@ -102,8 +102,8 @@ class _RegisterFormState extends State<RegisterForm> {
                   decoration: _fieldDecoration(AppStrings.chooseYourFamily.tr()),
                   items: state.families.map((f) {
                     return DropdownMenuItem(
-                      value: f.id,
-                      child: Text(f.name, style: AppStyles.styleRegular14(context).copyWith(color: AppColors.white),)
+                        value: f.id,
+                        child: Text(f.name, style: AppStyles.styleRegular14(context).copyWith(color: AppColors.white),)
                     );
                   }).toList(),
                   onChanged: (v) {
@@ -123,8 +123,8 @@ class _RegisterFormState extends State<RegisterForm> {
           const VerticalSpace(16),
 
           /// -------- Password ---------
-         SecondaryTextFormField(
-           isPasswordField: true,
+          SecondaryTextFormField(
+            isPasswordField: true,
             suffixIcon:    Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor)   ,
             controller: _passwordController,
             labelText: AppStrings.password.tr(),
@@ -135,7 +135,7 @@ class _RegisterFormState extends State<RegisterForm> {
           /// -------- Confirm Password ---------
           SecondaryTextFormField(
             isPasswordField: true,
-           suffixIcon: Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor),
+            suffixIcon: Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor),
             controller: _confirmPasswordController,
             labelText: AppStrings.confirmPassword.tr(),
             validate: (v) => v!.isEmpty ? 'Please enter your confirm password' : null,
@@ -152,6 +152,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 password: _passwordController.text,
                 confirmPassword: _confirmPasswordController.text,
                 familyId: _selectedFamilyId!,
+                type: 'user',
               );
               context.read<RegisterCubit>().register(data);
             }

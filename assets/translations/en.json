@@ -187,7 +187,7 @@
 
 
 
-"getStarted": "Get Started Now",
+  "getStarted": "Get Started Now",
   "chooseYourFamily": "Choose Your Family",
   "verification": "Verification",
   "accountVerifiedSuccessfully": "Account Verified Successfully",
@@ -215,6 +215,12 @@
   "noNewsFoundTillNow": "No News Found in Your Family Till Now",
   "noMembersFoundTillNow": "No Members Found in Your Family Till Now",
   "noEventsFoundTillNow": "No Events Found in Your Family Till Now",
+  "createEventForYourFamily": "Create events for your family",
+  "createNewsForYourFamily": "Create news for your family",
+  "create": "Create",
+  "useFamilyCodeToJoin": "Use family code to join",
+  "addFamily": "Add family",
+  "createNewFamily": "Create a new family",
   "addMember": "Add Member"
 
 

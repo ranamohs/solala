@@ -14,7 +14,8 @@ import '../../../../../core/constants/app_styles.dart';
 import '../views/all_news_view.dart';
 
 class FamilyNewsSection extends StatefulWidget {
-  const FamilyNewsSection({super.key});
+  final String accountType;
+  const FamilyNewsSection({super.key, required this.accountType});
 
   @override
   State<FamilyNewsSection> createState() => _FamilyNewsSectionState();
@@ -51,21 +52,33 @@ class _FamilyNewsSectionState extends State<FamilyNewsSection> {
                 ],
               ),
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AllNewsView(),
-                  ),
-                );
-              },
-              child: Text(
-                AppStrings.viewAll.tr(),
-                style: AppStyles.styleBold16(context)
-                    .copyWith(color: AppColors.greenColor),
+            if (widget.accountType == 'provider')
+              TextButton(
+                onPressed: () {
+                  // TODO: Implement create news
+                },
+                child: Text(
+                  AppStrings.create.tr(),
+                  style: AppStyles.styleBold16(context)
+                      .copyWith(color: AppColors.greenColor),
+                ),
+              )
+            else
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AllNewsView(),
+                    ),
+                  );
+                },
+                child: Text(
+                  AppStrings.viewAll.tr(),
+                  style: AppStyles.styleBold16(context)
+                      .copyWith(color: AppColors.greenColor),
+                ),
               ),
-            ),
           ],
         ),
         SizedBox(height: 8.h),
@@ -76,7 +89,9 @@ class _FamilyNewsSectionState extends State<FamilyNewsSection> {
               if (reports.isEmpty) {
                 return Center(
                   child: Text(
-                    AppStrings.noNewsFoundTillNow.tr(),
+                    widget.accountType == 'provider'
+                        ? AppStrings.createNewsForYourFamily.tr()
+                        : AppStrings.noNewsFoundTillNow.tr(),
                     style: AppStyles.styleMedium18(context).copyWith(
                       color: AppColors.secondaryColor,
                       fontWeight: FontWeight.bold,

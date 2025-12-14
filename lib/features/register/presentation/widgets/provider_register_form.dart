@@ -82,6 +82,7 @@ class _ProviderRegisterFormState extends State<ProviderRegisterForm> {
                 email: _emailController.text,
                 password: _passwordController.text,
                 confirmPassword: _confirmPasswordController.text,
+                type: 'provider',
               );
               context.read<RegisterCubit>().register(data);
             }

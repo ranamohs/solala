@@ -64,6 +64,62 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
       return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
     }
   }
+
+  @override
+  Future<Either<Failure, BasicModel>> createFamily(
+      {required String nameAr,
+        required String nameEn,
+        required String code,
+        required String image}) async {
+    final isConnected = await networkCubit.networkInfo.isConnected;
+
+    if (!isConnected) {
+      return Left(
+          NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+    }
+
+    try {
+      final token = await secureStorageHelper?.getToken();
+      final formData = FormData.fromMap({
+        'name[ar]': nameAr,
+        'name[en]': nameEn,
+        'code': code,
+        if (image.isNotEmpty)
+          'image': await MultipartFile.fromFile(image,
+              filename: image.split('/').last),
+      });
+
+      final response = await dioConsumer.post(
+        EndPoints.addFamily,
+        data: formData,
+        isFormData: true,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response != null && response is Map<String, dynamic>) {
+        if (response.containsKey('data') && response['status'] == true) {
+          final basicModel = BasicModel.fromJson(response);
+          return Right(basicModel);
+        } else {
+          String errorMessage = AppStrings.unexpectedError.tr();
+          if (response['message'] is Map) {
+            errorMessage = response['message']['ar'] ?? errorMessage;
+          }
+          return Left(UnexpectedFailure(
+            errMessage: errorMessage,
+          ));
+        }
+      } else {
+        return Left(
+            ServerFailure(errMessage: AppStrings.serverConnectionFailed.tr()));
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
+    }
+  }
 // في FamilyTreeRepoImpl
   @override
   Future<Either<Failure, BasicModel>> addFamilyMember({

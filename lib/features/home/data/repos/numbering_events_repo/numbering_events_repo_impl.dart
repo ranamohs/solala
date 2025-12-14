@@ -25,17 +25,21 @@ class NumberingEventsRepoImpl implements NumberingEventsRepo {
     try {
       final token = await secureStorageHelper.getToken();
       final familyId = userDataManager.getUserFamilyId();
+      if (familyId == null) {
+        return Left(ServerFailure(errMessage: 'Family ID not found'));
+      }
       final response = await dioConsumer.get(
         '${EndPoints.numberingEvents}$familyId/numbering-events',
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
         },
-
       );
       return Right(NumberingEventsModel.fromJson(response));
     } on DioException catch (e) {
-      return Left( ServerFailure(errMessage: AppStrings.unexpectedError.tr()) );
+      return Left(ServerFailure.fromDioException(e));
+    } catch (e) {
+      return Left(ServerFailure(errMessage: AppStrings.unexpectedError.tr()));
     }
   }
 }

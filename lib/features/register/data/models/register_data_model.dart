@@ -7,6 +7,7 @@ class RegisterDataModel {
   final String password;
   final String confirmPassword;
   final int? familyId;
+  final String type;
 
   RegisterDataModel({
     required this.name,
@@ -14,7 +15,8 @@ class RegisterDataModel {
     required this.email,
     required this.password,
     required this.confirmPassword,
-     this.familyId,
+    this.familyId,
+    required this.type,
   });
 
   Map<String, dynamic> toJson() {
@@ -24,7 +26,8 @@ class RegisterDataModel {
       ApiKey.email: email,
       ApiKey.password: password,
       ApiKey.passwordConfirmation: confirmPassword,
-      ApiKey.familyId: familyId ?? null,
+      ApiKey.familyId: familyId,
+      ApiKey.type: type,
     };
   }
 
@@ -36,6 +39,7 @@ class RegisterDataModel {
       password: json[ApiKey.password],
       confirmPassword: json[ApiKey.passwordConfirmation],
       familyId: json[ApiKey.familyId],
+      type: json[ApiKey.type],
     );
   }
 }
