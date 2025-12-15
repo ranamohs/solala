@@ -232,5 +232,6 @@
   "address_ar": "Address (Arabic)",
   "address_en": "Address (English)",
   "event_date": "Event Date",
-  "please_select_image": "Please select an image"
+  "please_select_image": "Please select an image",
+  "create_news": "Create News"
 }

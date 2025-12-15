@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/models/news_model/news_model.dart';
 import '../../../data/repos/news_repos/news_repo.dart';
 import 'news_state.dart';
 
@@ -46,5 +47,17 @@ class NewsCubit extends Cubit<NewsState> {
         },
       );
     }
+  }
+
+  Future<void> createNews(CreateNewsRequestModel createNewsRequestModel) async {
+    emit(CreateNewsLoading());
+    final result = await reportsRepo.createNews(createNewsRequestModel);
+    result.fold(
+          (failure) => emit(CreateNewsError(message: failure.errMessage)),
+          (_) {
+        emit(CreateNewsSuccess(message: 'News Created Successfully'));
+        getReports();
+      },
+    );
   }
 }

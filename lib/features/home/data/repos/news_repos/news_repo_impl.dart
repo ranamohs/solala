@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:solala/core/databases/api/api_consumer.dart';
 import 'package:solala/core/databases/api/dio_consumer.dart';
 import 'package:solala/core/errors/failure.dart';
 import 'package:solala/features/home/data/models/news_model/news_model.dart';
@@ -58,6 +57,32 @@ class NewsRepoImpl implements NewsRepo {
         },
       );
       return right(NewsDetailsModel.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioException(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> createNews(
+      CreateNewsRequestModel createNewsRequestModel) async {
+    try {
+      final isConnected = await networkCubit.networkInfo.isConnected;
+
+      if (!isConnected) {
+        return Left(
+            NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+      }
+      final token = await secureStorageHelper?.getToken();
+      await dioConsumer.post(
+        EndPoints.addNews,
+        data: createNewsRequestModel,
+        isFormData: true,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+      return right(null);
     } on DioException catch (e) {
       return left(ServerFailure.fromDioException(e));
     }

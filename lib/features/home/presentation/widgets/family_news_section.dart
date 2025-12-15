@@ -7,6 +7,7 @@ import 'package:solala/core/widgets/retry_widget.dart';
 import 'package:solala/features/home/data/models/news_model/news_model.dart';
 import 'package:solala/features/home/presentation/manager/news_cubit/news_cubit.dart';
 import 'package:solala/features/home/presentation/manager/news_cubit/news_state.dart';
+import 'package:solala/features/home/presentation/views/create_news_view.dart';
 
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
@@ -55,7 +56,15 @@ class _FamilyNewsSectionState extends State<FamilyNewsSection> {
             if (widget.accountType == 'provider')
               TextButton(
                 onPressed: () {
-                  // TODO: Implement create news
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<NewsCubit>(),
+                        child: const CreateNewsView(),
+                      ),
+                    ),
+                  );
                 },
                 child: Text(
                   AppStrings.create.tr(),

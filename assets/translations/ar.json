@@ -155,5 +155,6 @@
   "address_ar": "العنوان (بالعربية)",
   "address_en": "العنوان (بالانجليزية)",
   "event_date": "تاريخ المناسبة",
-  "please_select_image": "الرجاء اختيار صورة"
+  "please_select_image": "الرجاء اختيار صورة",
+  "create_news": "إنشاء خبر"
 }

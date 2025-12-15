@@ -34,6 +34,7 @@ class EndPoints {
   static const String numberingEvents = "/family/";
   static const String familyInfo = "/families/";
   static const String news = "/reports";
+  static const String addNews = "/reports/add";
   static const String addFamily = "/family/add";
 
 }

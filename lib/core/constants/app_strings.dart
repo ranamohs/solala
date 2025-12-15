@@ -132,6 +132,7 @@ class AppStrings {
   static const String addressEn = 'address_en';
   static const String eventDate = 'event_date';
   static const String pleaseSelectImage = 'please_select_image';
+  static const String createNews = 'create_news';
 
 
 

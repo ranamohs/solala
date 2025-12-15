@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 class NewsModel {
   bool? status;
   Message? message;
@@ -198,5 +202,40 @@ class NewsDetailsModel {
     message =
     json['message'] != null ? Message.fromJson(json['message']) : null;
     data = json['data'] != null ? ReportData.fromJson(json['data']) : null;
+  }
+
+
+}
+
+
+
+
+
+class CreateNewsRequestModel {
+  final String titleAr;
+  final String titleEn;
+  final String descriptionAr;
+  final String descriptionEn;
+  final File? image;
+
+  CreateNewsRequestModel({
+    required this.titleAr,
+    required this.titleEn,
+    required this.descriptionAr,
+    required this.descriptionEn,
+    this.image,
+  });
+
+  Future<Map<String, dynamic>> toJson() async {
+    final Map<String, dynamic> data = {
+      'title[ar]': titleAr,
+      'title[en]': titleEn,
+      'description[ar]': descriptionAr,
+      'description[en]': descriptionEn,
+    };
+    if (image != null) {
+      data['image'] = await MultipartFile.fromFile(image!.path);
+    }
+    return data;
   }
 }
