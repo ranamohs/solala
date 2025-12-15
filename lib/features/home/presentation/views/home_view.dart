@@ -39,7 +39,7 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _getFamilyInfo() async {
     final familyId = getIt<UserDataManager>().getUserFamilyId();
     if (familyId != null) {
-      context.read<FamilyInfoCubit>().getFamilyInfo(familyId: familyId);
+      context.read<FamilyInfoCubit>().getFamilyInfo();
     }
   }
 
@@ -74,7 +74,7 @@ class _HomeViewState extends State<HomeView> {
                 onRefresh: () async {
                   context.read<BannersCubit>().getBanners();
                   context.read<NumberingEventsCubit>().getNumberingEvents();
-                  context.read<FamilyInfoCubit>().getFamilyInfo(familyId: getIt<UserDataManager>().getUserFamilyId()!);
+                  context.read<FamilyInfoCubit>().getFamilyInfo();
                   context.read<NewsCubit>().getReports();
                 },
                 child: CustomScrollView(
@@ -86,7 +86,7 @@ class _HomeViewState extends State<HomeView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          VerticalSpace(22),
+                          VerticalSpace(32),
                           HomeAppbar(
                             isArabic: isArabic,
                           ),

@@ -100,113 +100,127 @@ class _CreateEventViewState extends State<CreateEventView> {
             padding: const EdgeInsets.all(20),
             child: Form(
               key: _formKey,
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: _pickImage,
-                    child: CircleAvatar(
-                      radius: 50.r,
-                      backgroundColor: Colors.grey[200],
-                      backgroundImage:
-                      _image != null ? FileImage(_image!) : null,
-                      child: _image == null
-                          ? const Icon(Icons.add_a_photo,
-                          size: 50, color: Colors.grey)
-                          : null,
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppColors.primaryColor,
+                      AppColors.secondaryColor,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: CircleAvatar(
+                        radius: 50.r,
+                        backgroundColor: Colors.white54,
+                        backgroundImage:
+                        _image != null ? FileImage(_image!) : null,
+                        child: _image == null
+                            ? const Icon(Icons.add_a_photo,
+                            size: 50, color: Colors.white)
+                            : null,
+                      ),
                     ),
-                  ),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                      controller: _titleArController,
-                      labelText: AppStrings.titleAr.tr()),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                      controller: _titleEnController,
-                      labelText: AppStrings.titleEn.tr()),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                      controller: _typeArController,
-                      labelText: AppStrings.typeAr.tr()),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                      controller: _typeEnController,
-                      labelText: AppStrings.typeEn.tr()),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                    controller: _descriptionArController,
-                    labelText: AppStrings.descriptionAr.tr(),
-                    maxLines: 5,
-                  ),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                    controller: _descriptionEnController,
-                    labelText: AppStrings.descriptionEn.tr(),
-                    maxLines: 5,
-                  ),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                      controller: _addressArController,
-                      labelText: AppStrings.addressAr.tr()),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                      controller: _addressEnController,
-                      labelText: AppStrings.addressEn.tr()),
-                  const VerticalSpace(20),
-                  SecondaryTextFormField(
-                    controller: _eventDateController,
-                    labelText: AppStrings.eventDate.tr(),
-                    readOnly: true,
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2101),
-                      );
-                      if (pickedDate != null) {
-                        _eventDateController.text =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                      }
-                    },
-                  ),
-                  const VerticalSpace(30),
-                  BlocBuilder<EventsCubit, EventsState>(
-                    builder: (context, state) {
-                      return PrimaryButton(
-                        isLoading: state is CreateEventLoading,
-                        onPressed: () {
-                          if (_formKey.currentState!.validate() &&
-                              _image != null) {
-                            context.read<EventsCubit>().createEvent(
-                              context: context,
-                              createEventModel: CreateEventModel(
-                                titleAr: _titleArController.text,
-                                titleEn: _titleEnController.text,
-                                typeAr: _typeArController.text,
-                                typeEn: _typeEnController.text,
-                                descriptionAr: _descriptionArController.text,
-                                descriptionEn:
-                                _descriptionEnController.text,
-                                addressAr: _addressArController.text,
-                                addressEn: _addressEnController.text,
-                                eventDate: _eventDateController.text,
-                                image: _image!,
-                              ),
-                            );
-                          } else if (_image == null) {
-                            fixedSnackBar(
-                              context,
-                              message: AppStrings.pleaseSelectImage.tr(),
-                              icon: Icons.error,
-                              iconColor: Colors.red,
-                            );
-                          }
-                        },
-                        text: AppStrings.create.tr(),
-                      );
-                    },
-                  ),
-                ],
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                        controller: _titleArController,
+                        labelText: AppStrings.titleAr.tr()),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                        controller: _titleEnController,
+                        labelText: AppStrings.titleEn.tr()),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                        controller: _typeArController,
+                        labelText: AppStrings.typeAr.tr()),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                        controller: _typeEnController,
+                        labelText: AppStrings.typeEn.tr()),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                      controller: _descriptionArController,
+                      labelText: AppStrings.descriptionAr.tr(),
+                      maxLines: 5,
+                    ),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                      controller: _descriptionEnController,
+                      labelText: AppStrings.descriptionEn.tr(),
+                      maxLines: 5,
+                    ),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                        controller: _addressArController,
+                        labelText: AppStrings.addressAr.tr()),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                        controller: _addressEnController,
+                        labelText: AppStrings.addressEn.tr()),
+                    const VerticalSpace(20),
+                    SecondaryTextFormField(
+                      controller: _eventDateController,
+                      labelText: AppStrings.eventDate.tr(),
+                      readOnly: true,
+                      onTap: () async {
+                        DateTime? pickedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2101),
+                        );
+                        if (pickedDate != null) {
+                          _eventDateController.text =
+                              DateFormat('yyyy-MM-dd').format(pickedDate);
+                        }
+                      },
+                    ),
+                    const VerticalSpace(30),
+                    BlocBuilder<EventsCubit, EventsState>(
+                      builder: (context, state) {
+                        return PrimaryButton(
+                          isLoading: state is CreateEventLoading,
+                          onPressed: () {
+                            if (_formKey.currentState!.validate() &&
+                                _image != null) {
+                              context.read<EventsCubit>().createEvent(
+                                context: context,
+                                createEventModel: CreateEventModel(
+                                  titleAr: _titleArController.text,
+                                  titleEn: _titleEnController.text,
+                                  typeAr: _typeArController.text,
+                                  typeEn: _typeEnController.text,
+                                  descriptionAr: _descriptionArController.text,
+                                  descriptionEn:
+                                  _descriptionEnController.text,
+                                  addressAr: _addressArController.text,
+                                  addressEn: _addressEnController.text,
+                                  eventDate: _eventDateController.text,
+                                  image: _image!,
+                                ),
+                              );
+                            } else if (_image == null) {
+                              fixedSnackBar(
+                                context,
+                                message: AppStrings.pleaseSelectImage.tr(),
+                                icon: Icons.error,
+                                iconColor: Colors.red,
+                              );
+                            }
+                          },
+                          text: AppStrings.create.tr(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

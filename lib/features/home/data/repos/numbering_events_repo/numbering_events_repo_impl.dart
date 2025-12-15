@@ -24,12 +24,12 @@ class NumberingEventsRepoImpl implements NumberingEventsRepo {
   Future<Either<Failure, NumberingEventsModel>> getNumberingEvents() async {
     try {
       final token = await secureStorageHelper.getToken();
-      final familyId = userDataManager.getUserFamilyId();
-      if (familyId == null) {
-        return Left(ServerFailure(errMessage: 'Family ID not found'));
-      }
+      // final familyId = userDataManager.getUserFamilyId();
+      // if (familyId == null) {
+      //   return Left(ServerFailure(errMessage: 'Family ID not found'));
+      // }
       final response = await dioConsumer.get(
-        '${EndPoints.numberingEvents}$familyId/numbering-events',
+        EndPoints.numberingEvents,
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',

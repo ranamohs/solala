@@ -45,16 +45,7 @@ class _EventsSectionState extends State<EventsSection> {
                     Text(AppStrings.events.tr(),
                         style: AppStyles.styleBold16(context)
                             .copyWith(color: AppColors.secondaryColor)),
-                    TextButton(
-                      onPressed: () {
-                        // TODO: Implement create event
-                      },
-                      child: Text(
-                        AppStrings.create.tr(),
-                        style: AppStyles.styleBold16(context)
-                            .copyWith(color: AppColors.greenColor),
-                      ),
-                    ),
+
                   ],
                 ),
                 Center(

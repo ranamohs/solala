@@ -238,7 +238,7 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
         if (label.isNotEmpty) ...[
           Text(
             label,
-            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureBlackColor)
+            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.white)
           ),
           const SizedBox(height: 6),
         ],
@@ -250,7 +250,7 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
             color: Colors.white.withOpacity(0.12),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: Colors.black.withOpacity(0.40),
+              color: Colors.white.withOpacity(0.40),
               width: 1,
             ),
           ),
@@ -263,7 +263,7 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
             onTap: widget.onTap,
             onFieldSubmitted: widget.onSubmit,
             validator: widget.validation ?? widget.validate,
-            style: AppStyles.styleRegular16(context).copyWith(color: AppColors.pureBlackColor),
+            style: AppStyles.styleRegular16(context).copyWith(color: AppColors.white),
             decoration: InputDecoration(
               border: InputBorder.none,
               counterText: "",

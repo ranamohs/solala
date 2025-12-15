@@ -35,7 +35,7 @@ Future<void> _checkUserStatusAndNavigate() async {
     if (userCubit.state.isGuest) {
       customGo(context, AppRouter.loginView);
     } else {
-      customGo(context, AppRouter.homePage);
+      customGo(context, AppRouter.loginView);
     }
   }
   );

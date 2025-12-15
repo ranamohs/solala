@@ -126,8 +126,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                     getIt<UserDataManager>().getUserFamilyName();
                     final familyId =
                     getIt<UserDataManager>().getUserFamilyId();
-
-                    // إذا كانت القائمة فارغة، نعرض عضو افتراضي مع اسم العائلة
                     if (familyName != null && familyName.isNotEmpty) {
                       final familyRoot = FamilyMember(
                         id: 0,

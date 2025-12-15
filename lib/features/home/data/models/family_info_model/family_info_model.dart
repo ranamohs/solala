@@ -14,7 +14,9 @@ class FamilyInfoModel {
       status: json['status'],
       message:
       json['message'] != null ? Message.fromJson(json['message']) : null,
-      data: json['data'] != null ? FamilyInfoData.fromJson(json['data']) : null,
+      data: json['data'] != null && json['data'] is Map<String, dynamic>
+          ? FamilyInfoData.fromJson(json['data'])
+          : null,
     );
   }
 }

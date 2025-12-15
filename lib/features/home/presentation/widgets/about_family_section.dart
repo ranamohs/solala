@@ -66,7 +66,7 @@ class AboutFamilySection extends StatelessWidget {
                   if (familyId != null) {
                     context
                         .read<FamilyInfoCubit>()
-                        .getFamilyInfo(familyId: familyId);
+                        .getFamilyInfo();
                   }
                 },
               );

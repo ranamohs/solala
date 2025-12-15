@@ -83,7 +83,14 @@ class _ProviderFamilyViewState extends State<ProviderFamilyView> {
                   padding:
                   EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.5),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        AppColors.primaryColor,
+                        AppColors.secondaryColor.withOpacity(0.9),
+                      ],
+                    ) ,
                     borderRadius: BorderRadius.circular(22.r),
                     border: Border.all(
                       color: Colors.white.withOpacity(0.18),
@@ -102,6 +109,7 @@ class _ProviderFamilyViewState extends State<ProviderFamilyView> {
                           Icon(
                             Icons.people,
                             size: 32.sp,
+                            color: AppColors.white,
                           ),
                         ],
                       ),
@@ -109,15 +117,15 @@ class _ProviderFamilyViewState extends State<ProviderFamilyView> {
                       GestureDetector(
                         onTap: _pickImage,
                         child: CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.black.withOpacity(0.1),
+                          radius: 50.r,
+                          backgroundColor: Colors.white.withOpacity(0.1),
                           backgroundImage:
                           _image != null ? FileImage(_image!) : null,
                           child: _image == null
-                              ? const Icon(
+                              ?  Icon(
                             Icons.camera_alt,
                             color: Colors.white,
-                            size: 40,
+                            size: 40.sp,
                           )
                               : null,
                         ),
