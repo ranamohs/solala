@@ -1,12 +1,16 @@
 import 'package:solala/core/constants/app_assets.dart';
 import 'package:solala/core/constants/app_colors.dart';
 import 'package:solala/core/constants/app_strings.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:solala/core/services/service_locator.dart';
+import 'package:solala/features/events/presentation/manager/events_cuibt/events_cubit.dart';
 import 'package:solala/features/home/presentation/views/home_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../account/presentation/views/update_profile_view.dart';
 import '../../../app_info/presentation/views/contact_us_view.dart';
 import '../../../events/presentation/views/events_view.dart';
+import '../../../family_tree/presentation/manager/family_cubit/family_cubit.dart';
 import '../../../family_tree/presentation/views/family_tree_view.dart';
 import '../../../settings/views/settings_view.dart';
 
@@ -39,8 +43,14 @@ class _AppLayoutState extends State<AppLayout> {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       HomeView(),
-      EventsView(),
-      FamilyTreeView(),
+      BlocProvider(
+        create: (context) => getIt<EventsCubit>()..getEvents(),
+        child: EventsView(),
+      ),
+      BlocProvider(
+        create: (context) => getIt<FamilyTreeCubit>(),
+        child: FamilyTreeView(),
+      ),
       SettingsView(),
       UpdateProfileView(),
     ];

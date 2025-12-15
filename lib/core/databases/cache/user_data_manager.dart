@@ -12,8 +12,19 @@ class UserDataManager {
   int? _cachedUserId;
   String? _cachedUserFamilyId;
   String? _cachedUserFamilyName;
+  String? _cachedUserAccountType;
 
   UserDataManager(this._cacheHelper);
+
+  void saveAccountType({required String accountType}) {
+    _cacheHelper.saveData(key: 'accountType', value: accountType);
+    _cachedUserAccountType = accountType;
+  }
+
+  String? getAccountType() {
+    _cachedUserAccountType ??= _cacheHelper.getData(key: 'accountType');
+    return _cachedUserAccountType;
+  }
 
   void saveUserName({required String name}) {
     _cacheHelper.saveData(key: 'name', value: name);
@@ -91,6 +102,7 @@ class UserDataManager {
     await _cacheHelper.removeData(key: 'phoneNumber');
     await _cacheHelper.removeData(key: 'avatarUrl');
     await _cacheHelper.removeData(key: 'isGuest');
+    await _cacheHelper.removeData(key: 'accountType');
 
     _cachedUserId = null;
     _cachedUserName = null;

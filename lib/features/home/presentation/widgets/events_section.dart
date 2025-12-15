@@ -7,67 +7,104 @@ import 'package:solala/core/constants/app_strings.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
+import '../../../../core/databases/cache/user_data_manager.dart';
 import '../../../../core/services/service_locator.dart';
 import '../manager/numering_events_cubit/numbering_events_cubit.dart';
 import '../manager/numering_events_cubit/numbering_events_state.dart';
 
-class EventsSection extends StatelessWidget {
+class EventsSection extends StatefulWidget {
   const EventsSection({
     super.key,
   });
 
   @override
+  State<EventsSection> createState() => _EventsSectionState();
+}
+
+class _EventsSectionState extends State<EventsSection> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<NumberingEventsCubit>().getNumberingEvents();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<NumberingEventsCubit>()..getNumberingEvents(),
-      child: BlocBuilder<NumberingEventsCubit, NumberingEventsState>(
-        builder: (context, state) {
-          if (state is NumberingEventsSuccess) {
-            final data = state.numberingEventsModel.data;
-            if (data == null) {
-              return Center(
-                child: Text(AppStrings.noEventsFoundTillNow.tr(), style: AppStyles.styleBold16(context).copyWith(color: AppColors.secondaryColor),),
-              );
-            }
-            return Row(
+    final accountType = getIt<UserDataManager>().getAccountType();
+    return BlocBuilder<NumberingEventsCubit, NumberingEventsState>(
+      builder: (context, state) {
+        if (state is NumberingEventsSuccess) {
+          final data = state.numberingEventsModel.data;
+          if (accountType == 'provider' &&
+              (data == null || (data.eventsCount ?? 0) == 0)) {
+            return Column(
               children: [
-                Expanded(
-                  child: _StatCard(
-                    title: AppStrings.members.tr(),
-                    value: data.familiesMemberCount.toString(),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(AppStrings.events.tr(),
+                        style: AppStyles.styleBold16(context)
+                            .copyWith(color: AppColors.secondaryColor)),
+
+                  ],
                 ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: _StatCard(
-                    title: AppStrings.events.tr(),
-                    value: data.eventsCount.toString(),
-                  ),
-                ),
-                SizedBox(width: 12.w),
-                Expanded(
-                  child: _StatCard(
-                    title: AppStrings.news.tr(),
-                    value: data.newsCount.toString(),
+                Center(
+                  child: Text(
+                    AppStrings.createEventForYourFamily.tr(),
+                    style: AppStyles.styleBold16(context)
+                        .copyWith(color: AppColors.secondaryColor),
                   ),
                 ),
               ],
             );
-          } else if (state is NumberingEventsFailure) {
+          }
+          if (data == null) {
             return Center(
-              child: Text(state.message),
-            );
-          } else {
-            return Center(
-              child: LoadingAnimationWidget.flickr(
-                leftDotColor: AppColors.primaryColor,
-                rightDotColor: AppColors.greenColor,
-                size: 64,
+              child: Text(
+                AppStrings.noEventsFoundTillNow.tr(),
+                style: AppStyles.styleBold16(context)
+                    .copyWith(color: AppColors.secondaryColor),
               ),
             );
           }
-        },
-      ),
+          return Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  title: AppStrings.members.tr(),
+                  value: (data.familiesMemberCount ?? 0).toString(),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: _StatCard(
+                  title: AppStrings.events.tr(),
+                  value: (data.eventsCount ?? 0).toString(),
+                ),
+              ),
+              SizedBox(width: 12.w),
+              Expanded(
+                child: _StatCard(
+                  title: AppStrings.news.tr(),
+                  value: (data.newsCount ?? 0).toString(),
+                ),
+              ),
+            ],
+          );
+        } else if (state is NumberingEventsFailure) {
+          return Center(
+            child: Text(state.message),
+          );
+        } else {
+          return Center(
+            child: LoadingAnimationWidget.flickr(
+              leftDotColor: AppColors.primaryColor,
+              rightDotColor: AppColors.greenColor,
+              size: 64,
+            ),
+          );
+        }
+      },
     );
   }
 }
@@ -87,11 +124,11 @@ class _StatCard extends StatelessWidget {
       height: 80.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(18.r),
-        gradient:  LinearGradient(
+        gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            AppColors.beigeColor ,
+            AppColors.beigeColor,
             AppColors.lightGreenColor,
           ],
         ),
@@ -109,7 +146,7 @@ class _StatCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style:AppStyles.styleMedium18(context).copyWith(
+              style: AppStyles.styleMedium18(context).copyWith(
                 color: AppColors.secondaryColor,
                 fontWeight: FontWeight.w600,
               ),
@@ -117,7 +154,7 @@ class _StatCard extends StatelessWidget {
             SizedBox(height: 6.h),
             Text(
               value,
-              style:AppStyles.styleMedium16(context).copyWith(
+              style: AppStyles.styleMedium16(context).copyWith(
                 color: AppColors.primaryColor,
                 fontWeight: FontWeight.w700,
               ),

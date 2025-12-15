@@ -138,6 +138,23 @@
   "noNewsFoundTillNow": "لا يوجد اخبار في عائلتك حتي الان",
   "noMembersFoundTillNow": "لم يتم تسجل افراد الي عائلتك حتي الان",
   "noEventsFoundTillNow": "لا يوجد احداث في عائلتك حتي الان",
-  "addMember": "إضافة فرد"
-
+  "createEventForYourFamily": "قم ب انشاء احداث لعائلتك",
+  "createNewsForYourFamily": "قم ب انشاء اخبار ل عائلتك",
+  "create": "إنشاء",
+  "useFamilyCodeToJoin": "استخدم كود العائلة للانضمام",
+  "addFamily": "إضافة عائلة",
+  "createNewFamily": "إنشاء عائلة جديدة",
+  "addMember": "إضافة فرد",
+  "create_event": "إنشاء مناسبة",
+  "title_ar": "العنوان (بالعربية)",
+  "title_en": "العنوان (بالانجليزية)",
+  "type_ar": "النوع (بالعربية)",
+  "type_en": "النوع (بالانجليزية)",
+  "description_ar": "الوصف (بالعربية)",
+  "description_en": "الوصف (بالانجليزية)",
+  "address_ar": "العنوان (بالعربية)",
+  "address_en": "العنوان (بالانجليزية)",
+  "event_date": "تاريخ المناسبة",
+  "please_select_image": "الرجاء اختيار صورة",
+  "create_news": "إنشاء خبر"
 }

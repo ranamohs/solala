@@ -90,10 +90,7 @@ class _RegisterViewState extends State<RegisterView> {
                               style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
                             ),
                             SizedBox(height: 30.h),
-
-                            /// THE SAME FORM EXACTLY
                             const RegisterForm(),
-
                             SizedBox(height: 25.h),
 
                             Row(

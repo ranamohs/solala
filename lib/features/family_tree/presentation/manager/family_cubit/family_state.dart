@@ -36,6 +36,26 @@ class FamilyTreeFailure extends FamilyTreeState {
   List<Object> get props => [failure];
 }
 
+class CreateFamilyLoading extends FamilyTreeState {}
+
+class CreateFamilySuccess extends FamilyTreeState {
+  final BasicModel basicModel;
+
+  const CreateFamilySuccess(this.basicModel);
+
+  @override
+  List<Object> get props => [basicModel];
+}
+
+class CreateFamilyFailure extends FamilyTreeState {
+  final Failure failure;
+
+  const CreateFamilyFailure(this.failure);
+
+  @override
+  List<Object> get props => [failure];
+}
+
 class UpdateFamilyMemberLoading extends FamilyTreeState {}
 
 class UpdateFamilyMemberSuccess extends FamilyTreeState {

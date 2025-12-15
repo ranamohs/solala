@@ -27,18 +27,27 @@ class DioConsumer extends ApiConsumer {
   //! POST
   @override
   Future post(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    bool isFormData = false,
-  }) async {
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+        bool isFormData = false,
+      }) async {
     try {
       final res = await dio.post(
         path,
-        data: data,
+        data: isFormData
+            ? FormData.fromMap(data is Map<String, dynamic>
+            ? data
+            : await data.toJson())
+            : data,
         queryParameters: queryParameters,
-        options: Options(headers: headers ?? defaultHeaders),
+        options: Options(
+          headers: headers ??
+              (isFormData
+                  ? ({'accept': 'application/json'}..remove('Content-Type'))
+                  : defaultHeaders),
+        ),
       );
       return res.data;
     } on DioException catch (e) {
@@ -56,9 +65,18 @@ class DioConsumer extends ApiConsumer {
     try {
       final res = await dio.put(
         path,
-        data: data,
+        data: isFormData
+            ? FormData.fromMap(data is Map<String, dynamic>
+            ? data
+            : await data.toJson())
+            : data,
         queryParameters: queryParameters,
-        options: Options(headers: headers ?? defaultHeaders),
+        options: Options(
+          headers: headers ??
+              (isFormData
+                  ? ({'accept': 'application/json'}..remove('Content-Type'))
+                  : defaultHeaders),
+        ),
       );
       return res.data;
     } on DioException catch (e) {
@@ -69,11 +87,11 @@ class DioConsumer extends ApiConsumer {
   //! GET
   @override
   Future get(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-  }) async {
+      String path, {
+        Object? data,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+      }) async {
     try {
       final res = await dio.get(
         path,
@@ -89,11 +107,11 @@ class DioConsumer extends ApiConsumer {
   //! DELETE
   @override
   Future delete(
-    String path, {
-    Object? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-  }) async {
+      String path, {
+        Object? data,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+      }) async {
     try {
       final res = await dio.delete(
         path,
@@ -110,13 +128,13 @@ class DioConsumer extends ApiConsumer {
   //! PATCH
   @override
   Future patch(
-    String path, {
-    dynamic data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    bool isFormData = false,
-    Options? options,
-  }) async {
+      String path, {
+        dynamic data,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+        bool isFormData = false,
+        Options? options,
+      }) async {
     try {
       final res = await dio.patch(
         path,

@@ -40,3 +40,17 @@ class ReportsFailure extends NewsState {
 
   ReportsFailure({required this.message});
 }
+
+class CreateNewsLoading extends NewsState {}
+
+class CreateNewsSuccess extends NewsState {
+  final String message;
+
+  CreateNewsSuccess({required this.message});
+}
+
+class CreateNewsError extends NewsState {
+  final String message;
+
+  CreateNewsError({required this.message});
+}

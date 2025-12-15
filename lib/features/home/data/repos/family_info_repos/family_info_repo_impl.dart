@@ -24,9 +24,7 @@ class FamilyInfoRepoImpl implements FamilyInfoRepo {
   });
 
   @override
-  Future<Either<Failure, FamilyInfoModel>> getFamilyInfo({
-    required String familyId,
-  }) async {
+  Future<Either<Failure, FamilyInfoModel>> getFamilyInfo() async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
     if (!isConnected) {
@@ -37,7 +35,7 @@ class FamilyInfoRepoImpl implements FamilyInfoRepo {
     try {
       final token = await secureStorageHelper?.getToken();
       final response = await dioConsumer.get(
-        '${EndPoints.familyInfo}$familyId',
+        EndPoints.familyInfo,
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',

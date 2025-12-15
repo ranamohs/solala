@@ -39,7 +39,7 @@ class _HomeViewState extends State<HomeView> {
   Future<void> _getFamilyInfo() async {
     final familyId = getIt<UserDataManager>().getUserFamilyId();
     if (familyId != null) {
-      context.read<FamilyInfoCubit>().getFamilyInfo(familyId: familyId);
+      context.read<FamilyInfoCubit>().getFamilyInfo();
     }
   }
 
@@ -68,46 +68,51 @@ class _HomeViewState extends State<HomeView> {
           },
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 22.w),
-            child: PrimaryRefreshIndicator(
-              onRefresh: () async {
-                context.read<BannersCubit>().getBanners();
-                context.read<NumberingEventsCubit>().getNumberingEvents();
-                context.read<FamilyInfoCubit>().getFamilyInfo(familyId: getIt<UserDataManager>().getUserFamilyId()!);
-                context.read<NewsCubit>().getReports();
-
-              },
-              child: CustomScrollView(
-                keyboardDismissBehavior:
-                ScrollViewKeyboardDismissBehavior.onDrag,
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        VerticalSpace(22),
-                        HomeAppbar(
-                          isArabic: isArabic,
+            child: BlocProvider(
+              create: (context) => getIt<NumberingEventsCubit>(),
+              child: PrimaryRefreshIndicator(
+                onRefresh: () async {
+                  context.read<BannersCubit>().getBanners();
+                  context.read<NumberingEventsCubit>().getNumberingEvents();
+                  context.read<FamilyInfoCubit>().getFamilyInfo();
+                  context.read<NewsCubit>().getReports();
+                },
+                child: CustomScrollView(
+                  keyboardDismissBehavior:
+                  ScrollViewKeyboardDismissBehavior.onDrag,
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          VerticalSpace(32),
+                          HomeAppbar(
+                            isArabic: isArabic,
+                          ),
+                          VerticalSpace(22),
+                        ],
+                      ),
+                    ),
+                    const BannersSection(),
+                    const SliverToBoxAdapter(child: VerticalSpace(40)),
+                    SliverToBoxAdapter(child: EventsSection()),
+                    const SliverToBoxAdapter(child: VerticalSpace(24)),
+                    const SliverToBoxAdapter(
+                      child: AboutFamilySection(),
+                    ),
+                    const SliverToBoxAdapter(child: VerticalSpace(24)),
+                    SliverToBoxAdapter(
+                      child: BlocProvider(
+                        create: (context) => getIt<NewsCubit>(),
+                        child: FamilyNewsSection(
+                          accountType:
+                          getIt<UserDataManager>().getAccountType() ?? 'user',
                         ),
-                        VerticalSpace(22),
-                      ],
+                      ),
                     ),
-                  ),
-                  const BannersSection(),
-                  const SliverToBoxAdapter(child: VerticalSpace(40)),
-                  SliverToBoxAdapter(child: EventsSection()),
-                  const SliverToBoxAdapter(child: VerticalSpace(24)),
-                  const SliverToBoxAdapter(
-                    child: AboutFamilySection(),
-                  ),
-                  const SliverToBoxAdapter(child: VerticalSpace(24)),
-                  SliverToBoxAdapter(
-                    child: BlocProvider(
-                      create: (context) => getIt<NewsCubit>(),
-                      child: const FamilyNewsSection(),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

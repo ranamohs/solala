@@ -28,7 +28,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     required String name,
     required String gender,
     required String relation,
-     int? parentId,
+    int? parentId,
     required String avatar,
   }) async {
     emit(AddFamilyMemberLoading());
@@ -78,6 +78,27 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     result.fold(
           (failure) => emit(DeleteFamilyMemberFailure(failure)),
           (basicModel) => emit(DeleteFamilyMemberSuccess(basicModel)),
+    );
+  }
+
+  Future<void> createFamily({
+    required String nameAr,
+    required String nameEn,
+    required String code,
+    required String image,
+  }) async {
+    emit(CreateFamilyLoading());
+
+    final result = await familyTreeRepo.createFamily(
+      nameAr: nameAr,
+      nameEn: nameEn,
+      code: code,
+      image: image,
+    );
+
+    result.fold(
+          (failure) => emit(CreateFamilyFailure(failure)),
+          (basicModel) => emit(CreateFamilySuccess(basicModel)),
     );
   }
 }

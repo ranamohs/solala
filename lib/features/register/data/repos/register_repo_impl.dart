@@ -3,6 +3,7 @@ import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/end_points.dart';
 import 'package:solala/core/databases/api/dio_consumer.dart';
 import 'package:solala/core/databases/cache/secure_storage_helper.dart';
+import 'package:solala/core/databases/cache/user_data_manager.dart';
 import 'package:solala/features/register/data/models/family_model.dart';
 import 'package:solala/features/register/data/models/register_data_model.dart';
 import 'package:solala/core/data/models/auth_failure_model.dart';
@@ -14,10 +15,12 @@ import 'package:easy_localization/easy_localization.dart';
 class RegisterRepoImpl implements RegisterRepo {
   final DioConsumer dioConsumer;
   final SecureStorageHelper secureStorageHelper;
+  final UserDataManager userDataManager;
 
   RegisterRepoImpl({
     required this.dioConsumer,
     required this.secureStorageHelper,
+    required this.userDataManager,
   });
 
   @override
@@ -27,13 +30,34 @@ class RegisterRepoImpl implements RegisterRepo {
       final response = await dioConsumer.post(
         EndPoints.register,
         data: registerData.toJson(),
+        isFormData: true,
       );
 
       if (response != null && response is Map<String, dynamic>) {
-        if (response.containsKey(ApiKey.token)) {
+        if (response['status'] == true) {
           final registerSuccessModel = RegisterSuccessModel.fromJson(response);
-          String token = response[ApiKey.token];
-          await secureStorageHelper.saveToken(token: token);
+          if (registerSuccessModel.token != null &&
+              registerSuccessModel.user != null) {
+            await secureStorageHelper.saveToken(
+                token: registerSuccessModel.token!);
+            userDataManager.saveUserName(
+                name: registerSuccessModel.user!.name ?? '');
+            userDataManager.saveUserEmail(
+                email: registerSuccessModel.user!.email ?? '');
+            userDataManager.saveUserPhoneNumber(
+                phoneNumber: registerSuccessModel.user!.phone ?? '');
+            if (registerSuccessModel.user!.id != null) {
+              userDataManager.saveUserId(id: registerSuccessModel.user!.id!);
+            }
+            if (registerSuccessModel.user!.familyId != null) {
+              userDataManager.saveUserFamilyId(
+                  familyId: registerSuccessModel.user!.familyId!);
+            }
+            if (registerSuccessModel.user!.familyName != null) {
+              userDataManager.saveUserFamilyName(
+                  familyName: registerSuccessModel.user!.familyName!);
+            }
+          }
           return Right(registerSuccessModel);
         } else {
           return Left(AuthFailureModel.fromJson(response));

@@ -238,7 +238,7 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
         if (label.isNotEmpty) ...[
           Text(
             label,
-            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
+            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.white)
           ),
           const SizedBox(height: 6),
         ],
@@ -263,19 +263,13 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
             onTap: widget.onTap,
             onFieldSubmitted: widget.onSubmit,
             validator: widget.validation ?? widget.validate,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-            ),
+            style: AppStyles.styleRegular16(context).copyWith(color: AppColors.white),
             decoration: InputDecoration(
               border: InputBorder.none,
               counterText: "",
               contentPadding:
               const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-
-              /// ❌ NO HINT TEXT (حسب طلبك)
               hintText: null,
-
               suffixIcon: isPassword
                   ? IconButton(
                 icon: Icon(

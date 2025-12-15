@@ -11,13 +11,11 @@ class FamilyInfoCubit extends Cubit<FamilyInfoState> {
 
   FamilyInfoCubit({required this.familyInfoRepo}) : super(FamilyInfoInitial());
 
-  Future<void> getFamilyInfo({
-    required String familyId,
-  }) async {
+  Future<void> getFamilyInfo() async {
     emit(FamilyInfoLoading());
 
     final Either<Failure, FamilyInfoModel> result =
-    await familyInfoRepo.getFamilyInfo(familyId: familyId);
+    await familyInfoRepo.getFamilyInfo();
 
     result.fold(
           (failure) => emit(FamilyInfoFailure(failure)),

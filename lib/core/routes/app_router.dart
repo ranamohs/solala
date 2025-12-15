@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import '../../features/home/presentation/views/home_page.dart';
 
 import '../../features/login/presentation/views/login_view.dart';
+import '../../features/register/presentation/views/choose_role_view.dart';
+import '../../features/register/presentation/views/provider_register_view.dart';
 import '../../features/register/presentation/views/verfication_view.dart';
 
 import '../../features/settings/views/change_language_view.dart';
@@ -51,6 +53,9 @@ abstract class AppRouter {
   static const introView = '/introView';
   static const verificationView = '/verificationView';
   static const verificationSuccessView = '/verificationSuccessView';
+  static const chooseRoleView = '/chooseRoleView';
+  static const providerRegisterView = '/providerRegisterView';
+
 
 
   static final router = GoRouter(
@@ -60,7 +65,11 @@ abstract class AppRouter {
       GoRoute(path: introView,builder: (context, state) => const IntroView()),
       GoRoute(path: introViewWithButton,builder: (context, state) => const IntroWithButton()),
       GoRoute(path: loginView, builder: (context, state) => LoginView()),
-
+      GoRoute(path: chooseRoleView, builder: (context, state) => const ChooseRoleView()),
+      GoRoute(path: providerRegisterView, builder: (context, state) => BlocProvider(
+        create: (context) => getIt<RegisterCubit>(),
+        child:  ProviderRegisterView(),
+      )),
       GoRoute(path: verificationSuccessView, builder: (context, state) => const VerificationSuccessWidget()),
 
 

@@ -53,17 +53,19 @@ class _EventCardState extends State<EventCard> {
                     ),
                   ),
                   SizedBox(width: 20.w),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(widget.event.title?.ar ?? '',
-                          style: AppStyles.styleBold16(context)
-                              .copyWith(color: AppColors.secondaryColor)),
-                      SizedBox(height: 3),
-                      Text(widget.event.eventDate?.split('T')[0] ?? '',
-                          style: AppStyles.styleMedium14(context)
-                              .copyWith(color: AppColors.secondaryColor)),
-                    ],
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.event.title?.ar ?? '',
+                            style: AppStyles.styleBold16(context)
+                                .copyWith(color: AppColors.secondaryColor)),
+                        SizedBox(height: 3),
+                        Text(widget.event.eventDate?.split('T')[0] ?? '',
+                            style: AppStyles.styleMedium14(context)
+                                .copyWith(color: AppColors.secondaryColor)),
+                      ],
+                    ),
                   ),
                   const Spacer(),
                   GestureDetector(

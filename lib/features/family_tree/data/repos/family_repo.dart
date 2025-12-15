@@ -10,7 +10,7 @@ abstract class FamilyTreeRepo {
     required String name,
     required String gender,
     required String relation,
-     int? parentId,
+    int? parentId,
     required String avatar,
   });
   Future<Either<Failure, FamilyMember>> updateFamilyMember({
@@ -23,5 +23,11 @@ abstract class FamilyTreeRepo {
 
   Future<Either<Failure, BasicModel>> deleteFamilyMember({
     required int memberId,
+  });
+  Future<Either<Failure, BasicModel>> createFamily({
+    required String nameAr,
+    required String nameEn,
+    required String code,
+    required String image,
   });
 }

@@ -39,3 +39,17 @@ class EventsFailure extends EventsState {
 
   EventsFailure({required this.errorMessage});
 }
+
+class CreateEventLoading extends EventsState {}
+
+class CreateEventSuccess extends EventsState {
+  final String message;
+
+  CreateEventSuccess({required this.message});
+}
+
+class CreateEventFailure extends EventsState {
+  final String message;
+
+  CreateEventFailure({required this.message});
+}

@@ -1,6 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:solala/features/events/data/models/create_event_model.dart';
 import 'package:solala/features/events/data/repos/events_repo.dart';
 
+import '../../../../../core/constants/end_points.dart';
 import '../../../data/models/event_model.dart';
 import 'events_state.dart';
 
@@ -49,5 +53,28 @@ class EventsCubit extends Cubit<EventsState> {
         },
       );
     }
+  }
+
+  Future<void> createEvent({
+    required CreateEventModel createEventModel,
+    required BuildContext context,
+  }) async {
+    emit(CreateEventLoading());
+    final response = await eventsRepo.createEvent(
+      createEventModel: createEventModel,
+    );
+    response.fold(
+          (failure) => emit(CreateEventFailure(message: failure.errMessage)),
+          (data) {
+        final message = data[ApiKey.message];
+        if (message is String) {
+          emit(CreateEventFailure(message: message));
+        } else {
+          final locale = context.locale;
+          final successMessage = message[locale.languageCode] ?? message['en'];
+          emit(CreateEventSuccess(message: successMessage));
+        }
+      },
+    );
   }
 }

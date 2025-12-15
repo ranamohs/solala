@@ -29,10 +29,14 @@ class EndPoints {
   static const String updateFamilyMember = "/family/tree-update/";
   static const String deleteFamilyMember = "/family/tree-delete/";
   static const String events = "/events";
+  static const String addEvent = "/events/add";
   static const String eventDetails = "/events/";
-  static const String numberingEvents = "/family/";
-  static const String familyInfo = "/families/";
+  static const String numberingEvents = "/family/numbering-events";
+  static const String familyInfo = "/family/";
   static const String news = "/reports";
+  static const String addNews = "/reports/add";
+  static const String addFamily = "/family/add";
+
 }
 
 class ApiKey {
@@ -76,6 +80,7 @@ class ApiKey {
   static const String rating = 'rating';
   static const String comment = 'comment';
   static const String familyId = 'family_id';
+  static const String type = 'type';
 }
 
 class Params {

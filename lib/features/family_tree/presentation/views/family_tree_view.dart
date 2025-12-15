@@ -11,6 +11,7 @@ import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/app_styles.dart';
 import 'package:solala/core/databases/cache/user_data_manager.dart';
 import 'package:solala/core/services/service_locator.dart';
+import 'package:solala/features/family_tree/presentation/views/provider_family_tree_view.dart';
 import 'package:solala/features/family_tree/presentation/widgets/add_member_dialog.dart';
 
 import '../../../../core/widgets/app_buttons.dart';
@@ -35,7 +36,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   @override
   void initState() {
     super.initState();
-    context.read<FamilyTreeCubit>().getFamilyTree();
+    final accountType = getIt<UserDataManager>().getAccountType();
+    final familyId = getIt<UserDataManager>().getUserFamilyId();
+    if (accountType != 'provider' || (familyId != null && familyId.isNotEmpty)) {
+      context.read<FamilyTreeCubit>().getFamilyTree();
+    }
   }
 
   void _centerGraph(Size? graphSize, Size viewportSize) {
@@ -50,6 +55,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
 
   @override
   Widget build(BuildContext context) {
+    final accountType = getIt<UserDataManager>().getAccountType();
+    final familyId = getIt<UserDataManager>().getUserFamilyId();
+
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -67,7 +75,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           ),
         ),
         backgroundColor: Colors.transparent,
-        body: BlocListener<FamilyTreeCubit, FamilyTreeState>(
+        body: (accountType == 'provider' && (familyId == null || familyId.isEmpty))
+            ? const ProviderFamilyView()
+            : BlocListener<FamilyTreeCubit, FamilyTreeState>(
           listener: (context, state) {
             if (state is AddFamilyMemberSuccess ||
                 state is UpdateFamilyMemberSuccess ||
@@ -87,6 +97,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                     current is! AddFamilyMemberFailure;
               },
               builder: (context, state) {
+                if (state is FamilyTreeInitial) {
+                  return const SizedBox.shrink();
+                }
                 if (state is FamilyTreeLoading) {
                   return Center(
                     child: LoadingAnimationWidget.flickr(
@@ -113,8 +126,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                     getIt<UserDataManager>().getUserFamilyName();
                     final familyId =
                     getIt<UserDataManager>().getUserFamilyId();
-
-                    // إذا كانت القائمة فارغة، نعرض عضو افتراضي مع اسم العائلة
                     if (familyName != null && familyName.isNotEmpty) {
                       final familyRoot = FamilyMember(
                         id: 0,
