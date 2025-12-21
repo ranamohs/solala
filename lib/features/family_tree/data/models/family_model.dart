@@ -46,6 +46,14 @@ class FamilyMember {
         this.avatar,
         this.children});
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is FamilyMember && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
+
   FamilyMember.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];

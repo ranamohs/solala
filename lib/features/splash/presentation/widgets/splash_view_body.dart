@@ -18,7 +18,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 100), () {
+    Future.delayed(const Duration(milliseconds:5), () {
       if (mounted) {
         context.read<UserCubit>().checkGuestStatus();
       }
@@ -34,7 +34,7 @@ class _SplashViewBodyState extends State<SplashViewBody> {
             if (state.isGuest) {
               customGo(context, AppRouter.loginView);
             } else {
-              customGo(context, AppRouter.homePage);
+              customGo(context, AppRouter.loginView);
             }
           }
         });

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:solala/core/services/service_locator.dart';
 import 'package:solala/core/databases/cache/user_data_manager.dart';
 
@@ -24,8 +25,7 @@ class AddMemberDialog extends StatefulWidget {
 
   const AddMemberDialog({
     super.key,
-     this.parentId,
-
+    this.parentId,
     this.isEditMode = false,
     this.existingName,
     this.existingGender,
