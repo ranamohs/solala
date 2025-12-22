@@ -36,15 +36,26 @@ class FamilyMember {
   String? relation;
   String? gender;
   String? avatar;
+  String? birthDate;
+  String? birthPlace;
+  int? isLive;
+  String? phone;
+  String? job;
   List<FamilyMember>? children;
 
-  FamilyMember(
-      {this.id,
-        this.name,
-        this.relation,
-        this.gender,
-        this.avatar,
-        this.children});
+  FamilyMember({
+    this.id,
+    this.name,
+    this.relation,
+    this.gender,
+    this.avatar,
+    this.birthDate,
+    this.birthPlace,
+    this.isLive,
+    this.phone,
+    this.job,
+    this.children,
+  });
 
   @override
   bool operator ==(Object other) =>
@@ -60,6 +71,15 @@ class FamilyMember {
     relation = json['relation'];
     gender = json['gender'];
     avatar = json['avatar'];
+    birthDate = json['birth_date'];
+    birthPlace = json['birth_place'];
+    if (json['is_live'] is bool) {
+      isLive = json['is_live'] ? 1 : 0;
+    } else {
+      isLive = json['is_live'];
+    }
+    phone = json['phone'];
+    job = json['job'];
     if (json['children'] != null) {
       children = <FamilyMember>[];
       json['children'].forEach((v) {

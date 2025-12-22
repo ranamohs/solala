@@ -42,15 +42,25 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _relationController;
+  late TextEditingController _birthDateController;
+  late TextEditingController _birthPlaceController;
+  late TextEditingController _phoneController;
+  late TextEditingController _jobController;
   String? _gender;
   File? _image;
   bool _imageChanged = false;
+  DateTime? _selectedDate;
+  bool _isLive = true;
 
   @override
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.existingName ?? '');
     _relationController = TextEditingController(text: widget.existingRelation ?? '');
+    _birthDateController = TextEditingController();
+    _birthPlaceController = TextEditingController();
+    _phoneController = TextEditingController();
+    _jobController = TextEditingController();
     _gender = widget.existingGender;
   }
 
@@ -58,6 +68,10 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
   void dispose() {
     _nameController.dispose();
     _relationController.dispose();
+    _birthDateController.dispose();
+    _birthPlaceController.dispose();
+    _phoneController.dispose();
+    _jobController.dispose();
     super.dispose();
   }
 
@@ -365,6 +379,46 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                               return null;
                             },
                           ),
+
+                          const SizedBox(height: 16),
+
+                          // Birth Date
+                          _buildDateField(),
+
+                          const SizedBox(height: 16),
+
+                          // Birth Place
+                          _buildTextField(
+                            controller: _birthPlaceController,
+                            label: 'مكان الميلاد',
+                            icon: Icons.location_on_outlined,
+                            validator: (value) => null, // Optional
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Phone
+                          _buildTextField(
+                            controller: _phoneController,
+                            label: 'رقم الهاتف',
+                            icon: Icons.phone_outlined,
+                            validator: (value) => null, // Optional
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Job
+                          _buildTextField(
+                            controller: _jobController,
+                            label: 'الوظيفة',
+                            icon: Icons.work_outline,
+                            validator: (value) => null, // Optional
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Is Live Switch
+                          _buildIsLiveSwitch(),
                         ],
                       ),
                     ),
@@ -399,7 +453,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                           ),
                         ),
                       ),
-                       SizedBox(width: 12.w),
+                      SizedBox(width: 12.w),
                       Expanded(
                         flex: 2,
                         child: ElevatedButton(
@@ -417,6 +471,11 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                                   relation: _relationController.text,
                                   parentId: widget.parentId,
                                   avatar: _image?.path ?? '',
+                                  birthDate: _birthDateController.text,
+                                  birthPlace: _birthPlaceController.text,
+                                  isLive: _isLive ? 1 : 0,
+                                  phone: _phoneController.text,
+                                  job: _jobController.text,
                                 );
                               }
                             }
@@ -485,6 +544,76 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
           ),
         ),
         validator: validator,
+      ),
+    );
+  }
+
+  Widget _buildDateField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: InkWell(
+        onTap: () async {
+          final DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: _selectedDate ?? DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+          );
+          if (picked != null && picked != _selectedDate) {
+            setState(() {
+              _selectedDate = picked;
+              _birthDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+            });
+          }
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: 'تاريخ الميلاد',
+            prefixIcon: Icon(Icons.calendar_today_outlined, color: AppColors.primaryColor),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 8.w,
+              vertical: 16.h,
+            ),
+          ),
+          child: Text(
+            _birthDateController.text.isEmpty ? 'اختيار التاريخ' : _birthDateController.text,
+            style: AppStyles.styleRegular14(context).copyWith(
+              color: _birthDateController.text.isEmpty ? Colors.grey.shade600 : Colors.black,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIsLiveSwitch() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: SwitchListTile(
+        title: Text(
+          'على قيد الحياة',
+          style: AppStyles.styleRegular14(context),
+        ),
+        value: _isLive,
+        onChanged: (bool value) {
+          setState(() {
+            _isLive = value;
+          });
+        },
+        secondary: Icon(
+          _isLive ? Icons.favorite : Icons.heart_broken_outlined,
+          color: _isLive ? AppColors.primaryColor : Colors.grey,
+        ),
       ),
     );
   }

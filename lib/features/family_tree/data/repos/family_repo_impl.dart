@@ -129,6 +129,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     required String relation,
     int? parentId,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -145,6 +150,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
         relation: relation,
         parentId: parentId,
         avatar: avatar,
+        birthDate: birthDate,
+        birthPlace: birthPlace,
+        isLive: isLive,
+        phone: phone,
+        job: job,
       );
 
       final response = await dioConsumer.post(
@@ -185,6 +195,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     required String gender,
     required String relation,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -200,6 +215,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
         gender: gender,
         relation: relation,
         avatar: avatar,
+        birthDate: birthDate,
+        birthPlace: birthPlace,
+        isLive: isLive,
+        phone: phone,
+        job: job,
       );
 
       final response = await dioConsumer.post(

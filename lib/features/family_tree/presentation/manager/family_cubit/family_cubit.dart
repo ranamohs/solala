@@ -30,6 +30,11 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     required String relation,
     int? parentId,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     emit(AddFamilyMemberLoading());
 
@@ -39,6 +44,11 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       relation: relation,
       parentId: parentId,
       avatar: avatar,
+      birthDate: birthDate,
+      birthPlace: birthPlace,
+      isLive: isLive,
+      phone: phone,
+      job: job,
     );
 
     result.fold(
@@ -53,6 +63,11 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     required String gender,
     required String relation,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     emit(UpdateFamilyMemberLoading());
 
@@ -62,6 +77,11 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       gender: gender,
       relation: relation,
       avatar: avatar,
+      birthDate: birthDate,
+      birthPlace: birthPlace,
+      isLive: isLive,
+      phone: phone,
+      job: job,
     );
 
     result.fold(

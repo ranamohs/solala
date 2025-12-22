@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,8 +29,14 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _relationController;
+  late TextEditingController _birthDateController;
+  late TextEditingController _birthPlaceController;
+  late TextEditingController _phoneController;
+  late TextEditingController _jobController;
   String? _gender;
   File? _image;
+  DateTime? _selectedDate;
+  late bool _isLive;
 
   @override
   void initState() {
@@ -37,13 +44,27 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
     _nameController = TextEditingController(text: widget.member.name ?? '');
     _relationController =
         TextEditingController(text: widget.member.relation ?? '');
+    _birthDateController =
+        TextEditingController(text: widget.member.birthDate ?? '');
+    _birthPlaceController =
+        TextEditingController(text: widget.member.birthPlace ?? '');
+    _phoneController = TextEditingController(text: widget.member.phone ?? '');
+    _jobController = TextEditingController(text: widget.member.job ?? '');
     _gender = widget.member.gender;
+    _isLive = widget.member.isLive == 1;
+    if (widget.member.birthDate != null && widget.member.birthDate!.isNotEmpty) {
+      _selectedDate = DateTime.tryParse(widget.member.birthDate!);
+    }
   }
 
   @override
   void dispose() {
     _nameController.dispose();
     _relationController.dispose();
+    _birthDateController.dispose();
+    _birthPlaceController.dispose();
+    _phoneController.dispose();
+    _jobController.dispose();
     super.dispose();
   }
 
@@ -114,7 +135,6 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Header with gradient
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -181,8 +201,17 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
                                   backgroundColor: Colors.white,
                                   backgroundImage: _image != null
                                       ? FileImage(_image!)
-                                      : NetworkImage(widget.member.avatar!)
-                                  as ImageProvider,
+                                      : (widget.member.avatar != null &&
+                                      widget.member.avatar!.isNotEmpty
+                                      ? NetworkImage(widget.member.avatar!)
+                                      : null) as ImageProvider?,
+                                  child: (_image == null &&
+                                      (widget.member.avatar == null ||
+                                          widget.member.avatar!.isEmpty))
+                                      ? Icon(Icons.person,
+                                      size: 50,
+                                      color: Colors.grey.shade400)
+                                      : null,
                                 ),
                               ),
                               Positioned(
@@ -301,6 +330,43 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
                               return null;
                             },
                           ),
+
+                          const SizedBox(height: 16),
+
+                          // Birth Date
+                          _buildDateField(),
+
+                          const SizedBox(height: 16),
+
+                          // Birth Place
+                          _buildTextField(
+                            controller: _birthPlaceController,
+                            label: 'مكان الميلاد',
+                            icon: Icons.location_on_outlined,
+                            validator: (value) => null, // Optional
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Phone
+                          _buildTextField(
+                            controller: _phoneController,
+                            label: 'رقم الهاتف',
+                            icon: Icons.phone_outlined,
+                            validator: (value) => null, // Optional
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Job
+                          _buildTextField(
+                            controller: _jobController,
+                            label: 'الوظيفة',
+                            icon: Icons.work_outline,
+                            validator: (value) => null,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildIsLiveSwitch(),
                         ],
                       ),
                     ),
@@ -352,6 +418,11 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
                                 gender: _gender!,
                                 relation: _relationController.text,
                                 avatar: _image?.path ?? '',
+                                birthDate: _birthDateController.text,
+                                birthPlace: _birthPlaceController.text,
+                                isLive: _isLive ? 1 : 0,
+                                phone: _phoneController.text,
+                                job: _jobController.text,
                               );
                             }
                           },
@@ -422,6 +493,76 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
           ),
         ),
         validator: validator,
+      ),
+    );
+  }
+
+  Widget _buildDateField() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: InkWell(
+        onTap: () async {
+          final DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: _selectedDate ?? DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+          );
+          if (picked != null && picked != _selectedDate) {
+            setState(() {
+              _selectedDate = picked;
+              _birthDateController.text = DateFormat('yyyy-MM-dd').format(picked);
+            });
+          }
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: 'تاريخ الميلاد',
+            prefixIcon: Icon(Icons.calendar_today_outlined, color: AppColors.primaryColor),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.symmetric(
+              horizontal: 8.w,
+              vertical: 16.h,
+            ),
+          ),
+          child: Text(
+            _birthDateController.text.isEmpty ? 'اختيار التاريخ' : _birthDateController.text,
+            style: AppStyles.styleRegular14(context).copyWith(
+              color: _birthDateController.text.isEmpty ? Colors.grey.shade600 : Colors.black,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildIsLiveSwitch() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: Colors.grey.shade300),
+      ),
+      child: SwitchListTile(
+        title: Text(
+          'على قيد الحياة',
+          style: AppStyles.styleRegular14(context),
+        ),
+        value: _isLive,
+        onChanged: (bool value) {
+          setState(() {
+            _isLive = value;
+          });
+        },
+        secondary: Icon(
+          _isLive ? Icons.favorite : Icons.heart_broken_outlined,
+          color: _isLive ? AppColors.primaryColor : Colors.grey,
+        ),
       ),
     );
   }
