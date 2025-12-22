@@ -29,6 +29,7 @@ class LogoutDialog extends StatelessWidget {
           secureStorageHelper.deleteToken();
           context.read<UserCubit>().setGuestStatus(true);
           GoRouter.of(context).go(AppRouter.loginView);
+          userDataManager.clearAllUserData();
           fixedSnackBar(
             context,
             message: isArabic(context)
@@ -37,11 +38,11 @@ class LogoutDialog extends StatelessWidget {
             icon: Icons.check_circle_outline,
             boxColor: Colors.green,
           );
-          userDataManager.clearAllUserData();
         } else if (state is LogoutFailureState) {
           secureStorageHelper.deleteToken();
           context.read<UserCubit>().setGuestStatus(true);
           GoRouter.of(context).go(AppRouter.loginView);
+          userDataManager.clearAllUserData();
           fixedSnackBar(
             context,
             message: isArabic(context)

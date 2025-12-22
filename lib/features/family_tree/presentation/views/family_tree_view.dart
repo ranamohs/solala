@@ -19,6 +19,7 @@ import '../manager/family_cubit/family_cubit.dart';
 import '../manager/family_cubit/family_state.dart';
 import '../widgets/member_details_dialog.dart';
 import '../widgets/update_menmber_dialog.dart';
+import 'provider_family_tree_view.dart';
 
 class FamilyTreeView extends StatefulWidget {
   const FamilyTreeView({super.key});
@@ -219,33 +220,41 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                         ),
                       );
                     } else {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundImage:
-                              AssetImage(AppAssets.accountIcon),
-                            ),
-                            SizedBox(height: 16.h),
-                            Text(
-                              AppStrings.noMembersFoundTillNow.tr(),
-                              style: AppStyles.styleMedium18(context).copyWith(
-                                color: AppColors.secondaryColor,
-                                fontWeight: FontWeight.bold,
+                      final accountType =
+                      getIt<UserDataManager>().getAccountType();
+                      if (accountType == 'provider') {
+                        return const ProviderFamilyView();
+                      } else {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 50,
+                                backgroundImage:
+                                AssetImage(AppAssets.accountIcon),
                               ),
-                            ),
-                            SizedBox(height: 8.h),
-                            Text(
-                              "Please add family information".tr(),
-                              style: AppStyles.styleRegular14(context).copyWith(
-                                color: AppColors.greyColor,
+                              SizedBox(height: 16.h),
+                              Text(
+                                AppStrings.noMembersFoundTillNow.tr(),
+                                style: AppStyles.styleMedium18(context)
+                                    .copyWith(
+                                  color: AppColors.secondaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
+                              SizedBox(height: 8.h),
+                              Text(
+                                "Please add family information".tr(),
+                                style: AppStyles.styleRegular14(context)
+                                    .copyWith(
+                                  color: AppColors.greyColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   }
 

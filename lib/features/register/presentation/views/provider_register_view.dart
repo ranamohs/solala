@@ -37,7 +37,7 @@ class _RegisterViewState extends State<ProviderRegisterView> {
       listener: (context, state) {
         if (state is RegisterSuccessState) {
           context.read<UserCubit>().setGuestStatus(false);
-          customPush(context, AppRouter.homePage);
+          customPush(context, AppRouter.loginView);
         } else if (state is RegisterFailureState) {
           fixedSnackBar(
             context,
