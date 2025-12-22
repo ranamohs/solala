@@ -233,5 +233,15 @@
   "address_en": "Address (English)",
   "event_date": "Event Date",
   "please_select_image": "Please select an image",
-  "create_news": "Create News"
+  "create_news": "Create News",
+  "relation": "Relation",
+  "gender": "Gender",
+  "birthDate": "Birth Date",
+  "birthPlace": "Birth Place",
+  "status": "Status",
+  "phone": "Phone",
+  "job": "Job",
+  "alive": "Alive",
+  "deceased": "Deceased",
+  "close": "Close"
 }

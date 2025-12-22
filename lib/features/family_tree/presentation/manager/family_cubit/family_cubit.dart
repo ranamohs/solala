@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:solala/core/errors/failure.dart';
+import 'package:solala/features/family_tree/data/models/family_member_details_model.dart';
 
 import '../../../data/models/family_model.dart';
 import '../../../data/repos/family_repo.dart';
@@ -119,6 +120,19 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     result.fold(
           (failure) => emit(CreateFamilyFailure(failure)),
           (basicModel) => emit(CreateFamilySuccess(basicModel)),
+    );
+  }
+
+  Future<void> getFamilyMemberDetails({required int memberId}) async {
+    emit(GetFamilyMemberDetailsLoading());
+
+    final Either<Failure, FamilyMemberDetailsModel> result =
+    await familyTreeRepo.getFamilyMemberDetails(memberId: memberId);
+
+    result.fold(
+          (failure) => emit(GetFamilyMemberDetailsFailure(failure)),
+          (memberDetailsModel) =>
+          emit(GetFamilyMemberDetailsSuccess(memberDetailsModel)),
     );
   }
 }

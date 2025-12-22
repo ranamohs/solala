@@ -1,10 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:solala/core/errors/failure.dart';
+import 'package:solala/features/family_tree/data/models/family_member_details_model.dart';
 
 import '../../../../core/data/models/basic_model.dart';
 import '../models/family_model.dart';
 
 abstract class FamilyTreeRepo {
+  Future<Either<Failure, FamilyMemberDetailsModel>> getFamilyMemberDetails(
+      {required int memberId});
   Future<Either<Failure, FamilyTreeModel>> getFamilyTree();
   Future<Either<Failure, BasicModel>> addFamilyMember({
     required String name,

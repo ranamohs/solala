@@ -17,6 +17,7 @@ import '../../../../core/widgets/retry_widget.dart';
 import '../../data/models/family_model.dart';
 import '../manager/family_cubit/family_cubit.dart';
 import '../manager/family_cubit/family_state.dart';
+import '../widgets/member_details_dialog.dart';
 import '../widgets/update_menmber_dialog.dart';
 
 class FamilyTreeView extends StatefulWidget {
@@ -76,17 +77,48 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           ),
         ),
         backgroundColor: Colors.transparent,
-        body: BlocListener<FamilyTreeCubit, FamilyTreeState>(
-          listener: (context, state) {
-            if (state is AddFamilyMemberSuccess ||
-                state is UpdateFamilyMemberSuccess ||
-                state is DeleteFamilyMemberSuccess) {
-              context.read<FamilyTreeCubit>().getFamilyTree();
-            }
-            if (state is FamilyTreeSuccess) {
-              _initializeExpansionState(state.familyTreeModel.data ?? []);
-            }
-          },
+        body: MultiBlocListener(
+          listeners: [
+            BlocListener<FamilyTreeCubit, FamilyTreeState>(
+              listener: (context, state) {
+                if (state is AddFamilyMemberSuccess ||
+                    state is UpdateFamilyMemberSuccess ||
+                    state is DeleteFamilyMemberSuccess) {
+                  context.read<FamilyTreeCubit>().getFamilyTree();
+                }
+                if (state is FamilyTreeSuccess) {
+                  _initializeExpansionState(state.familyTreeModel.data ?? []);
+                }
+              },
+            ),
+            BlocListener<FamilyTreeCubit, FamilyTreeState>(
+              listener: (context, state) {
+                if (state is GetFamilyMemberDetailsLoading) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (state is GetFamilyMemberDetailsSuccess) {
+                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    builder: (_) => MemberDetailsDialog(
+                      member: state.memberDetailsModel,
+                    ),
+                  );
+                } else if (state is GetFamilyMemberDetailsFailure) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.failure.errMessage),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
           child: RefreshIndicator(
             backgroundColor: AppColors.primaryColor,
             color: AppColors.greenColor,
@@ -95,8 +127,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             },
             child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
               buildWhen: (previous, current) {
-                return current is! AddFamilyMemberLoading &&
-                    current is! AddFamilyMemberFailure;
+                return current is FamilyTreeLoading ||
+                    current is FamilyTreeSuccess ||
+                    current is FamilyTreeFailure;
               },
               builder: (context, state) {
                 if (state is FamilyTreeLoading) {
@@ -310,9 +343,18 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
     getIt<UserDataManager>().getUserFamilyId();
     return Column(
       children: [
-        CircleAvatar(
-          radius: isEmptyTree ? 40 : 40,
-          backgroundImage: backgroundImage,
+        GestureDetector(
+          onTap: () {
+            if (member.id != null) {
+              context
+                  .read<FamilyTreeCubit>()
+                  .getFamilyMemberDetails(memberId: member.id!);
+            }
+          },
+          child: CircleAvatar(
+            radius: isEmptyTree ? 40 : 40,
+            backgroundImage: backgroundImage,
+          ),
         ),
         const SizedBox(height: 8),
         Row(

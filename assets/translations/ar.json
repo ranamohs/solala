@@ -156,5 +156,15 @@
   "address_en": "العنوان (بالانجليزية)",
   "event_date": "تاريخ المناسبة",
   "please_select_image": "الرجاء اختيار صورة",
-  "create_news": "إنشاء خبر"
+  "create_news": "إنشاء خبر",
+  "relation": "صلة القرابة",
+  "gender": "النوع",
+  "birthDate": "تاريخ الميلاد",
+  "birthPlace": "مكان الميلاد",
+  "status": "الحالة",
+  "phone": "رقم الهاتف",
+  "job": "الوظيفة",
+  "alive": "على قيد الحياة",
+  "deceased": "متوفى",
+  "close": "إغلاق"
 }

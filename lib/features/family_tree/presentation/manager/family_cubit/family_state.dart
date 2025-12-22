@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 
 import '../../../../../core/data/models/basic_model.dart';
 import '../../../../../core/errors/failure.dart';
+import '../../../data/models/family_member_details_model.dart';
 import '../../../data/models/family_model.dart';
 
 abstract class FamilyTreeState extends Equatable {
@@ -31,6 +32,26 @@ class FamilyTreeFailure extends FamilyTreeState {
   final Failure failure;
 
   const FamilyTreeFailure(this.failure);
+
+  @override
+  List<Object> get props => [failure];
+}
+
+class GetFamilyMemberDetailsLoading extends FamilyTreeState {}
+
+class GetFamilyMemberDetailsSuccess extends FamilyTreeState {
+  final FamilyMemberDetailsModel memberDetailsModel;
+
+  const GetFamilyMemberDetailsSuccess(this.memberDetailsModel);
+
+  @override
+  List<Object> get props => [memberDetailsModel];
+}
+
+class GetFamilyMemberDetailsFailure extends FamilyTreeState {
+  final Failure failure;
+
+  const GetFamilyMemberDetailsFailure(this.failure);
 
   @override
   List<Object> get props => [failure];
