@@ -19,6 +19,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     final Either<Failure, FamilyTreeModel> result =
     await familyTreeRepo.getFamilyTree();
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(FamilyTreeFailure(failure)),
           (familyTreeModel) => emit(FamilyTreeSuccess(familyTreeModel)),
@@ -52,6 +53,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       job: job,
     );
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(AddFamilyMemberFailure(failure)),
           (basicModel) => emit(AddFamilyMemberSuccess(basicModel)),
@@ -85,6 +87,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       job: job,
     );
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(UpdateFamilyMemberFailure(failure)),
           (familyMember) => emit(UpdateFamilyMemberSuccess(familyMember)),
@@ -96,6 +99,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
 
     final result = await familyTreeRepo.deleteFamilyMember(memberId: memberId);
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(DeleteFamilyMemberFailure(failure)),
           (basicModel) => emit(DeleteFamilyMemberSuccess(basicModel)),
@@ -117,6 +121,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       image: image,
     );
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(CreateFamilyFailure(failure)),
           (basicModel) => emit(CreateFamilySuccess(basicModel)),
@@ -129,6 +134,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     final Either<Failure, FamilyMemberDetailsModel> result =
     await familyTreeRepo.getFamilyMemberDetails(memberId: memberId);
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(GetFamilyMemberDetailsFailure(failure)),
           (memberDetailsModel) =>

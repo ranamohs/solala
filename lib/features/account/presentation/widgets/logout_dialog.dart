@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:solala/core/state_management/user_cubit/user_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:solala/core/databases/cache/secure_storage_helper.dart';
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/constants/app_styles.dart';
 import '../../../../core/databases/cache/user_data_manager.dart';
 import '../../../../core/functions/fixed_snack_bar.dart';
 import '../../../../core/functions/is_arabic.dart';
@@ -72,27 +74,17 @@ class LogoutDialog extends StatelessWidget {
                 // Title
                 Text(
                   AppStrings.logout.tr(),
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
+                  style: AppStyles.styleBold18(context),
                 ),
 
-                const SizedBox(height: 16),
-
-                // Message
+                 SizedBox(height: 16.h),
                 Text(
                   AppStrings.logoutMessage.tr(),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                  ),
+                  style: AppStyles.styleRegular14(context),
                 ),
 
-                const SizedBox(height: 24),
-
-                // Buttons Row
+                 SizedBox(height: 24.h),
                 Row(
                   children: [
                     // Cancel Button
@@ -109,17 +101,11 @@ class LogoutDialog extends StatelessWidget {
                         ),
                         child: Text(
                           AppStrings.cancel.tr(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: AppStyles.styleMedium16(context),
                         ),
                       ),
                     ),
-
-                    const SizedBox(width: 12),
-
-                    // Logout Button
+                     SizedBox(width: 12.w),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: state is LogoutLoadingState
@@ -147,10 +133,7 @@ class LogoutDialog extends StatelessWidget {
                         )
                             : Text(
                           AppStrings.logout.tr(),
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: AppStyles.styleMedium16(context),
                         ),
                       ),
                     ),

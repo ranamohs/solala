@@ -26,11 +26,9 @@ class ForgotPasswordRepoImpl implements ForgotPasswordRepo {
         },
       );
       if (response['status'] == false) {
-        // Check for the specific validation message first
         if (response['errors'] != null && response['errors']['message'] is String) {
           return Left(ServerFailure(errMessage: response['errors']['message']));
         }
-        // Fallback to the general message
         return Left(ServerFailure(errMessage: response['message']['ar'] ?? response['message']['en']));
       }
       return Right(response['message']);
