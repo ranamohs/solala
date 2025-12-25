@@ -38,6 +38,11 @@ class ServerFailure extends Failure {
     if (response.data is Map<String, dynamic>) {
       // Handle validation errors (status code 422)
       if (response.statusCode == 422) {
+        // Prioritize the specific message if available
+        if (response.data['errors'] != null && response.data['errors']['message'] is String) {
+          return ServerFailure(errMessage: response.data['errors']['message']);
+        }
+        // Fallback to the previous logic
         if (response.data['errors'] != null && response.data['errors']['errors'] != null) {
           final errors = response.data['errors']['errors'] as Map<String, dynamic>;
           // Take the first error message from the list

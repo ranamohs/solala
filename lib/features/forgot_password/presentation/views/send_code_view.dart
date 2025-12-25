@@ -39,7 +39,6 @@ class _SendCodeViewState extends State<SendCodeView> {
             );
             customPush(context, AppRouter.resetPasswordView, extra: _emailController.text );
           } else if (state is SendVerificationCodeFailure) {
-
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.errMessage),
