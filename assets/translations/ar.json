@@ -166,5 +166,18 @@
   "job": "الوظيفة",
   "alive": "على قيد الحياة",
   "deceased": "متوفى",
-  "close": "إغلاق"
+  "close": "إغلاق",
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "sendVerificationCode": "إرسال رمز التحقق",
+  "enterYourEmail": "أدخل بريدك الإلكتروني",
+  "verificationCodeSent": "تم إرسال رمز التحقق إلى البريد الإلكتروني",
+  "resetPassword": "إعادة تعيين كلمة المرور",
+  "passwordResetSuccessfully": "تم إعادة تعيين كلمة المرور بنجاح",
+  "code": "الرمز",
+  "passwordConfirmation": "تأكيد كلمة المرور",
+  "pleaseEnterYourEmail": "الرجاء إدخال بريدك الإلكتروني",
+  "pleaseEnterTheCode": "الرجاء إدخال الرمز",
+  "pleaseEnterYourNewPassword": "الرجاء إدخال كلمة المرور الجديدة",
+  "pleaseConfirmYourNewPassword": "الرجاء تأكيد كلمة المرور الجديدة"
 }
+

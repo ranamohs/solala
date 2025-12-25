@@ -36,6 +36,20 @@ class ServerFailure extends Failure {
 
   factory ServerFailure.fromBadResponse(Response response) {
     if (response.data is Map<String, dynamic>) {
+      // Handle validation errors (status code 422)
+      if (response.statusCode == 422) {
+        if (response.data['errors'] != null && response.data['errors']['errors'] != null) {
+          final errors = response.data['errors']['errors'] as Map<String, dynamic>;
+          // Take the first error message from the list
+          if (errors.isNotEmpty) {
+            final firstErrorField = errors.keys.first;
+            final firstErrorMessage = (errors[firstErrorField] as List).first;
+            return ServerFailure(errMessage: firstErrorMessage);
+          }
+        }
+      }
+
+      // Handle general message errors
       final message = response.data['message'];
       if (message is Map<String, dynamic>) {
         return ServerFailure(

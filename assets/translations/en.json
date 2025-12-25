@@ -243,5 +243,18 @@
   "job": "Job",
   "alive": "Alive",
   "deceased": "Deceased",
-  "close": "Close"
+  "close": "Close",
+  "forgotPassword": "Forgot Password?",
+  "sendVerificationCode": "Send Verification Code",
+  "enterYourEmail": "Enter your email",
+  "verificationCodeSent": "Verification code sent to email",
+  "resetPassword": "Reset Password",
+  "passwordResetSuccessfully": "Password reset successfully",
+  "code": "Code",
+  "passwordConfirmation": "Password Confirmation",
+  "pleaseEnterYourEmail": "Please enter your email",
+  "pleaseEnterTheCode": "Please enter the code",
+  "pleaseEnterYourNewPassword": "Please enter your new password",
+  "pleaseConfirmYourNewPassword": "Please confirm your new password"
 }
+

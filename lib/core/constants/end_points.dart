@@ -36,6 +36,8 @@ class EndPoints {
   static const String news = "/reports";
   static const String addNews = "/reports/add";
   static const String addFamily = "/family/add";
+  static const String sendVerificationCode = "/send-verification-code";
+  static const String resetPassword = "/reset-password";
 
 }
 

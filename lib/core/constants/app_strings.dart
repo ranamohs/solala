@@ -143,4 +143,18 @@ class AppStrings {
   static const String alive = 'alive';
   static const String deceased = 'deceased';
   static const String close = 'close';
+  static const String forgotPassword = 'forgotPassword';
+  static const String sendVerificationCode = 'sendVerificationCode';
+  static const String enterYourEmail = 'enterYourEmail';
+  static const String verificationCodeSent = 'verificationCodeSent';
+  static const String resetPassword = 'resetPassword';
+  static const String newPassword = 'newPassword';
+  static const String confirmNewPassword = 'confirmNewPassword';
+  static const String passwordResetSuccessfully = 'passwordResetSuccessfully';
+  static const String code = 'code';
+  static const String passwordConfirmation = 'passwordConfirmation';
+  static const String pleaseEnterYourEmail = 'pleaseEnterYourEmail';
+  static const String pleaseEnterTheCode = 'pleaseEnterTheCode';
+  static const String pleaseEnterYourNewPassword = 'pleaseEnterYourNewPassword';
+  static const String pleaseConfirmYourNewPassword = 'pleaseConfirmYourNewPassword';
 }

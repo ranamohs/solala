@@ -41,6 +41,8 @@ import '../../features/family_tree/data/repos/family_repo_impl.dart';
 import '../../features/events/data/repos/events_repo.dart';
 import '../../features/events/data/repos/events_repo_impl.dart';
 import '../../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
+import '../../features/forgot_password/data/repos/forgot_password_repo_impl.dart';
+import '../../features/forgot_password/presentation/manager/cubit/forgot_password_cubit.dart';
 import '../../features/home/data/repos/family_info_repos/family_info_repo.dart';
 import '../../features/home/data/repos/family_info_repos/family_info_repo_impl.dart';
 import '../../features/home/data/repos/numbering_events_repo/numbering_events_repo.dart';
@@ -247,4 +249,14 @@ void setupServiceLocator() {
   getIt.registerFactory<NewsCubit>(() => NewsCubit(
     getIt<NewsRepo>(),
   ));
+
+  // Forgot Password dependencies
+  getIt.registerSingleton<ForgotPasswordRepoImpl>(
+    ForgotPasswordRepoImpl(
+      dioConsumer: getIt.get<DioConsumer>(),
+      secureStorageHelper: getIt<SecureStorageHelper>(),
+    ),
+  );
+  getIt.registerFactory<ForgotPasswordCubit>(
+          () => ForgotPasswordCubit(forgotPasswordRepo: getIt<ForgotPasswordRepoImpl>()));
 }
