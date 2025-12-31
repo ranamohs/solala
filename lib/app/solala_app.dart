@@ -11,6 +11,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../features/family_tree/presentation/manager/family_cubit/family_cubit.dart';
 import '../features/home/presentation/manager/banners_cubit/banners_cubit.dart';
 import '../features/home/presentation/manager/family_info_cubit/family_info_cubit.dart';
+import '../features/home/presentation/manager/news_cubit/news_cubit.dart';
+import '../features/home/presentation/manager/numering_events_cubit/numbering_events_cubit.dart';
 
 class SolalaApp extends StatelessWidget {
   const SolalaApp({super.key});
@@ -42,6 +44,12 @@ class SolalaApp extends StatelessWidget {
             ),
             BlocProvider<FamilyInfoCubit>(
               create: (_) => getIt<FamilyInfoCubit>(),
+            ),
+            BlocProvider<NumberingEventsCubit>(
+              create: (_) => getIt<NumberingEventsCubit>()..getNumberingEvents(),
+            ),
+            BlocProvider<NewsCubit>(
+              create: (_) => getIt<NewsCubit>()..getReports(),
             ),
           ],
           child: MaterialApp.router(

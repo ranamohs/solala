@@ -72,8 +72,6 @@ class _RegisterFormState extends State<RegisterForm> {
 
           ),
           const VerticalSpace(16),
-
-          /// -------- Phone ---------
           SecondaryTextFormField(
             controller: _phoneController,
             labelText: AppStrings.phoneNumber.tr(),
@@ -81,16 +79,12 @@ class _RegisterFormState extends State<RegisterForm> {
             validate: (v) => v!.isEmpty ? 'Please enter your phone number' : null,
           ),
           const VerticalSpace(16),
-
-          /// -------- Email ---------
           SecondaryTextFormField(
             controller: _emailController,
             labelText: AppStrings.email.tr(),
             validate: (v) => v!.isEmpty ? 'Please enter your email' : null,
           ),
           const VerticalSpace(16),
-
-          /// -------- Family Dropdown ---------
           BlocBuilder<RegisterCubit, RegisterState>(
             builder: (context, state) {
               if (state is GetFamiliesSuccessState) {
@@ -119,10 +113,7 @@ class _RegisterFormState extends State<RegisterForm> {
               );
             },
           ),
-
           const VerticalSpace(16),
-
-          /// -------- Password ---------
           SecondaryTextFormField(
             isPasswordField: true,
             suffixIcon:    Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor)   ,
@@ -131,8 +122,6 @@ class _RegisterFormState extends State<RegisterForm> {
             validate: (v) => v!.isEmpty ? 'Please enter your password' : null,
           ),
           const VerticalSpace(16),
-
-          /// -------- Confirm Password ---------
           SecondaryTextFormField(
             isPasswordField: true,
             suffixIcon: Icon(Icons.remove_red_eye, color: AppColors.pureWhiteColor),
@@ -141,8 +130,6 @@ class _RegisterFormState extends State<RegisterForm> {
             validate: (v) => v!.isEmpty ? 'Please enter your confirm password' : null,
           ),
           const VerticalSpace(32),
-
-
           PrimaryButton( onPressed: () {
             if (_formKey.currentState!.validate()) {
               final data = RegisterDataModel(

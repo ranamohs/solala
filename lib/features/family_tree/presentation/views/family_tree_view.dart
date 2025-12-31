@@ -181,13 +181,15 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                       _buildGraph(graph, familyRoot, null);
 
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        final RenderBox? graphRenderBox =
-                        _graphKey.currentContext?.findRenderObject() as RenderBox?;
-                        final RenderBox? viewportRenderBox =
-                        context.findRenderObject() as RenderBox?;
+                        if (mounted) {
+                          final RenderBox? graphRenderBox =
+                          _graphKey.currentContext?.findRenderObject() as RenderBox?;
+                          final RenderBox? viewportRenderBox =
+                          context.findRenderObject() as RenderBox?;
 
-                        if (graphRenderBox != null && viewportRenderBox != null) {
-                          _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                          if (graphRenderBox != null && viewportRenderBox != null) {
+                            _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                          }
                         }
                       });
 
@@ -272,13 +274,15 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                   }
 
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    final RenderBox? graphRenderBox =
-                    _graphKey.currentContext?.findRenderObject() as RenderBox?;
-                    final RenderBox? viewportRenderBox =
-                    context.findRenderObject() as RenderBox?;
+                    if (mounted) {
+                      final RenderBox? graphRenderBox =
+                      _graphKey.currentContext?.findRenderObject() as RenderBox?;
+                      final RenderBox? viewportRenderBox =
+                      context.findRenderObject() as RenderBox?;
 
-                    if (graphRenderBox != null && viewportRenderBox != null) {
-                      _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                      if (graphRenderBox != null && viewportRenderBox != null) {
+                        _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                      }
                     }
                   });
 
