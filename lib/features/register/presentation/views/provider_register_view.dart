@@ -28,7 +28,6 @@ class _RegisterViewState extends State<ProviderRegisterView> {
   @override
   void initState() {
     super.initState();
-    context.read<RegisterCubit>().getFamilies();
   }
 
   @override

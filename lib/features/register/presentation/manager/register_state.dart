@@ -32,6 +32,19 @@ class RegisterFailureState extends RegisterState {
   List<Object?> get props => [failedModel];
 }
 
+class JoinFamilyLoadingState extends RegisterState {}
+
+class JoinFamilySuccessState extends RegisterState {}
+
+class JoinFamilyFailureState extends RegisterState {
+  final AuthFailureModel failedModel;
+
+  const JoinFamilyFailureState(this.failedModel);
+
+  @override
+  List<Object?> get props => [failedModel];
+}
+
 class VerifyLoginCodeLoadingState extends RegisterState {}
 
 class VerifyLoginCodeSuccessState extends RegisterState {
@@ -47,26 +60,6 @@ class VerifyLoginCodeFailureState extends RegisterState {
   final AuthFailureModel failedModel;
 
   const VerifyLoginCodeFailureState(this.failedModel);
-
-  @override
-  List<Object?> get props => [failedModel];
-}
-
-class GetFamiliesLoadingState extends RegisterState {}
-
-class GetFamiliesSuccessState extends RegisterState {
-  final List<FamilyModel> families;
-
-  const GetFamiliesSuccessState({required this.families});
-
-  @override
-  List<Object?> get props => [families];
-}
-
-class GetFamiliesFailureState extends RegisterState {
-  final AuthFailureModel failedModel;
-
-  const GetFamiliesFailureState(this.failedModel);
 
   @override
   List<Object?> get props => [failedModel];

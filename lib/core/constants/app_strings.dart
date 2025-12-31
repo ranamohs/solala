@@ -157,4 +157,6 @@ class AppStrings {
   static const String pleaseEnterTheCode = 'pleaseEnterTheCode';
   static const String pleaseEnterYourNewPassword = 'pleaseEnterYourNewPassword';
   static const String pleaseConfirmYourNewPassword = 'pleaseConfirmYourNewPassword';
+  static const String joinFamily = 'joinFamily';
+  static const String pleaseEnterFamilyCode = 'pleaseEnterFamilyCode';
 }

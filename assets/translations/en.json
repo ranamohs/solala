@@ -255,6 +255,8 @@
   "pleaseEnterYourEmail": "Please enter your email",
   "pleaseEnterTheCode": "Please enter the code",
   "pleaseEnterYourNewPassword": "Please enter your new password",
-  "pleaseConfirmYourNewPassword": "Please confirm your new password"
+  "pleaseConfirmYourNewPassword": "Please confirm your new password",
+  "joinFamily": "Join Family",
+  "pleaseEnterFamilyCode": "Please enter family code"
 }
 

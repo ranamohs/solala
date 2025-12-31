@@ -106,9 +106,6 @@ void setupServiceLocator() {
     ),
   );
 
-
-
-
   getIt.registerLazySingleton<AboutUsRepo>(
         () => AboutUsRepoImpl(
       dioConsumer: getIt<DioConsumer>(),
