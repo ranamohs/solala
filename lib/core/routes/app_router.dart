@@ -5,6 +5,9 @@ import 'package:solala/features/splash/presentation/views/splash_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/forgot_password/presentation/manager/cubit/forgot_password_cubit.dart';
+import '../../features/forgot_password/presentation/views/reset_password_view.dart';
+import '../../features/forgot_password/presentation/views/send_code_view.dart';
 import '../../features/home/presentation/views/home_page.dart';
 
 import '../../features/login/presentation/views/login_view.dart';
@@ -24,6 +27,7 @@ import '../../features/splash/presentation/views/intro_view.dart';
 import '../../features/splash/presentation/views/intro_with_button.dart';
 import '../../features/app_info/presentation/views/help_and_support_view.dart';
 import '../services/service_locator.dart';
+
 
 abstract class AppRouter {
   static const welcomeView = '/welcomeView';
@@ -55,6 +59,9 @@ abstract class AppRouter {
   static const verificationSuccessView = '/verificationSuccessView';
   static const chooseRoleView = '/chooseRoleView';
   static const providerRegisterView = '/providerRegisterView';
+
+  static const sendCodeView = '/sendCodeView';
+  static const resetPasswordView = '/resetPasswordView';
 
 
 
@@ -89,7 +96,22 @@ abstract class AppRouter {
         create: (context) => getIt<RegisterCubit>(),
         child: const VerificationView(),
       )),
-
+      GoRoute(
+        path: sendCodeView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<ForgotPasswordCubit>(),
+          child: const SendCodeView(),
+        ),
+      ),
+      GoRoute(
+        path: resetPasswordView,
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<ForgotPasswordCubit>(),
+          child: ResetPasswordView(
+            email: state.extra as String,
+          ),
+        ),
+      ),
     ],
   );
 }

@@ -129,7 +129,20 @@ class _LoginViewState extends State<_LoginViewBody> {
                               validate: (v) => v!.isEmpty ? 'Please enter your password' : null,
                             ),
 
+                            SizedBox(height: 10.h),
 
+                            GestureDetector(
+                              onTap: () {
+                                customPush(context, AppRouter.sendCodeView);
+                              },
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  AppStrings.forgotPassword.tr(),
+                                  style: AppStyles.styleMedium14(context).copyWith(color: AppColors.primaryColor),
+                                ),
+                              ),
+                            ),
                             SizedBox(height: 20.h),
 
                             /// Login Button

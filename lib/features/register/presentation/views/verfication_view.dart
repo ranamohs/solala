@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,14 +43,14 @@ class _VerificationViewState extends State<VerificationView> {
 
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
-        if (state is VerifyLoginCodeLoadingState) {
+        if (state is JoinFamilyLoadingState) {
           isLoading = true;
           setState(() {});
-        } else if (state is VerifyLoginCodeSuccessState) {
+        } else if (state is JoinFamilySuccessState) {
           isLoading = false;
           setState(() {});
-          GoRouter.of(context).push(AppRouter.verificationSuccessView);
-        } else if (state is VerifyLoginCodeFailureState) {
+          GoRouter.of(context).pushReplacement(AppRouter.homePage);
+        } else if (state is JoinFamilyFailureState) {
           isLoading = false;
           setState(() {});
           fixedSnackBar(
@@ -61,7 +62,6 @@ class _VerificationViewState extends State<VerificationView> {
             boxColor: Colors.red.withOpacity(0.6),
             durationInSeconds: 3,
           );
-          // floatingSnackBar(context, state.failedModel.messageLocalized!.ar );
         }
       },
       builder: (context, state) {
@@ -149,15 +149,7 @@ class _VerificationViewState extends State<VerificationView> {
                                   color: AppColors.pureBlackColor,
                                 ),
                               ),
-                              SizedBox(height: 4.h),
-                              Text(
-                              AppStrings.yourNumber.tr(),
-                                textAlign: TextAlign.center,
-                                style:
-                                AppStyles.styleMedium14(context).copyWith(
-                                  color: AppColors.primaryColor,
-                                ),
-                              ),
+
                             ],
                           ),
                         ),
@@ -167,7 +159,7 @@ class _VerificationViewState extends State<VerificationView> {
                           child: PrimaryButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                context.read<RegisterCubit>().verifyLoginCode(
+                                context.read<RegisterCubit>().joinFamily(
                                     _verificationCodeController.text);
                               }
                             },
@@ -183,8 +175,13 @@ class _VerificationViewState extends State<VerificationView> {
                                 color: AppColors.pureBlackColor,
                               ),
                               children: [
-                                 TextSpan(text: AppStrings.didNotGetTheCode.tr() + "  " ),
+                                TextSpan(text: AppStrings.didNotGetTheCode.tr() + "  " ),
                                 TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      context.read<RegisterCubit>().joinFamily(
+                                          _verificationCodeController.text);
+                                    },
                                   text: AppStrings.resend.tr(),
                                   style: AppStyles.styleMedium14(context)
                                       .copyWith(

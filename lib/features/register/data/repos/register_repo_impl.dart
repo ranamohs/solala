@@ -79,25 +79,24 @@ class RegisterRepoImpl implements RegisterRepo {
       );
     }
   }
-
   @override
-  Future<Either<AuthFailureModel, RegisterSuccessModel>> verifyLoginCode(
-      {required String code}) async {
+  Future<Either<AuthFailureModel, void>> joinFamily(
+      {required String familyCode}) async {
     try {
+      final token = await secureStorageHelper.getToken();
       final response = await dioConsumer.post(
-        EndPoints.verifyLoginCode,
-        data: {
-          'login_code': code,
+        EndPoints.joinFamily,
+        data: {'family_code': familyCode},
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
         },
-        isFormData: true,
+
       );
 
       if (response != null && response is Map<String, dynamic>) {
-        if (response.containsKey(ApiKey.token)) {
-          final registerSuccessModel = RegisterSuccessModel.fromJson(response);
-          String token = response[ApiKey.token];
-          await secureStorageHelper.saveToken(token: token);
-          return Right(registerSuccessModel);
+        if (response['status'] == true) {
+          return const Right(null);
         } else {
           return Left(AuthFailureModel.fromJson(response));
         }
@@ -120,18 +119,23 @@ class RegisterRepoImpl implements RegisterRepo {
   }
 
   @override
-  Future<Either<AuthFailureModel, List<FamilyModel>>> getFamilies() async {
+  Future<Either<AuthFailureModel, RegisterSuccessModel>> verifyLoginCode(
+      {required String code}) async {
     try {
-      final response = await dioConsumer.get(
-        EndPoints.families,
+      final response = await dioConsumer.post(
+        EndPoints.verifyLoginCode,
+        data: {
+          'login_code': code,
+        },
+        isFormData: true,
       );
 
       if (response != null && response is Map<String, dynamic>) {
-        if (response.containsKey('data')) {
-          final List<dynamic> familyList = response['data'];
-          final List<FamilyModel> families =
-          familyList.map((json) => FamilyModel.fromJson(json)).toList();
-          return Right(families);
+        if (response.containsKey(ApiKey.token)) {
+          final registerSuccessModel = RegisterSuccessModel.fromJson(response);
+          String token = response[ApiKey.token];
+          await secureStorageHelper.saveToken(token: token);
+          return Right(registerSuccessModel);
         } else {
           return Left(AuthFailureModel.fromJson(response));
         }

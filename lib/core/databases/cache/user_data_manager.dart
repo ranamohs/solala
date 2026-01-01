@@ -103,6 +103,8 @@ class UserDataManager {
     await _cacheHelper.removeData(key: 'avatarUrl');
     await _cacheHelper.removeData(key: 'isGuest');
     await _cacheHelper.removeData(key: 'accountType');
+    await _cacheHelper.removeData(key: 'familyId');
+    await _cacheHelper.removeData(key: 'familyName');
 
     _cachedUserId = null;
     _cachedUserName = null;

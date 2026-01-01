@@ -11,6 +11,9 @@ class DioConsumer extends ApiConsumer {
 
   DioConsumer({required this.dio}) {
     dio.options.baseUrl = EndPoints.baserUrl;
+    dio.options.validateStatus = (status) {
+      return status! < 500;
+    };
     dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
@@ -33,26 +36,22 @@ class DioConsumer extends ApiConsumer {
         Map<String, dynamic>? headers,
         bool isFormData = false,
       }) async {
-    try {
-      final res = await dio.post(
-        path,
-        data: isFormData
-            ? FormData.fromMap(data is Map<String, dynamic>
-            ? data
-            : await data.toJson())
-            : data,
-        queryParameters: queryParameters,
-        options: Options(
-          headers: headers ??
-              (isFormData
-                  ? ({'accept': 'application/json'}..remove('Content-Type'))
-                  : defaultHeaders),
-        ),
-      );
-      return res.data;
-    } on DioException catch (e) {
-      return e.response?.data ?? {'message': 'Unknown error occurred'};
-    }
+    final res = await dio.post(
+      path,
+      data: isFormData
+          ? FormData.fromMap(data is Map<String, dynamic>
+          ? data
+          : await data.toJson())
+          : data,
+      queryParameters: queryParameters,
+      options: Options(
+        headers: headers ??
+            (isFormData
+                ? ({'accept': 'application/json'}..remove('Content-Type'))
+                : defaultHeaders),
+      ),
+    );
+    return res.data;
   }
   //! PuT
   Future put(
@@ -62,27 +61,22 @@ class DioConsumer extends ApiConsumer {
         Map<String, dynamic>? headers,
         bool isFormData = false,
       }) async {
-    try {
-      final res = await dio.put(
-        path,
-        data: isFormData
-            ? FormData.fromMap(data is Map<String, dynamic>
-            ? data
-            : await data.toJson())
-            : data,
-        queryParameters: queryParameters,
-        options: Options(
-          headers: headers ??
-              (isFormData
-                  ? ({'accept': 'application/json'}..remove('Content-Type'))
-                  : defaultHeaders),
-        ),
-      );
-      return res.data;
-    } on DioException catch (e) {
-
-      return e.response?.data ?? {'message': 'Unknown error occurred'};
-    }
+    final res = await dio.put(
+      path,
+      data: isFormData
+          ? FormData.fromMap(data is Map<String, dynamic>
+          ? data
+          : await data.toJson())
+          : data,
+      queryParameters: queryParameters,
+      options: Options(
+        headers: headers ??
+            (isFormData
+                ? ({'accept': 'application/json'}..remove('Content-Type'))
+                : defaultHeaders),
+      ),
+    );
+    return res.data;
   }
   //! GET
   @override
@@ -92,16 +86,12 @@ class DioConsumer extends ApiConsumer {
         Map<String, dynamic>? queryParameters,
         Map<String, dynamic>? headers,
       }) async {
-    try {
-      final res = await dio.get(
-        path,
-        queryParameters: queryParameters,
-        options: Options(headers: headers ?? defaultHeaders),
-      );
-      return res.data;
-    } on DioException catch (e) {
-      return e.response?.data ?? {'message': 'Unknown error occurred'};
-    }
+    final res = await dio.get(
+      path,
+      queryParameters: queryParameters,
+      options: Options(headers: headers ?? defaultHeaders),
+    );
+    return res.data;
   }
 
   //! DELETE
@@ -112,17 +102,13 @@ class DioConsumer extends ApiConsumer {
         Map<String, dynamic>? queryParameters,
         Map<String, dynamic>? headers,
       }) async {
-    try {
-      final res = await dio.delete(
-        path,
-        data: data,
-        queryParameters: queryParameters,
-        options: Options(headers: headers ?? defaultHeaders),
-      );
-      return res.data;
-    } on DioException catch (e) {
-      return e.response?.data ?? {'message': 'Unknown error occurred'};
-    }
+    final res = await dio.delete(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: Options(headers: headers ?? defaultHeaders),
+    );
+    return res.data;
   }
 
   //! PATCH
@@ -135,16 +121,12 @@ class DioConsumer extends ApiConsumer {
         bool isFormData = false,
         Options? options,
       }) async {
-    try {
-      final res = await dio.patch(
-        path,
-        data: isFormData ? FormData.fromMap(data) : data,
-        queryParameters: queryParameters,
-        options: options ?? Options(headers: headers ?? defaultHeaders),
-      );
-      return res.data;
-    } on DioException catch (e) {
-      return e.response?.data ?? {'message': 'Unknown error occurred'};
-    }
+    final res = await dio.patch(
+      path,
+      data: isFormData ? FormData.fromMap(data) : data,
+      queryParameters: queryParameters,
+      options: options ?? Options(headers: headers ?? defaultHeaders),
+    );
+    return res.data;
   }
 }

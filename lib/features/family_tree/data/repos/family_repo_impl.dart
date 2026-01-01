@@ -8,6 +8,7 @@ import 'package:solala/core/errors/failure.dart';
 import 'package:solala/core/state_management/network_connection_cubit/network_connection_cubit.dart';
 import 'package:solala/features/family_tree/data/models/add_family_member_request_model.dart';
 import 'package:solala/features/family_tree/data/models/create_family_request_model.dart';
+import 'package:solala/features/family_tree/data/models/family_member_details_model.dart';
 import 'package:solala/features/family_tree/data/models/update_family_member_request_model.dart';
 
 import '../../../../core/data/models/basic_model.dart';
@@ -28,6 +29,49 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     required this.networkCubit,
     required this.secureStorageHelper,
   });
+
+  @override
+  Future<Either<Failure, FamilyMemberDetailsModel>> getFamilyMemberDetails(
+      {required int memberId}) async {
+    final isConnected = await networkCubit.networkInfo.isConnected;
+
+    if (!isConnected) {
+      return Left(
+          NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+    }
+
+    try {
+      final token = await secureStorageHelper?.getToken();
+      final response = await dioConsumer.get(
+        '${EndPoints.familyTree}/$memberId',
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+
+      if (response != null && response is Map<String, dynamic>) {
+        if (response.containsKey('data') && response['status'] == true) {
+          final memberDetailsModel =
+          FamilyMemberDetailsModel.fromJson(response['data']);
+          return Right(memberDetailsModel);
+        } else {
+          String errorMessage = AppStrings.unexpectedError.tr();
+          if (response['message'] is Map) {
+            errorMessage = response['message']['ar'] ?? errorMessage;
+          }
+          return Left(UnexpectedFailure(
+            errMessage: errorMessage,
+          ));
+        }
+      } else {
+        return Left(
+            ServerFailure(errMessage: AppStrings.serverConnectionFailed.tr()));
+      }
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
+    }
+  }
 
   @override
   Future<Either<Failure, FamilyTreeModel>> getFamilyTree() async {
@@ -129,6 +173,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     required String relation,
     int? parentId,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -145,6 +194,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
         relation: relation,
         parentId: parentId,
         avatar: avatar,
+        birthDate: birthDate,
+        birthPlace: birthPlace,
+        isLive: isLive,
+        phone: phone,
+        job: job,
       );
 
       final response = await dioConsumer.post(
@@ -185,6 +239,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     required String gender,
     required String relation,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -200,6 +259,11 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
         gender: gender,
         relation: relation,
         avatar: avatar,
+        birthDate: birthDate,
+        birthPlace: birthPlace,
+        isLive: isLive,
+        phone: phone,
+        job: job,
       );
 
       final response = await dioConsumer.post(

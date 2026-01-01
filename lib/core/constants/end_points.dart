@@ -23,6 +23,7 @@ class EndPoints {
   static const String register = "/register";
   static const String login = "/login";
   static const String families = "/families";
+  static const String joinFamily = "/join-family";
   static const String verifyLoginCode = "/verify-login-code";
   static const String familyTree = "/family/tree";
   static const String addFamilyMember = "/family/tree-add-member";
@@ -36,6 +37,8 @@ class EndPoints {
   static const String news = "/reports";
   static const String addNews = "/reports/add";
   static const String addFamily = "/family/add";
+  static const String sendVerificationCode = "/send-verification-code";
+  static const String resetPassword = "/reset-password";
 
 }
 

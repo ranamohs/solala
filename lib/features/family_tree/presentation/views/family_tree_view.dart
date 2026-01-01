@@ -11,15 +11,15 @@ import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/app_styles.dart';
 import 'package:solala/core/databases/cache/user_data_manager.dart';
 import 'package:solala/core/services/service_locator.dart';
-import 'package:solala/features/family_tree/presentation/views/provider_family_tree_view.dart';
 import 'package:solala/features/family_tree/presentation/widgets/add_member_dialog.dart';
-
 import '../../../../core/widgets/app_buttons.dart';
 import '../../../../core/widgets/retry_widget.dart';
 import '../../data/models/family_model.dart';
 import '../manager/family_cubit/family_cubit.dart';
 import '../manager/family_cubit/family_state.dart';
+import '../widgets/member_details_dialog.dart';
 import '../widgets/update_menmber_dialog.dart';
+import 'provider_family_tree_view.dart';
 
 class FamilyTreeView extends StatefulWidget {
   const FamilyTreeView({super.key});
@@ -32,15 +32,12 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   final GlobalKey _graphKey = GlobalKey();
   final TransformationController _transformationController =
   TransformationController();
+  final Map<int, bool> _expandedNodes = {};
 
   @override
   void initState() {
     super.initState();
-    final accountType = getIt<UserDataManager>().getAccountType();
-    final familyId = getIt<UserDataManager>().getUserFamilyId();
-    if (accountType != 'provider' || (familyId != null && familyId.isNotEmpty)) {
-      context.read<FamilyTreeCubit>().getFamilyTree();
-    }
+    context.read<FamilyTreeCubit>().getFamilyTree();
   }
 
   void _centerGraph(Size? graphSize, Size viewportSize) {
@@ -53,11 +50,17 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
       ..scale(scale);
   }
 
+  void _initializeExpansionState(List<FamilyMember> memberList) {
+    for (var member in memberList) {
+      if (member.children != null && member.children!.isNotEmpty) {
+        _expandedNodes.putIfAbsent(member.id!, () => false);
+        _initializeExpansionState(member.children!);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final accountType = getIt<UserDataManager>().getAccountType();
-    final familyId = getIt<UserDataManager>().getUserFamilyId();
-
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -75,16 +78,48 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           ),
         ),
         backgroundColor: Colors.transparent,
-        body: (accountType == 'provider' && (familyId == null || familyId.isEmpty))
-            ? const ProviderFamilyView()
-            : BlocListener<FamilyTreeCubit, FamilyTreeState>(
-          listener: (context, state) {
-            if (state is AddFamilyMemberSuccess ||
-                state is UpdateFamilyMemberSuccess ||
-                state is DeleteFamilyMemberSuccess) {
-              context.read<FamilyTreeCubit>().getFamilyTree();
-            }
-          },
+        body: MultiBlocListener(
+          listeners: [
+            BlocListener<FamilyTreeCubit, FamilyTreeState>(
+              listener: (context, state) {
+                if (state is AddFamilyMemberSuccess ||
+                    state is UpdateFamilyMemberSuccess ||
+                    state is DeleteFamilyMemberSuccess) {
+                  context.read<FamilyTreeCubit>().getFamilyTree();
+                }
+                if (state is FamilyTreeSuccess) {
+                  _initializeExpansionState(state.familyTreeModel.data ?? []);
+                }
+              },
+            ),
+            BlocListener<FamilyTreeCubit, FamilyTreeState>(
+              listener: (context, state) {
+                if (state is GetFamilyMemberDetailsLoading) {
+                  showDialog(
+                    context: context,
+                    builder: (_) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                } else if (state is GetFamilyMemberDetailsSuccess) {
+                  Navigator.of(context).pop();
+                  showDialog(
+                    context: context,
+                    builder: (_) => MemberDetailsDialog(
+                      member: state.memberDetailsModel,
+                    ),
+                  );
+                } else if (state is GetFamilyMemberDetailsFailure) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(state.failure.errMessage),
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
           child: RefreshIndicator(
             backgroundColor: AppColors.primaryColor,
             color: AppColors.greenColor,
@@ -93,13 +128,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             },
             child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
               buildWhen: (previous, current) {
-                return current is! AddFamilyMemberLoading &&
-                    current is! AddFamilyMemberFailure;
+                return current is FamilyTreeLoading ||
+                    current is FamilyTreeSuccess ||
+                    current is FamilyTreeFailure;
               },
               builder: (context, state) {
-                if (state is FamilyTreeInitial) {
-                  return const SizedBox.shrink();
-                }
                 if (state is FamilyTreeLoading) {
                   return Center(
                     child: LoadingAnimationWidget.flickr(
@@ -148,13 +181,15 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                       _buildGraph(graph, familyRoot, null);
 
                       WidgetsBinding.instance.addPostFrameCallback((_) {
-                        final RenderBox? graphRenderBox =
-                        _graphKey.currentContext?.findRenderObject() as RenderBox?;
-                        final RenderBox? viewportRenderBox =
-                        context.findRenderObject() as RenderBox?;
+                        if (mounted) {
+                          final RenderBox? graphRenderBox =
+                          _graphKey.currentContext?.findRenderObject() as RenderBox?;
+                          final RenderBox? viewportRenderBox =
+                          context.findRenderObject() as RenderBox?;
 
-                        if (graphRenderBox != null && viewportRenderBox != null) {
-                          _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                          if (graphRenderBox != null && viewportRenderBox != null) {
+                            _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                          }
                         }
                       });
 
@@ -187,33 +222,41 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                         ),
                       );
                     } else {
-                      return Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CircleAvatar(
-                              radius: 50,
-                              backgroundImage:
-                              AssetImage(AppAssets.accountIcon),
-                            ),
-                            SizedBox(height: 16.h),
-                            Text(
-                              AppStrings.noMembersFoundTillNow.tr(),
-                              style: AppStyles.styleMedium18(context).copyWith(
-                                color: AppColors.secondaryColor,
-                                fontWeight: FontWeight.bold,
+                      final accountType =
+                      getIt<UserDataManager>().getAccountType();
+                      if (accountType == 'provider') {
+                        return const ProviderFamilyView();
+                      } else {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
+                                radius: 50,
+                                backgroundImage:
+                                AssetImage(AppAssets.accountIcon),
                               ),
-                            ),
-                            SizedBox(height: 8.h),
-                            Text(
-                              "Please add family information".tr(),
-                              style: AppStyles.styleRegular14(context).copyWith(
-                                color: AppColors.greyColor,
+                              SizedBox(height: 16.h),
+                              Text(
+                                AppStrings.noMembersFoundTillNow.tr(),
+                                style: AppStyles.styleMedium18(context)
+                                    .copyWith(
+                                  color: AppColors.secondaryColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
+                              SizedBox(height: 8.h),
+                              Text(
+                                "Please add family information".tr(),
+                                style: AppStyles.styleRegular14(context)
+                                    .copyWith(
+                                  color: AppColors.greyColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
                     }
                   }
 
@@ -231,13 +274,15 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                   }
 
                   WidgetsBinding.instance.addPostFrameCallback((_) {
-                    final RenderBox? graphRenderBox =
-                    _graphKey.currentContext?.findRenderObject() as RenderBox?;
-                    final RenderBox? viewportRenderBox =
-                    context.findRenderObject() as RenderBox?;
+                    if (mounted) {
+                      final RenderBox? graphRenderBox =
+                      _graphKey.currentContext?.findRenderObject() as RenderBox?;
+                      final RenderBox? viewportRenderBox =
+                      context.findRenderObject() as RenderBox?;
 
-                    if (graphRenderBox != null && viewportRenderBox != null) {
-                      _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                      if (graphRenderBox != null && viewportRenderBox != null) {
+                        _centerGraph(graphRenderBox.size, viewportRenderBox.size);
+                      }
                     }
                   });
 
@@ -289,7 +334,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
       graph.addEdge(parentNode, node);
     }
 
-    if (member.children != null) {
+    if ((_expandedNodes[member.id] ?? false) && member.children != null) {
       for (var child in member.children!) {
         _buildGraph(graph, child, member);
       }
@@ -311,9 +356,18 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
     getIt<UserDataManager>().getUserFamilyId();
     return Column(
       children: [
-        CircleAvatar(
-          radius: isEmptyTree ? 40 : 40,
-          backgroundImage: backgroundImage,
+        GestureDetector(
+          onTap: () {
+            if (member.id != null) {
+              context
+                  .read<FamilyTreeCubit>()
+                  .getFamilyMemberDetails(memberId: member.id!);
+            }
+          },
+          child: CircleAvatar(
+            radius: isEmptyTree ? 40 : 40,
+            backgroundImage: backgroundImage,
+          ),
         ),
         const SizedBox(height: 8),
         Row(
@@ -325,6 +379,22 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                   ? AppStyles.styleSemiBold14(context).copyWith(color: AppColors.greenColor)
                   : AppStyles.styleRegular14(context),
             ),
+            if (member.children != null && member.children!.isNotEmpty)
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _expandedNodes[member.id!] =
+                    !(_expandedNodes[member.id!] ?? false);
+                  });
+                },
+                child: Icon(
+                  (_expandedNodes[member.id!] ?? false)
+                      ? Icons.arrow_drop_down
+                      : Icons.arrow_right,
+                  size: 24,
+                  color: AppColors.greenColor,
+                ),
+              ),
             const SizedBox(width: 5),
             if (isEmptyTree && member.id == 0)
 
@@ -373,7 +443,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 ),
               )
             else
-            // للأعضاء العاديين
               Row(
                 children: [
                   GestureDetector(

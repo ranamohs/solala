@@ -6,7 +6,6 @@ class RegisterDataModel {
   final String email;
   final String password;
   final String confirmPassword;
-  final int? familyId;
   final String type;
 
   RegisterDataModel({
@@ -15,7 +14,6 @@ class RegisterDataModel {
     required this.email,
     required this.password,
     required this.confirmPassword,
-    this.familyId,
     required this.type,
   });
 
@@ -26,7 +24,6 @@ class RegisterDataModel {
       ApiKey.email: email,
       ApiKey.password: password,
       ApiKey.passwordConfirmation: confirmPassword,
-      ApiKey.familyId: familyId,
       ApiKey.type: type,
     };
   }
@@ -38,7 +35,6 @@ class RegisterDataModel {
       email: json[ApiKey.email],
       password: json[ApiKey.password],
       confirmPassword: json[ApiKey.passwordConfirmation],
-      familyId: json[ApiKey.familyId],
       type: json[ApiKey.type],
     );
   }

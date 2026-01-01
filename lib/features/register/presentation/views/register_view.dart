@@ -25,18 +25,16 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends State<RegisterView> {
   @override
-  void initState() {
-    super.initState();
-    context.read<RegisterCubit>().getFamilies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocConsumer<RegisterCubit, RegisterState>(
       listener: (context, state) {
         if (state is RegisterSuccessState) {
           context.read<UserCubit>().setGuestStatus(false);
-          customPush(context, AppRouter.verificationView);
+          if (state.register.user?.accountType == 'user') {
+            customPushReplacement(context, AppRouter.verificationView);
+          } else {
+            customPushReplacement(context, AppRouter.homePage);
+          }
         } else if (state is RegisterFailureState) {
           fixedSnackBar(
             context,
@@ -86,8 +84,8 @@ class _RegisterViewState extends State<RegisterView> {
                             ),
                             SizedBox(height: 10.h),
                             Text(
-                              AppStrings.fillFormToProceed.tr(),
-                              style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
+                                AppStrings.fillFormToProceed.tr(),
+                                style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
                             ),
                             SizedBox(height: 30.h),
                             const RegisterForm(),
@@ -126,8 +124,8 @@ class _RegisterViewState extends State<RegisterView> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    AppStrings.alreadyHaveAnAccount.tr(),
-                                    style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
+                                      AppStrings.alreadyHaveAnAccount.tr(),
+                                      style: AppStyles.styleMedium14(context).copyWith(color: AppColors.pureWhiteColor)
                                   ),
                                   const SizedBox(width: 6),
                                   GestureDetector(
@@ -136,8 +134,8 @@ class _RegisterViewState extends State<RegisterView> {
                                           context, AppRouter.loginView);
                                     },
                                     child:  Text(
-                                      AppStrings.login.tr(),
-                                      style: AppStyles.styleMedium14(context).copyWith(color: AppColors.primaryColor)
+                                        AppStrings.login.tr(),
+                                        style: AppStyles.styleMedium14(context).copyWith(color: AppColors.primaryColor)
                                     ),
                                   ),
                                 ],

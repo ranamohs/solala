@@ -133,50 +133,30 @@ class AppStrings {
   static const String eventDate = 'event_date';
   static const String pleaseSelectImage = 'please_select_image';
   static const String createNews = 'create_news';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  static const String relation = 'relation';
+  static const String gender = 'gender';
+  static const String birthDate = 'birthDate';
+  static const String birthPlace = 'birthPlace';
+  static const String status = 'status';
+  static const String phone = 'phone';
+  static const String job = 'job';
+  static const String alive = 'alive';
+  static const String deceased = 'deceased';
+  static const String close = 'close';
+  static const String forgotPassword = 'forgotPassword';
+  static const String sendVerificationCode = 'sendVerificationCode';
+  static const String enterYourEmail = 'enterYourEmail';
+  static const String verificationCodeSent = 'verificationCodeSent';
+  static const String resetPassword = 'resetPassword';
+  static const String newPassword = 'newPassword';
+  static const String confirmNewPassword = 'confirmNewPassword';
+  static const String passwordResetSuccessfully = 'passwordResetSuccessfully';
+  static const String code = 'code';
+  static const String passwordConfirmation = 'passwordConfirmation';
+  static const String pleaseEnterYourEmail = 'pleaseEnterYourEmail';
+  static const String pleaseEnterTheCode = 'pleaseEnterTheCode';
+  static const String pleaseEnterYourNewPassword = 'pleaseEnterYourNewPassword';
+  static const String pleaseConfirmYourNewPassword = 'pleaseConfirmYourNewPassword';
+  static const String joinFamily = 'joinFamily';
+  static const String pleaseEnterFamilyCode = 'pleaseEnterFamilyCode';
 }

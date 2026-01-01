@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:solala/core/errors/failure.dart';
+import 'package:solala/features/family_tree/data/models/family_member_details_model.dart';
 
 import '../../../data/models/family_model.dart';
 import '../../../data/repos/family_repo.dart';
@@ -18,6 +19,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     final Either<Failure, FamilyTreeModel> result =
     await familyTreeRepo.getFamilyTree();
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(FamilyTreeFailure(failure)),
           (familyTreeModel) => emit(FamilyTreeSuccess(familyTreeModel)),
@@ -30,6 +32,11 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     required String relation,
     int? parentId,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     emit(AddFamilyMemberLoading());
 
@@ -39,8 +46,14 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       relation: relation,
       parentId: parentId,
       avatar: avatar,
+      birthDate: birthDate,
+      birthPlace: birthPlace,
+      isLive: isLive,
+      phone: phone,
+      job: job,
     );
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(AddFamilyMemberFailure(failure)),
           (basicModel) => emit(AddFamilyMemberSuccess(basicModel)),
@@ -53,6 +66,11 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     required String gender,
     required String relation,
     required String avatar,
+    String? birthDate,
+    String? birthPlace,
+    int? isLive,
+    String? phone,
+    String? job,
   }) async {
     emit(UpdateFamilyMemberLoading());
 
@@ -62,8 +80,14 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       gender: gender,
       relation: relation,
       avatar: avatar,
+      birthDate: birthDate,
+      birthPlace: birthPlace,
+      isLive: isLive,
+      phone: phone,
+      job: job,
     );
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(UpdateFamilyMemberFailure(failure)),
           (familyMember) => emit(UpdateFamilyMemberSuccess(familyMember)),
@@ -75,6 +99,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
 
     final result = await familyTreeRepo.deleteFamilyMember(memberId: memberId);
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(DeleteFamilyMemberFailure(failure)),
           (basicModel) => emit(DeleteFamilyMemberSuccess(basicModel)),
@@ -96,9 +121,24 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       image: image,
     );
 
+    if (isClosed) return;
     result.fold(
           (failure) => emit(CreateFamilyFailure(failure)),
           (basicModel) => emit(CreateFamilySuccess(basicModel)),
+    );
+  }
+
+  Future<void> getFamilyMemberDetails({required int memberId}) async {
+    emit(GetFamilyMemberDetailsLoading());
+
+    final Either<Failure, FamilyMemberDetailsModel> result =
+    await familyTreeRepo.getFamilyMemberDetails(memberId: memberId);
+
+    if (isClosed) return;
+    result.fold(
+          (failure) => emit(GetFamilyMemberDetailsFailure(failure)),
+          (memberDetailsModel) =>
+          emit(GetFamilyMemberDetailsSuccess(memberDetailsModel)),
     );
   }
 }
