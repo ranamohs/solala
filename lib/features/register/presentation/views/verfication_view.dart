@@ -53,9 +53,10 @@ class _VerificationViewState extends State<VerificationView> {
         } else if (state is JoinFamilyFailureState) {
           isLoading = false;
           setState(() {});
+          final message = state.failedModel.messageLocalized?.ar ?? state.failedModel.message ?? 'An unknown error occurred';
           fixedSnackBar(
             context,
-            message: state.failedModel.messageLocalized!.ar,
+            message: message,
             icon: Icons.error,
             iconColor: Colors.red,
             iconBgColor: Colors.red.withOpacity(0.1),

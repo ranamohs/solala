@@ -1,5 +1,4 @@
 import 'package:solala/core/data/models/auth_failure_model.dart';
-import 'package:solala/features/register/data/models/family_model.dart';
 import 'package:solala/features/register/data/models/register_success_model.dart';
 import 'package:equatable/equatable.dart';
 
@@ -35,6 +34,8 @@ class RegisterFailureState extends RegisterState {
 class JoinFamilyLoadingState extends RegisterState {}
 
 class JoinFamilySuccessState extends RegisterState {}
+
+class JoinFamilyLoadingProfileState extends RegisterState {}
 
 class JoinFamilyFailureState extends RegisterState {
   final AuthFailureModel failedModel;

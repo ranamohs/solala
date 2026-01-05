@@ -4,7 +4,6 @@ import 'package:solala/core/constants/end_points.dart';
 import 'package:solala/core/databases/api/dio_consumer.dart';
 import 'package:solala/core/databases/cache/secure_storage_helper.dart';
 import 'package:solala/core/databases/cache/user_data_manager.dart';
-import 'package:solala/features/register/data/models/family_model.dart';
 import 'package:solala/features/register/data/models/register_data_model.dart';
 import 'package:solala/core/data/models/auth_failure_model.dart';
 import 'package:solala/features/register/data/models/register_success_model.dart';
@@ -80,7 +79,7 @@ class RegisterRepoImpl implements RegisterRepo {
     }
   }
   @override
-  Future<Either<AuthFailureModel, void>> joinFamily(
+  Future<Either<AuthFailureModel, String>> joinFamily(
       {required String familyCode}) async {
     try {
       final token = await secureStorageHelper.getToken();
@@ -96,7 +95,8 @@ class RegisterRepoImpl implements RegisterRepo {
 
       if (response != null && response is Map<String, dynamic>) {
         if (response['status'] == true) {
-          return const Right(null);
+          final familyName = response['family'] as String;
+          return Right(familyName);
         } else {
           return Left(AuthFailureModel.fromJson(response));
         }

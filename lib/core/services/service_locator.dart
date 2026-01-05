@@ -90,7 +90,7 @@ void setupServiceLocator() {
     ),
   );
   getIt.registerFactory<RegisterCubit>(
-          () => RegisterCubit(registerRepo: getIt<RegisterRepoImpl>()));
+          () => RegisterCubit(registerRepo: getIt<RegisterRepoImpl>(), userDataManager: getIt<UserDataManager>(), updateProfileRepo: getIt<UpdateProfileRepoImpl>()));
 
   // Login dependencies
   getIt.registerSingleton<LoginRepoImpl>(

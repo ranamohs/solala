@@ -352,8 +352,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
     } else {
       backgroundImage = AssetImage(AppAssets.accountIcon);
     }
-    final familyId =
-    getIt<UserDataManager>().getUserFamilyId();
     return Column(
       children: [
         GestureDetector(
