@@ -50,9 +50,9 @@ class ChooseRoleView extends StatelessWidget {
                 ),
                  SizedBox(height: 60.h),
                 _GradientRoleCard(
-                  title: 'مستخدم',
-                  description: 'أبحث عن خدمات أحتاجها',
-                  icon: Icons.person_outline,
+                  title: 'إضافة أسرة',
+                  description: 'استخدم رمز الاسرة للانضمام اليها',
+                  icon: Icons.person,
                   onTap: () {
                     customPush(
                         context, AppRouter.registerView);
@@ -60,9 +60,9 @@ class ChooseRoleView extends StatelessWidget {
                 ),
                  SizedBox(height: 24.h),
                 _GradientRoleCard(
-                  title: 'مقدم خدمة',
-                  description: 'أريد تقديم خدماتي',
-                  icon: Icons.work_outline,
+                  title: 'أنشئ أسرة جديدة',
+                  description: 'أنشئ أسرة تجريبية واستفد من مزايا شجرتنا',
+                  icon: Icons.family_restroom,
                   onTap: () {
                     customPush(
                         context, AppRouter.providerRegisterView);

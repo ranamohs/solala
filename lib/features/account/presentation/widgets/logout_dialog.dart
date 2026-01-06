@@ -28,10 +28,10 @@ class LogoutDialog extends StatelessWidget {
     return BlocConsumer<LogoutCubit, LogoutState>(
       listener: (context, state) {
         if (state is LogoutSuccessState) {
+          userDataManager.clearAllUserData();
           secureStorageHelper.deleteToken();
           context.read<UserCubit>().setGuestStatus(true);
           GoRouter.of(context).go(AppRouter.loginView);
-          userDataManager.clearAllUserData();
           fixedSnackBar(
             context,
             message: isArabic(context)
@@ -41,10 +41,10 @@ class LogoutDialog extends StatelessWidget {
             boxColor: Colors.green,
           );
         } else if (state is LogoutFailureState) {
+          userDataManager.clearAllUserData();
           secureStorageHelper.deleteToken();
           context.read<UserCubit>().setGuestStatus(true);
           GoRouter.of(context).go(AppRouter.loginView);
-          userDataManager.clearAllUserData();
           fixedSnackBar(
             context,
             message: isArabic(context)
@@ -77,14 +77,14 @@ class LogoutDialog extends StatelessWidget {
                   style: AppStyles.styleBold18(context),
                 ),
 
-                 SizedBox(height: 16.h),
+                SizedBox(height: 16.h),
                 Text(
                   AppStrings.logoutMessage.tr(),
                   textAlign: TextAlign.center,
                   style: AppStyles.styleRegular14(context),
                 ),
 
-                 SizedBox(height: 24.h),
+                SizedBox(height: 24.h),
                 Row(
                   children: [
                     // Cancel Button
@@ -105,7 +105,7 @@ class LogoutDialog extends StatelessWidget {
                         ),
                       ),
                     ),
-                     SizedBox(width: 12.w),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: ElevatedButton(
                         onPressed: state is LogoutLoadingState

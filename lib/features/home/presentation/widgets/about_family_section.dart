@@ -81,11 +81,12 @@ class AboutFamilySection extends StatelessWidget {
 
   Widget _buildFamilyInfoContainer(
       BuildContext context, String name, String code) {
+    final accountType = getIt<UserDataManager>().getAccountType();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(4),
-        border: Border.all(color:AppColors.primaryColor, width: 1),
+        border: Border.all(color: AppColors.primaryColor, width: 1),
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -94,7 +95,7 @@ class AboutFamilySection extends StatelessWidget {
             Container(
               width: 4,
               decoration: const BoxDecoration(
-                color:AppColors.primaryColor,
+                color: AppColors.primaryColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(4),
                   bottomLeft: Radius.circular(4),
@@ -111,29 +112,34 @@ class AboutFamilySection extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                         AppStrings.familyName.tr(),
+                          AppStrings.familyName.tr(),
                           style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.secondaryColor),
+                              .copyWith(color: AppColors.secondaryColor),
                         ),
                         Text(
                           ":   $name",
                           style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.pureBlackColor),
+                              .copyWith(color: AppColors.pureBlackColor),
                         ),
                       ],
                     ),
-                    SizedBox(height: 6.h),
-                    Row(
-                      children: [
-                        Text(
-                          AppStrings.familyCode.tr(),
-                          style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.secondaryColor),
-                        ),
-                        Text(":   $code", style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.pureBlackColor),),
-                      ],
-                    ),
+                    if (accountType == 'provider') ...[
+                      SizedBox(height: 6.h),
+                      Row(
+                        children: [
+                          Text(
+                            AppStrings.familyCode.tr(),
+                            style: AppStyles.styleBold16(context)
+                                .copyWith(color: AppColors.secondaryColor),
+                          ),
+                          Text(
+                            ":   $code",
+                            style: AppStyles.styleBold16(context)
+                                .copyWith(color: AppColors.pureBlackColor),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),

@@ -346,14 +346,14 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
         bool isEmptyTree = false,
         String? familyId,
       }) {
+    final accountType = getIt<UserDataManager>().getAccountType();
     ImageProvider backgroundImage;
     if (member.avatar != null && member.avatar!.isNotEmpty) {
       backgroundImage = CachedNetworkImageProvider(member.avatar!);
     } else {
       backgroundImage = AssetImage(AppAssets.accountIcon);
     }
-    final familyId =
-    getIt<UserDataManager>().getUserFamilyId();
+    final familyId = getIt<UserDataManager>().getUserFamilyId();
     return Column(
       children: [
         GestureDetector(
@@ -376,7 +376,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             Text(
               member.name ?? '',
               style: isEmptyTree
-                  ? AppStyles.styleSemiBold14(context).copyWith(color: AppColors.greenColor)
+                  ? AppStyles.styleSemiBold14(context)
+                  .copyWith(color: AppColors.greenColor)
                   : AppStyles.styleRegular14(context),
             ),
             if (member.children != null && member.children!.isNotEmpty)
@@ -397,7 +398,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
               ),
             const SizedBox(width: 5),
             if (isEmptyTree && member.id == 0)
-
               Row(
                 children: [
                   GestureDetector(
@@ -408,7 +408,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                           builder: (_) => BlocProvider.value(
                             value: context.read<FamilyTreeCubit>(),
                             child: AddMemberDialog(
-                              parentId:null,
+                              parentId: null,
                             ),
                           ),
                         );
@@ -420,7 +420,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                       size: 24,
                     ),
                   ),
-
                 ],
               )
             else if (member.id == 0)
@@ -453,7 +452,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                           value: context.read<FamilyTreeCubit>(),
                           child: AddMemberDialog(
                             parentId: member.id!,
-
                           ),
                         ),
                       );
@@ -483,116 +481,120 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                       size: 20,
                     ),
                   ),
-                  SizedBox(width: 5.w),
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext dialogContext) {
-                          return Dialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Container(
-                              padding: const EdgeInsets.all(24),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
+                  if (accountType == 'provider') ...[
+                    SizedBox(width: 5.w),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext dialogContext) {
+                            return Dialog(
+                              shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(16),
-                                    decoration: BoxDecoration(
-                                      color: Colors.red.shade50,
-                                      shape: BoxShape.circle,
+                              child: Container(
+                                padding: const EdgeInsets.all(24),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red.shade50,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.delete_outline,
+                                        color: Colors.red.shade400,
+                                        size: 32,
+                                      ),
                                     ),
-                                    child: Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.red.shade400,
-                                      size: 32,
+                                    const SizedBox(height: 20),
+                                    Text(
+                                      AppStrings.deleteMember.tr(),
+                                      style: TextStyle(
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade800,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 20),
-
-                                  Text(
-                                    AppStrings.deleteMember.tr(),
-                                    style: TextStyle(
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.grey.shade800,
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      AppStrings.deleteMemberTitle.tr(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 14.sp,
+                                        color: Colors.grey.shade600,
+                                        height: 1.5,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 12),
-
-                                  Text(
-                                    AppStrings.deleteMemberTitle.tr(),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: 14.sp,
-                                      color: Colors.grey.shade600,
-                                      height: 1.5,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 24),
-
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: TextButton(
-                                          onPressed: () {
-                                            Navigator.of(dialogContext).pop();
-                                          },
-                                          style: TextButton.styleFrom(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.circular(12),
-                                              side: BorderSide(
-                                                  color: Colors.grey.shade300),
+                                    const SizedBox(height: 24),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextButton(
+                                            onPressed: () {
+                                              Navigator.of(dialogContext)
+                                                  .pop();
+                                            },
+                                            style: TextButton.styleFrom(
+                                              padding:
+                                              const EdgeInsets.symmetric(
+                                                  vertical: 14),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    12),
+                                                side: BorderSide(
+                                                    color: Colors
+                                                        .grey.shade300),
+                                              ),
                                             ),
-                                          ),
-                                          child: Text(
-                                            AppStrings.cancel.tr(),
-                                            style: TextStyle(
-                                              fontSize: 15.sp,
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.grey.shade700,
+                                            child: Text(
+                                              AppStrings.cancel.tr(),
+                                              style: TextStyle(
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.grey.shade700,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(width: 12.w),
-                                      Expanded(
-                                        child: PrimaryButton(
-                                          onPressed: () {
-                                            context
-                                                .read<FamilyTreeCubit>()
-                                                .deleteFamilyMember(
-                                                memberId: member.id!);
-                                            Navigator.of(dialogContext).pop();
-                                          },
-                                          text: AppStrings.delete.tr(),
+                                        SizedBox(width: 12.w),
+                                        Expanded(
+                                          child: PrimaryButton(
+                                            onPressed: () {
+                                              context
+                                                  .read<FamilyTreeCubit>()
+                                                  .deleteFamilyMember(
+                                                  memberId: member.id!);
+                                              Navigator.of(dialogContext)
+                                                  .pop();
+                                            },
+                                            text: AppStrings.delete.tr(),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                      size: 16.sp,
+                            );
+                          },
+                        );
+                      },
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.red,
+                        size: 16.sp,
+                      ),
                     ),
-                  ),
+                  ],
                 ],
               ),
           ],

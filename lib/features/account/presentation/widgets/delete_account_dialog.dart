@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:solala/core/databases/cache/secure_storage_helper.dart';
 
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -21,25 +22,31 @@ class DeleteAccountDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserDataManager userDataManager = getIt<UserDataManager>();
+    final SecureStorageHelper secureStorageHelper =
+    getIt<SecureStorageHelper>();
     return BlocConsumer<DeleteAccountCubit, DeleteAccountState>(
       listener: (context, state) {
         if (state is DeleteAccountSuccessState) {
-          GoRouter.of(context).go(AppRouter.loginView);
+          userDataManager.clearAllUserData();
+          secureStorageHelper.deleteToken();
           context.read<UserCubit>().setGuestStatus(true);
+          GoRouter.of(context).go(AppRouter.loginView);
           fixedSnackBar(
             context,
-            message:isArabic(context)
+            message: isArabic(context)
                 ? state.success.message.ar
                 : state.success.message.en,
             icon: Icons.check_circle_outline,
             boxColor: Colors.green,
           );
-          userDataManager.clearAllUserData();
         } else if (state is DeleteAccountFailureState) {
-          GoRouter.of(context).pop();
+          userDataManager.clearAllUserData();
+          secureStorageHelper.deleteToken();
+          context.read<UserCubit>().setGuestStatus(true);
+          GoRouter.of(context).go(AppRouter.loginView);
           fixedSnackBar(
             context,
-            message:isArabic(context)
+            message: isArabic(context)
                 ? state.failure.message.ar
                 : state.failure.message.en,
             icon: Icons.error_outline,

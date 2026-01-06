@@ -91,11 +91,15 @@ class RegisterRepoImpl implements RegisterRepo {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
         },
-
       );
 
       if (response != null && response is Map<String, dynamic>) {
         if (response['status'] == true) {
+          final familyData = response['family'] as Map<String, dynamic>;
+          final familyId = familyData['id'].toString();
+          final familyName = familyData['name'] as String;
+          userDataManager.saveUserFamilyId(familyId: familyId);
+          userDataManager.saveUserFamilyName(familyName: familyName);
           return const Right(null);
         } else {
           return Left(AuthFailureModel.fromJson(response));
