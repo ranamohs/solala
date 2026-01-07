@@ -1,4 +1,5 @@
 
+import '../../../login/data/models/login_success_model.dart';
 import '../../../../core/constants/end_points.dart';
 import '../../../../core/data/models/localized_text_model.dart';
 
@@ -26,40 +27,6 @@ class UpdateProfileSuccessModel {
       ApiKey.status: status,
       ApiKey.message: message.toJson(),
       ApiKey.user: data.toJson(),
-    };
-  }
-}
-
-class UserModel {
-  final String name;
-  final String? avatar;
-  final String email;
-  final String phone;
-  final String? pushNotificationsToken;
-
-  UserModel({
-    required this.name,
-    this.avatar,
-    required this.email,
-    required this.phone,
-    this.pushNotificationsToken,
-  });
-
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
-      name: json[ApiKey.name] as String,
-      avatar: json[ApiKey.avatar] as String?,
-      email: json[ApiKey.email] as String,
-      phone: json[ApiKey.phone] as String,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      ApiKey.name: name,
-      ApiKey.avatar: avatar,
-      ApiKey.email: email,
-      ApiKey.phone: phone,
     };
   }
 }
