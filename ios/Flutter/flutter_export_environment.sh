@@ -1,9 +1,9 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=E:\flutter_windows_3.34.0-0.1.pre-beta\flutter"
-export "FLUTTER_APPLICATION_PATH=E:\solala"
+export "FLUTTER_ROOT=/Users/rana/Documents/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/rana/Documents/GitHub/solala"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=lib\main.dart"
+export "FLUTTER_TARGET=lib/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.4"
 export "FLUTTER_BUILD_NUMBER=5"
