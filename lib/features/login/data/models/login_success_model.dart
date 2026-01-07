@@ -26,7 +26,7 @@ class UserModel {
   final dynamic longitude;
   final dynamic pushNotificationsToken;
   final dynamic accountType;
-  final String? familyId;
+  final dynamic familyId;
   final String? familyName;
 
   UserModel({

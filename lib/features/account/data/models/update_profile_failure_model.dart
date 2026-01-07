@@ -14,9 +14,20 @@ class UpdateProfileFailureModel {
   });
 
   factory UpdateProfileFailureModel.fromJson(Map<String, dynamic> json) {
+    final messageData = json[ApiKey.message];
+    LocalizedText message;
+
+    if (messageData is String) {
+      message = LocalizedText(ar: messageData, en: messageData);
+    } else if (messageData is Map<String, dynamic>) {
+      message = LocalizedText.fromJson(messageData);
+    } else {
+      message = LocalizedText(ar: '', en: '');
+    }
+
     return UpdateProfileFailureModel(
       status: json[ApiKey.status] as bool? ?? false,
-      message: LocalizedText.fromJson(json[ApiKey.message] ?? {}),
+      message: message,
       errors: json.containsKey(ApiKey.errors) && json[ApiKey.errors] is Map
           ? ErrorDetails.fromJson(json[ApiKey.errors])
           : null,

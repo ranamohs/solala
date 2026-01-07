@@ -47,7 +47,7 @@ class UpdateProfileRepoImpl implements UpdateProfileRepo {
     try {
       final formData = FormData.fromMap({
         ApiKey.name: name,
-        ApiKey.phoneNumber: phoneNumber,
+        ApiKey.phone: phoneNumber, // Corrected key
         ApiKey.email: email,
         if (avatar != null)
           ApiKey.image: await MultipartFile.fromFile(
@@ -59,23 +59,15 @@ class UpdateProfileRepoImpl implements UpdateProfileRepo {
       final response = await dioConsumer.post(
         EndPoints.updateProfile,
         headers: {
-          'Accept':'application/json',
-         Params.authorization: "${Params.bearer} $token",
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
         },
         isFormData: true,
         data: formData,
       );
       if (response != null && response is Map<String, dynamic>) {
-
         if (response[ApiKey.status] == true) {
-          final updateProfileSuccessModel = UpdateProfileSuccessModel.fromJson(response);
-          userDataManager.saveUserName(name: response[ApiKey.data][ApiKey.name]);
-          userDataManager.saveUserPhoneNumber(phoneNumber: response[ApiKey.data][ApiKey.phoneNumber]);
-          userDataManager.saveUserEmail(email: response[ApiKey.data][ApiKey.email]);
-          response[ApiKey.data][ApiKey.avatar] == null ? null  :
-          userDataManager.saveUserAvatarUrl(avatar: response[ApiKey.data][ApiKey.avatar]);
-
-          return Right(updateProfileSuccessModel);
+          return _handleSuccessResponse(response);
         } else {
           return Left(UpdateProfileFailureModel.fromJson(response));
         }
@@ -91,6 +83,16 @@ class UpdateProfileRepoImpl implements UpdateProfileRepo {
         );
       }
     } catch (e) {
+      if (e is DioException &&
+          e.response?.data != null &&
+          e.response?.data is Map<String, dynamic>) {
+        final responseData = e.response!.data;
+        if (responseData[ApiKey.status] == true) {
+          return _handleSuccessResponse(responseData);
+        } else {
+          return Left(UpdateProfileFailureModel.fromJson(responseData));
+        }
+      }
       return Left(
         UpdateProfileFailureModel(
           status: false,
@@ -98,7 +100,40 @@ class UpdateProfileRepoImpl implements UpdateProfileRepo {
             ar: AppStrings.unexpectedError.tr(),
             en: AppStrings.unexpectedError.tr(),
           ),
+        ),
+      );
+    }
+  }
 
+  Either<UpdateProfileFailureModel, UpdateProfileSuccessModel>
+  _handleSuccessResponse(Map<String, dynamic> response) {
+    try {
+      final updateProfileSuccessModel =
+      UpdateProfileSuccessModel.fromJson(response);
+      final userData = updateProfileSuccessModel.data;
+      if (userData != null) {
+        if (userData.name != null) {
+          userDataManager.saveUserName(name: userData.name!);
+        }
+        if (userData.phone != null) {
+          userDataManager.saveUserPhoneNumber(phoneNumber: userData.phone!);
+        }
+        if (userData.email != null) {
+          userDataManager.saveUserEmail(email: userData.email!);
+        }
+        if (userData.avatar != null && userData.avatar is String) {
+          userDataManager.saveUserAvatarUrl(avatar: userData.avatar);
+        }
+      }
+      return Right(updateProfileSuccessModel);
+    } catch (e) {
+      return Left(
+        UpdateProfileFailureModel(
+          status: false,
+          message: LocalizedText(
+            ar: AppStrings.unexpectedError.tr(),
+            en: AppStrings.unexpectedError.tr(),
+          ),
         ),
       );
     }

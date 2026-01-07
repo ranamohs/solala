@@ -39,9 +39,11 @@ class DioConsumer extends ApiConsumer {
     final res = await dio.post(
       path,
       data: isFormData
-          ? FormData.fromMap(data is Map<String, dynamic>
+          ? (data is FormData
           ? data
-          : await data.toJson())
+          : FormData.fromMap(data is Map<String, dynamic>
+          ? data
+          : await data.toJson()))
           : data,
       queryParameters: queryParameters,
       options: Options(
@@ -64,9 +66,11 @@ class DioConsumer extends ApiConsumer {
     final res = await dio.put(
       path,
       data: isFormData
-          ? FormData.fromMap(data is Map<String, dynamic>
+          ? (data is FormData
           ? data
-          : await data.toJson())
+          : FormData.fromMap(data is Map<String, dynamic>
+          ? data
+          : await data.toJson()))
           : data,
       queryParameters: queryParameters,
       options: Options(
