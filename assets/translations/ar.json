@@ -180,6 +180,8 @@
   "pleaseEnterYourNewPassword": "الرجاء إدخال كلمة المرور الجديدة",
   "pleaseConfirmYourNewPassword": "الرجاء تأكيد كلمة المرور الجديدة",
   "joinFamily": "الانضمام إلى عائلة",
-  "pleaseEnterFamilyCode": "الرجاء إدخال كود العائلة"
+  "pleaseEnterFamilyCode": "الرجاء إدخال كود العائلة",
+  "noDataFound": "لا توجد بيانات",
+  "search": "بحث"
 }
 

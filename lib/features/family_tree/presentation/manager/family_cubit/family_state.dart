@@ -21,11 +21,12 @@ class FamilyTreeLoading extends FamilyTreeState {}
 
 class FamilyTreeSuccess extends FamilyTreeState {
   final FamilyTreeModel familyTreeModel;
+  final List<int>? searchResultIds;
 
-  const FamilyTreeSuccess(this.familyTreeModel);
+  const FamilyTreeSuccess(this.familyTreeModel, {this.searchResultIds});
 
   @override
-  List<Object> get props => [familyTreeModel];
+  List<Object> get props => [familyTreeModel, searchResultIds ?? []];
 }
 
 class FamilyTreeFailure extends FamilyTreeState {

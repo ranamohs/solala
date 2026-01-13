@@ -159,4 +159,5 @@ class AppStrings {
   static const String pleaseConfirmYourNewPassword = 'pleaseConfirmYourNewPassword';
   static const String joinFamily = 'joinFamily';
   static const String pleaseEnterFamilyCode = 'pleaseEnterFamilyCode';
+  static const String noDataFound = 'noDataFound';
 }

@@ -43,4 +43,6 @@ abstract class FamilyTreeRepo {
     required String code,
     required String image,
   });
+  Future<Either<Failure, List<FamilyMember>>> searchFamilyTree(
+      {required String query});
 }

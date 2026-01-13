@@ -26,6 +26,7 @@ class EndPoints {
   static const String joinFamily = "/join-family";
   static const String verifyLoginCode = "/verify-login-code";
   static const String familyTree = "/family/tree";
+  static const String searchFamilyTree = "/family-tree/search";
   static const String addFamilyMember = "/family/tree-add-member";
   static const String updateFamilyMember = "/family/tree-update/";
   static const String deleteFamilyMember = "/family/tree-delete/";

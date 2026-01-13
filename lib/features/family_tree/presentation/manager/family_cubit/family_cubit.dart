@@ -10,6 +10,7 @@ import 'family_state.dart';
 
 class FamilyTreeCubit extends Cubit<FamilyTreeState> {
   final FamilyTreeRepo familyTreeRepo;
+  FamilyTreeModel? _lastSuccessState;
 
   FamilyTreeCubit({required this.familyTreeRepo}) : super(FamilyTreeInitial());
 
@@ -22,8 +23,35 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     if (isClosed) return;
     result.fold(
           (failure) => emit(FamilyTreeFailure(failure)),
-          (familyTreeModel) => emit(FamilyTreeSuccess(familyTreeModel)),
+          (familyTreeModel) {
+        _lastSuccessState = familyTreeModel;
+        emit(FamilyTreeSuccess(familyTreeModel));
+      },
     );
+  }
+
+  Future<void> searchFamilyTree({required String query}) async {
+    if (_lastSuccessState == null) {
+      return;
+    }
+    emit(FamilyTreeLoading());
+
+    final result = await familyTreeRepo.searchFamilyTree(query: query);
+
+    if (isClosed) return;
+    result.fold(
+          (failure) => emit(FamilyTreeFailure(failure)),
+          (members) {
+        final memberIds = members.map((e) => e.id!).toList();
+        emit(FamilyTreeSuccess(_lastSuccessState!, searchResultIds: memberIds));
+      },
+    );
+  }
+
+  void clearSearch() {
+    if (_lastSuccessState != null) {
+      emit(FamilyTreeSuccess(_lastSuccessState!));
+    }
   }
 
   Future<void> addFamilyMember({

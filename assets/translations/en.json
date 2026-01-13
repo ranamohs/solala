@@ -257,6 +257,8 @@
   "pleaseEnterYourNewPassword": "Please enter your new password",
   "pleaseConfirmYourNewPassword": "Please confirm your new password",
   "joinFamily": "Join Family",
-  "pleaseEnterFamilyCode": "Please enter family code"
+  "pleaseEnterFamilyCode": "Please enter family code",
+  "noDataFound": "No data found",
+  "search": "Search"
 }
 
