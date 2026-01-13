@@ -116,6 +116,8 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
   Future<Either<Failure, BasicModel>> createFamily(
       {required String nameAr,
         required String nameEn,
+        String? descriptionAr,
+        String? descriptionEn,
         required String code,
         required String image}) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
@@ -130,6 +132,8 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
       final requestModel = CreateFamilyRequestModel(
         nameAr: nameAr,
         nameEn: nameEn,
+        descriptionAr: descriptionAr,
+        descriptionEn: descriptionEn,
         code: code,
         image: image,
       );

@@ -51,12 +51,16 @@ class AboutFamilySection extends StatelessWidget {
               );
             } else if (state is FamilyInfoSuccess) {
               final familyInfo = state.familyInfoModel.data;
+              final description = isArabic(context)
+                  ? familyInfo?.description?.ar
+                  : familyInfo?.description?.en;
               return _buildFamilyInfoContainer(
                 context,
                 isArabic(context)
                     ? familyInfo?.name?.ar ?? ''
                     : familyInfo?.name?.en ?? '',
                 familyInfo?.code ?? '',
+                description,
               );
             } else if (state is FamilyInfoFailure) {
               return RetryWidget(
@@ -80,8 +84,10 @@ class AboutFamilySection extends StatelessWidget {
   }
 
   Widget _buildFamilyInfoContainer(
-      BuildContext context, String name, String code) {
+      BuildContext context, String name, String code, String? description) {
     final accountType = getIt<UserDataManager>().getAccountType();
+    final bool hasDescription = description != null && description.isNotEmpty;
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -136,6 +142,27 @@ class AboutFamilySection extends StatelessWidget {
                             ":   $code",
                             style: AppStyles.styleBold16(context)
                                 .copyWith(color: AppColors.pureBlackColor),
+                          ),
+                        ],
+                      ),
+                    ],
+                    if (hasDescription) ...[
+                      SizedBox(height: 6.h),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${AppStrings.familyHistory.tr()}:   ',
+                            style: AppStyles.styleBold16(context)
+                                .copyWith(color: AppColors.secondaryColor),
+                          ),
+                          Expanded(
+                            child: Text(
+                              description,
+                              style: AppStyles.styleBold16(context)
+                                  .copyWith(color: AppColors.pureBlackColor),
+                              maxLines: 3,
+                            ),
                           ),
                         ],
                       ),

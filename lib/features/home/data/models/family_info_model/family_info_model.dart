@@ -36,6 +36,7 @@ class Message {
 class FamilyInfoData {
   final int? id;
   final Message? name;
+  final Message? description;
   final String? code;
   final String? negotiatorId;
   final String? negotiator;
@@ -44,6 +45,7 @@ class FamilyInfoData {
   FamilyInfoData({
     this.id,
     this.name,
+    this.description,
     this.code,
     this.negotiatorId,
     this.negotiator,
@@ -54,6 +56,9 @@ class FamilyInfoData {
     return FamilyInfoData(
       id: json['id'],
       name: json['name'] != null ? Message.fromJson(json['name']) : null,
+      description: json['description'] != null && json['description'] is Map<String, dynamic>
+          ? Message.fromJson(json['description'])
+          : null,
       code: json['code'],
       negotiatorId: json['negotiator_id'],
       negotiator: json['negotiator'],

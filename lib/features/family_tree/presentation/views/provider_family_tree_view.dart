@@ -27,6 +27,8 @@ class _ProviderFamilyViewState extends State<ProviderFamilyView> {
   final _formKey = GlobalKey<FormState>();
   final _nameArController = TextEditingController();
   final _nameEnController = TextEditingController();
+  final _descriptionArController = TextEditingController();
+  final _descriptionEnController = TextEditingController();
   final _codeController = TextEditingController();
 
   Future<void> _pickImage() async {
@@ -42,6 +44,8 @@ class _ProviderFamilyViewState extends State<ProviderFamilyView> {
   void dispose() {
     _nameArController.dispose();
     _nameEnController.dispose();
+    _descriptionArController.dispose();
+    _descriptionEnController.dispose();
     _codeController.dispose();
     super.dispose();
   }
@@ -61,9 +65,14 @@ class _ProviderFamilyViewState extends State<ProviderFamilyView> {
               iconBgColor: Colors.green.withOpacity(0.1),
               boxColor: Colors.green.withOpacity(0.1),
             );
+            Future.delayed(const Duration(seconds: 2), () {
+              if (mounted) {
+                context.read<FamilyTreeCubit>().getFamilyTree();
+              }
+            });
           } else if (state is CreateFamilyFailure) {
             fixedSnackBar(
-               context,
+              context,
               message: state.failure.errMessage,
               icon: Icons.error,
               iconColor: Colors.red,
@@ -74,112 +83,126 @@ class _ProviderFamilyViewState extends State<ProviderFamilyView> {
           }
         },
         builder: (context, state) {
-          return Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppColors.primaryColor,
-                        AppColors.secondaryColor.withOpacity(0.9),
-                      ],
-                    ) ,
-                    borderRadius: BorderRadius.circular(22.r),
-                    border: Border.all(
-                      color: Colors.white.withOpacity(0.18),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          return SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 30.h),
+                      padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 30.h),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            AppColors.primaryColor,
+                            AppColors.secondaryColor.withOpacity(0.9),
+                          ],
+                        ) ,
+                        borderRadius: BorderRadius.circular(22.r),
+                        border: Border.all(
+                          color: Colors.white.withOpacity(0.18),
+                        ),
+                      ),
+                      child: Column(
                         children: [
-                          Text(
-                            AppStrings.createNewFamily.tr(),
-                            style: AppStyles.styleBold16(context)
-                                .copyWith(color: AppColors.greenColor),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                AppStrings.createNewFamily.tr(),
+                                style: AppStyles.styleBold16(context)
+                                    .copyWith(color: AppColors.greenColor),
+                              ),
+                              Icon(
+                                Icons.people,
+                                size: 32.sp,
+                                color: AppColors.white,
+                              ),
+                            ],
                           ),
-                          Icon(
-                            Icons.people,
-                            size: 32.sp,
-                            color: AppColors.white,
+                          const VerticalSpace(24),
+                          GestureDetector(
+                            onTap: _pickImage,
+                            child: CircleAvatar(
+                              radius: 50.r,
+                              backgroundColor: Colors.white.withOpacity(0.1),
+                              backgroundImage:
+                              _image != null ? FileImage(_image!) : null,
+                              child: _image == null
+                                  ?  Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 40.sp,
+                              )
+                                  : null,
+                            ),
+                          ),
+                          const VerticalSpace(24),
+                          SecondaryTextFormField(
+                            controller: _nameArController,
+                            labelText: '${AppStrings.familyName.tr()} (AR)',
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Please enter the family name in Arabic';
+                            //   }
+                            //   return null;
+                            // },
+                          ),
+                          const VerticalSpace(16),
+                          SecondaryTextFormField(
+                            controller: _nameEnController,
+                            labelText: '${AppStrings.familyName.tr()} (EN)',
+                            // validator: (value) {
+                            //   if (value == null || value.isEmpty) {
+                            //     return 'Please enter the family name in English';
+                            //   }
+                            //   return null;
+                            // },
+                          ),
+                          const VerticalSpace(16),
+                          SecondaryTextFormField(
+                            controller: _descriptionArController,
+                            labelText: AppStrings.familyDescriptionAr.tr(),
+                          ),
+                          const VerticalSpace(16),
+                          SecondaryTextFormField(
+                            controller: _descriptionEnController,
+                            labelText: AppStrings.familyDescriptionEn.tr(),
+                          ),
+                          const VerticalSpace(16),
+                          SecondaryTextFormField(
+                            controller: _codeController,
+                            labelText: AppStrings.familyCode.tr(),
+
+                          ),
+                          const VerticalSpace(26),
+                          PrimaryButton(
+                            isLoading: state is CreateFamilyLoading,
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                context.read<FamilyTreeCubit>().createFamily(
+                                  nameAr: _nameArController.text,
+                                  nameEn: _nameEnController.text,
+                                  descriptionAr: _descriptionArController.text,
+                                  descriptionEn: _descriptionEnController.text,
+                                  code: _codeController.text,
+                                  image: _image?.path ?? '',
+                                );
+                              }
+                            },
+                            text: AppStrings.addFamily.tr(),
                           ),
                         ],
                       ),
-                      const VerticalSpace(24),
-                      GestureDetector(
-                        onTap: _pickImage,
-                        child: CircleAvatar(
-                          radius: 50.r,
-                          backgroundColor: Colors.white.withOpacity(0.1),
-                          backgroundImage:
-                          _image != null ? FileImage(_image!) : null,
-                          child: _image == null
-                              ?  Icon(
-                            Icons.camera_alt,
-                            color: Colors.white,
-                            size: 40.sp,
-                          )
-                              : null,
-                        ),
-                      ),
-                      const VerticalSpace(24),
-                      SecondaryTextFormField(
-                        controller: _nameArController,
-                        labelText: '${AppStrings.familyName.tr()} (AR)',
-                        // validator: (value) {
-                        //   if (value == null || value.isEmpty) {
-                        //     return 'Please enter the family name in Arabic';
-                        //   }
-                        //   return null;
-                        // },
-                      ),
-                      const VerticalSpace(16),
-                      SecondaryTextFormField(
-                        controller: _nameEnController,
-                        labelText: '${AppStrings.familyName.tr()} (EN)',
-                        // validator: (value) {
-                        //   if (value == null || value.isEmpty) {
-                        //     return 'Please enter the family name in English';
-                        //   }
-                        //   return null;
-                        // },
-                      ),
-                      const VerticalSpace(16),
-                      SecondaryTextFormField(
-                          controller: _codeController,
-                          labelText: AppStrings.familyCode.tr(),
-
-                      ),
-                      const VerticalSpace(26),
-                      PrimaryButton(
-                        isLoading: state is CreateFamilyLoading,
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<FamilyTreeCubit>().createFamily(
-                              nameAr: _nameArController.text,
-                              nameEn: _nameEnController.text,
-                              code: _codeController.text,
-                              image: _image?.path ?? '',
-                            );
-                          }
-                        },
-                        text: AppStrings.addFamily.tr(),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          );
-        },
+                  )
+              );
+          },
       ),
     );
   }

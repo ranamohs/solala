@@ -137,6 +137,8 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
   Future<void> createFamily({
     required String nameAr,
     required String nameEn,
+    String? descriptionAr,
+    String? descriptionEn,
     required String code,
     required String image,
   }) async {
@@ -145,6 +147,8 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     final result = await familyTreeRepo.createFamily(
       nameAr: nameAr,
       nameEn: nameEn,
+      descriptionAr: descriptionAr,
+      descriptionEn: descriptionEn,
       code: code,
       image: image,
     );

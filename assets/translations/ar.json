@@ -182,6 +182,11 @@
   "joinFamily": "الانضمام إلى عائلة",
   "pleaseEnterFamilyCode": "الرجاء إدخال كود العائلة",
   "noDataFound": "لا توجد بيانات",
-  "search": "بحث"
+  "search": "بحث",
+  "familyDescriptionAr": "وصف العائلة (بالعربية)",
+  "familyDescriptionEn": "وصف العائلة (بالانجليزية)",
+  "familyHistory": "تاريخ العائلة"
+
+
 }
 

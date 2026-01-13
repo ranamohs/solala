@@ -259,6 +259,9 @@
   "joinFamily": "Join Family",
   "pleaseEnterFamilyCode": "Please enter family code",
   "noDataFound": "No data found",
-  "search": "Search"
+  "search": "Search",
+  "familyDescriptionAr": "Family Description (AR)",
+  "familyDescriptionEn": "Family Description (EN)",
+  "familyHistory": "Family History"
 }
 

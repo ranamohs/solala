@@ -160,4 +160,9 @@ class AppStrings {
   static const String joinFamily = 'joinFamily';
   static const String pleaseEnterFamilyCode = 'pleaseEnterFamilyCode';
   static const String noDataFound = 'noDataFound';
+  static const String familyDescriptionAr = 'familyDescriptionAr';
+  static const String familyDescriptionEn = 'familyDescriptionEn';
+  static const String familyHistory = 'familyHistory';
+
+
 }

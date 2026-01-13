@@ -40,6 +40,8 @@ abstract class FamilyTreeRepo {
   Future<Either<Failure, BasicModel>> createFamily({
     required String nameAr,
     required String nameEn,
+    String? descriptionAr,
+    String? descriptionEn,
     required String code,
     required String image,
   });

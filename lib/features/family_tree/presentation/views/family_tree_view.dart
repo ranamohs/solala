@@ -115,6 +115,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
 
   @override
   Widget build(BuildContext context) {
+    final String? accountType = getIt<UserDataManager>().getAccountType();
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -134,38 +135,39 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
         backgroundColor: Colors.transparent,
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: AppStrings.search.tr(),
-                  prefixIcon: const Icon(Icons.search),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      _searchController.clear();
+            if (accountType != 'provider')
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: AppStrings.search.tr(),
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.clear),
+                      onPressed: () {
+                        _searchController.clear();
+                        context.read<FamilyTreeCubit>().clearSearch();
+                      },
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  onSubmitted: (query) {
+                    if (query.trim().isNotEmpty) {
+                      context
+                          .read<FamilyTreeCubit>()
+                          .searchFamilyTree(query: query);
+                    } else {
                       context.read<FamilyTreeCubit>().clearSearch();
-                    },
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                    borderSide: BorderSide.none,
-                  ),
+                    }
+                  },
                 ),
-                onSubmitted: (query) {
-                  if (query.trim().isNotEmpty) {
-                    context
-                        .read<FamilyTreeCubit>()
-                        .searchFamilyTree(query: query);
-                  } else {
-                    context.read<FamilyTreeCubit>().clearSearch();
-                  }
-                },
               ),
-            ),
             Expanded(
               child: MultiBlocListener(
                 listeners: [
