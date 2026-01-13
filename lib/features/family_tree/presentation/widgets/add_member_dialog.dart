@@ -40,7 +40,7 @@ class AddMemberDialog extends StatefulWidget {
 class _AddMemberDialogState extends State<AddMemberDialog> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
-  late TextEditingController _relationController;
+  String? _relation;
   late TextEditingController _birthDateController;
   late TextEditingController _birthPlaceController;
   late TextEditingController _phoneController;
@@ -55,7 +55,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.existingName ?? '');
-    _relationController = TextEditingController(text: widget.existingRelation ?? '');
+    _relation = widget.existingRelation;
     _birthDateController = TextEditingController();
     _birthPlaceController = TextEditingController();
     _phoneController = TextEditingController();
@@ -66,7 +66,6 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
   @override
   void dispose() {
     _nameController.dispose();
-    _relationController.dispose();
     _birthDateController.dispose();
     _birthPlaceController.dispose();
     _phoneController.dispose();
@@ -367,16 +366,48 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                           SizedBox(height: 16.h),
 
                           // Relation field
-                          _buildTextField(
-                            controller: _relationController,
-                            label: 'صلة القرابة',
-                            icon: Icons.family_restroom,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'الرجاء إدخال صلة القرابة';
-                              }
-                              return null;
-                            },
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade50,
+                              borderRadius: BorderRadius.circular(16.r),
+                              border: Border.all(color: Colors.grey.shade300),
+                            ),
+                            child: DropdownButtonFormField<String>(
+                              value: _relation,
+                              decoration: InputDecoration(
+                                labelText: 'صلة القرابة',
+                                prefixIcon: Icon(
+                                  Icons.family_restroom,
+                                  color: AppColors.primaryColor,
+                                ),
+                                border: InputBorder.none,
+                                contentPadding:  EdgeInsets.symmetric(
+                                  horizontal: 8.w,
+                                  vertical: 8.h,
+                                ),
+                              ),
+                              items: [
+                                DropdownMenuItem(
+                                  value: 'son',
+                                  child: Text('ابن'),
+                                ),
+                                DropdownMenuItem(
+                                  value: 'daughter',
+                                  child: Text('ابنه'),
+                                ),
+                              ],
+                              onChanged: (value) {
+                                setState(() {
+                                  _relation = value;
+                                });
+                              },
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'الرجاء اختيار صلة القرابة';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
 
                           const SizedBox(height: 16),
@@ -467,7 +498,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                                 context.read<FamilyTreeCubit>().addFamilyMember(
                                   name: _nameController.text,
                                   gender: _gender!,
-                                  relation: _relationController.text,
+                                  relation: _relation!,
                                   parentId: widget.parentId,
                                   avatar: _image?.path ?? '',
                                   birthDate: _birthDateController.text,

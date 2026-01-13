@@ -364,9 +364,29 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                   .getFamilyMemberDetails(memberId: member.id!);
             }
           },
-          child: CircleAvatar(
-            radius: isEmptyTree ? 40 : 40,
-            backgroundImage: backgroundImage,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              CircleAvatar(
+                radius: isEmptyTree ? 40 : 40,
+                backgroundImage: backgroundImage,
+              ),
+              if (member.isLive == 0) ...[
+                Container(
+                  width: (isEmptyTree ? 40 : 40) * 2,
+                  height: (isEmptyTree ? 40 : 40) * 2,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.4),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Icon(
+                  Icons.not_interested,
+                  color: Colors.white,
+                  size: (isEmptyTree ? 40 : 40),
+                ),
+              ],
+            ],
           ),
         ),
         const SizedBox(height: 8),
