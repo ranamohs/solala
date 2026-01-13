@@ -262,6 +262,8 @@
   "search": "Search",
   "familyDescriptionAr": "Family Description (AR)",
   "familyDescriptionEn": "Family Description (EN)",
-  "familyHistory": "Family History"
+  "familyHistory": "Family History",
+  "legend": "Legend",
+  "deceasedStatus": "Deceased"
 }
 

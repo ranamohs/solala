@@ -31,7 +31,7 @@ class FamilyTreeView extends StatefulWidget {
 class _FamilyTreeViewState extends State<FamilyTreeView> {
   final GlobalKey _graphKey = GlobalKey();
   final TransformationController _transformationController =
-  TransformationController();
+      TransformationController();
   final Map<int, bool> _expandedNodes = {};
   final TextEditingController _searchController = TextEditingController();
   Map<int, FamilyMember> _memberMap = {};
@@ -53,8 +53,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
     if (graphSize == null) return;
     final double scale = viewportSize.width / graphSize.width;
     final double xOffset = (viewportSize.width - graphSize.width * scale) / 2;
-    final double yOffset =
-        (viewportSize.height - graphSize.height * scale) / 2;
+    final double yOffset = (viewportSize.height - graphSize.height * scale) / 2;
     _transformationController.value = Matrix4.identity()
       ..translate(xOffset, yOffset)
       ..scale(scale);
@@ -81,7 +80,10 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   void _buildParentMap(
-      FamilyMember member, FamilyMember? parent, Map<int, FamilyMember> map) {
+    FamilyMember member,
+    FamilyMember? parent,
+    Map<int, FamilyMember> map,
+  ) {
     if (parent != null && member.id != null) {
       map[member.id!] = parent;
     }
@@ -93,7 +95,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   Set<int> _getNodesToDisplay(
-      List<int> searchResultIds, List<FamilyMember> fullTree) {
+    List<int> searchResultIds,
+    List<FamilyMember> fullTree,
+  ) {
     final nodesToDisplay = Set<int>.from(searchResultIds);
     final parentMap = <int, FamilyMember>{};
 
@@ -128,203 +132,233 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           backgroundColor: Colors.transparent,
           title: Text(
             AppStrings.familyTree.tr(),
-            style: AppStyles.styleBold20(context)
-                .copyWith(color: AppColors.greenColor),
+            style: AppStyles.styleBold20(
+              context,
+            ).copyWith(color: AppColors.greenColor),
           ),
         ),
         backgroundColor: Colors.transparent,
-        body: Column(
+        body: Stack(
           children: [
-            if (accountType != 'provider')
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: AppStrings.search.tr(),
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        _searchController.clear();
-                        context.read<FamilyTreeCubit>().clearSearch();
+            Column(
+              children: [
+                if (accountType != 'provider')
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: AppStrings.search.tr(),
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            _searchController.clear();
+                            context.read<FamilyTreeCubit>().clearSearch();
+                          },
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onSubmitted: (query) {
+                        if (query.trim().isNotEmpty) {
+                          context.read<FamilyTreeCubit>().searchFamilyTree(
+                            query: query,
+                          );
+                        } else {
+                          context.read<FamilyTreeCubit>().clearSearch();
+                        }
                       },
                     ),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide.none,
+                  ),
+                Expanded(
+                  child: MultiBlocListener(
+                    listeners: [
+                      BlocListener<FamilyTreeCubit, FamilyTreeState>(
+                        listener: (context, state) {
+                          if (state is AddFamilyMemberSuccess ||
+                              state is UpdateFamilyMemberSuccess ||
+                              state is DeleteFamilyMemberSuccess) {
+                            context.read<FamilyTreeCubit>().getFamilyTree();
+                          }
+                          if (state is FamilyTreeSuccess) {
+                            _initializeExpansionState(
+                              state.familyTreeModel.data ?? [],
+                            );
+                            _memberMap.clear();
+                            _buildMemberMap(state.familyTreeModel.data ?? []);
+                          }
+                        },
+                      ),
+                      BlocListener<FamilyTreeCubit, FamilyTreeState>(
+                        listener: (context, state) {
+                          if (state is GetFamilyMemberDetailsLoading) {
+                            showDialog(
+                              context: context,
+                              builder: (_) => const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          } else if (state is GetFamilyMemberDetailsSuccess) {
+                            Navigator.of(context).pop();
+                            showDialog(
+                              context: context,
+                              builder: (_) => MemberDetailsDialog(
+                                member: state.memberDetailsModel,
+                              ),
+                            );
+                          } else if (state is GetFamilyMemberDetailsFailure) {
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(state.failure.errMessage)),
+                            );
+                          }
+                        },
+                      ),
+                    ],
+                    child: RefreshIndicator(
+                      backgroundColor: AppColors.primaryColor,
+                      color: AppColors.greenColor,
+                      onRefresh: () async {
+                        context.read<FamilyTreeCubit>().getFamilyTree();
+                        _searchController.clear();
+                      },
+                      child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
+                        builder: (context, state) {
+                          if (state is FamilyTreeLoading) {
+                            return Center(
+                              child: LoadingAnimationWidget.flickr(
+                                leftDotColor: AppColors.primaryColor,
+                                rightDotColor: AppColors.greenColor,
+                                size: 64,
+                              ),
+                            );
+                          }
+                          if (state is FamilyTreeFailure) {
+                            return Center(
+                              child: RetryWidget(
+                                message: state.failure.errMessage,
+                                onPressed: () {
+                                  context
+                                      .read<FamilyTreeCubit>()
+                                      .getFamilyTree();
+                                },
+                              ),
+                            );
+                          }
+                          if (state is FamilyTreeSuccess) {
+                            List<FamilyMember> members = List.from(
+                              state.familyTreeModel.data ?? [],
+                            );
+                            final searchIds = state.searchResultIds;
+
+                            if (members.isEmpty) {
+                              return _buildEmptyState();
+                            }
+
+                            final graph = Graph();
+                            final builder = BuchheimWalkerConfiguration()
+                              ..siblingSeparation = (100)
+                              ..levelSeparation = (150)
+                              ..subtreeSeparation = (150)
+                              ..orientation = (BuchheimWalkerConfiguration
+                                  .ORIENTATION_TOP_BOTTOM);
+
+                            Set<int>? nodesToDisplay;
+                            if (searchIds != null && searchIds.isNotEmpty) {
+                              nodesToDisplay = _getNodesToDisplay(
+                                searchIds,
+                                members,
+                              );
+                              for (var member in members) {
+                                _buildFilteredGraph(
+                                  graph,
+                                  member,
+                                  null,
+                                  nodesToDisplay,
+                                );
+                              }
+                            } else {
+                              for (var member in members) {
+                                _buildGraph(graph, member, null);
+                              }
+                            }
+
+                            if (graph.nodeCount == 0 && searchIds != null) {
+                              return Center(
+                                child: Text(AppStrings.noDataFound.tr()),
+                              );
+                            }
+
+                            WidgetsBinding.instance.addPostFrameCallback((_) {
+                              if (mounted) {
+                                final RenderBox? graphRenderBox =
+                                    _graphKey.currentContext?.findRenderObject()
+                                        as RenderBox?;
+                                final RenderBox? viewportRenderBox =
+                                    context.findRenderObject() as RenderBox?;
+                                if (graphRenderBox != null &&
+                                    viewportRenderBox != null) {
+                                  _centerGraph(
+                                    graphRenderBox.size,
+                                    viewportRenderBox.size,
+                                  );
+                                }
+                              }
+                            });
+
+                            return GestureDetector(
+                              onHorizontalDragStart: (details) {},
+                              child: InteractiveViewer(
+                                transformationController:
+                                    _transformationController,
+                                constrained: false,
+                                boundaryMargin: const EdgeInsets.all(
+                                  double.infinity,
+                                ),
+                                minScale: 0.01,
+                                maxScale: 5.6,
+                                child: GraphView(
+                                  key: _graphKey,
+                                  graph: graph,
+                                  algorithm: BuchheimWalkerAlgorithm(
+                                    builder,
+                                    TreeEdgeRenderer(builder),
+                                  ),
+                                  paint: Paint()
+                                    ..color = Colors.green
+                                    ..strokeWidth = 1
+                                    ..style = PaintingStyle.stroke,
+                                  builder: (Node node) {
+                                    final familyMember =
+                                        node.key!.value as FamilyMember;
+                                    return _buildMemberNode(
+                                      member: familyMember,
+                                      familyId: getIt<UserDataManager>()
+                                          .getUserFamilyId(),
+                                      isSearchResult:
+                                          searchIds?.contains(
+                                            familyMember.id,
+                                          ) ??
+                                          false,
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
+                      ),
                     ),
                   ),
-                  onSubmitted: (query) {
-                    if (query.trim().isNotEmpty) {
-                      context
-                          .read<FamilyTreeCubit>()
-                          .searchFamilyTree(query: query);
-                    } else {
-                      context.read<FamilyTreeCubit>().clearSearch();
-                    }
-                  },
                 ),
-              ),
-            Expanded(
-              child: MultiBlocListener(
-                listeners: [
-                  BlocListener<FamilyTreeCubit, FamilyTreeState>(
-                    listener: (context, state) {
-                      if (state is AddFamilyMemberSuccess ||
-                          state is UpdateFamilyMemberSuccess ||
-                          state is DeleteFamilyMemberSuccess) {
-                        context.read<FamilyTreeCubit>().getFamilyTree();
-                      }
-                      if (state is FamilyTreeSuccess) {
-                        _initializeExpansionState(
-                            state.familyTreeModel.data ?? []);
-                        _memberMap.clear();
-                        _buildMemberMap(state.familyTreeModel.data ?? []);
-                      }
-                    },
-                  ),
-                  BlocListener<FamilyTreeCubit, FamilyTreeState>(
-                    listener: (context, state) {
-                      if (state is GetFamilyMemberDetailsLoading) {
-                        showDialog(
-                          context: context,
-                          builder: (_) =>
-                          const Center(child: CircularProgressIndicator()),
-                        );
-                      } else if (state is GetFamilyMemberDetailsSuccess) {
-                        Navigator.of(context).pop();
-                        showDialog(
-                          context: context,
-                          builder: (_) =>
-                              MemberDetailsDialog(member: state.memberDetailsModel),
-                        );
-                      } else if (state is GetFamilyMemberDetailsFailure) {
-                        Navigator.of(context).pop();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.failure.errMessage)),
-                        );
-                      }
-                    },
-                  ),
-                ],
-                child: RefreshIndicator(
-                  backgroundColor: AppColors.primaryColor,
-                  color: AppColors.greenColor,
-                  onRefresh: () async {
-                    context.read<FamilyTreeCubit>().getFamilyTree();
-                    _searchController.clear();
-                  },
-                  child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
-                    builder: (context, state) {
-                      if (state is FamilyTreeLoading) {
-                        return Center(
-                          child: LoadingAnimationWidget.flickr(
-                            leftDotColor: AppColors.primaryColor,
-                            rightDotColor: AppColors.greenColor,
-                            size: 64,
-                          ),
-                        );
-                      }
-                      if (state is FamilyTreeFailure) {
-                        return Center(
-                          child: RetryWidget(
-                            message: state.failure.errMessage,
-                            onPressed: () {
-                              context.read<FamilyTreeCubit>().getFamilyTree();
-                            },
-                          ),
-                        );
-                      }
-                      if (state is FamilyTreeSuccess) {
-                        List<FamilyMember> members =
-                        List.from(state.familyTreeModel.data ?? []);
-                        final searchIds = state.searchResultIds;
-
-                        if (members.isEmpty) {
-                          return _buildEmptyState();
-                        }
-
-                        final graph = Graph();
-                        final builder = BuchheimWalkerConfiguration()
-                          ..siblingSeparation = (100)
-                          ..levelSeparation = (150)
-                          ..subtreeSeparation = (150)
-                          ..orientation = (BuchheimWalkerConfiguration
-                              .ORIENTATION_TOP_BOTTOM);
-
-                        Set<int>? nodesToDisplay;
-                        if (searchIds != null && searchIds.isNotEmpty) {
-                          nodesToDisplay = _getNodesToDisplay(searchIds, members);
-                          for (var member in members) {
-                            _buildFilteredGraph(
-                                graph, member, null, nodesToDisplay);
-                          }
-                        } else {
-                          for (var member in members) {
-                            _buildGraph(graph, member, null);
-                          }
-                        }
-
-                        if (graph.nodeCount == 0 && searchIds != null) {
-                          return Center(child: Text(AppStrings.noDataFound.tr()));
-                        }
-
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          if (mounted) {
-                            final RenderBox? graphRenderBox = _graphKey
-                                .currentContext
-                                ?.findRenderObject() as RenderBox?;
-                            final RenderBox? viewportRenderBox =
-                            context.findRenderObject() as RenderBox?;
-                            if (graphRenderBox != null &&
-                                viewportRenderBox != null) {
-                              _centerGraph(
-                                  graphRenderBox.size, viewportRenderBox.size);
-                            }
-                          }
-                        });
-
-                        return GestureDetector(
-                          onHorizontalDragStart: (details) {},
-                          child: InteractiveViewer(
-                            transformationController: _transformationController,
-                            constrained: false,
-                            boundaryMargin: const EdgeInsets.all(double.infinity),
-                            minScale: 0.01,
-                            maxScale: 5.6,
-                            child: GraphView(
-                              key: _graphKey,
-                              graph: graph,
-                              algorithm: BuchheimWalkerAlgorithm(
-                                  builder, TreeEdgeRenderer(builder)),
-                              paint: Paint()
-                                ..color = Colors.green
-                                ..strokeWidth = 1
-                                ..style = PaintingStyle.stroke,
-                              builder: (Node node) {
-                                final familyMember =
-                                node.key!.value as FamilyMember;
-                                return _buildMemberNode(
-                                  member: familyMember,
-                                  familyId:
-                                  getIt<UserDataManager>().getUserFamilyId(),
-                                  isSearchResult:
-                                  searchIds?.contains(familyMember.id) ??
-                                      false,
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ),
-              ),
+                _buildLegendWidget(context),
+              ],
             ),
           ],
         ),
@@ -356,9 +390,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             SizedBox(height: 8.h),
             Text(
               "Please add family information".tr(),
-              style: AppStyles.styleRegular14(context).copyWith(
-                color: AppColors.greyColor,
-              ),
+              style: AppStyles.styleRegular14(
+                context,
+              ).copyWith(color: AppColors.greyColor),
             ),
           ],
         ),
@@ -366,8 +400,12 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
     }
   }
 
-  void _buildFilteredGraph(Graph graph, FamilyMember member,
-      FamilyMember? parent, Set<int> nodesToDisplay) {
+  void _buildFilteredGraph(
+    Graph graph,
+    FamilyMember member,
+    FamilyMember? parent,
+    Set<int> nodesToDisplay,
+  ) {
     if (!nodesToDisplay.contains(member.id)) {
       return;
     }
@@ -421,9 +459,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
         GestureDetector(
           onTap: () {
             if (member.id != null) {
-              context
-                  .read<FamilyTreeCubit>()
-                  .getFamilyMemberDetails(memberId: member.id!);
+              context.read<FamilyTreeCubit>().getFamilyMemberDetails(
+                memberId: member.id!,
+              );
             }
           },
           child: Container(
@@ -437,10 +475,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundImage: backgroundImage,
-                ),
+                CircleAvatar(radius: 40, backgroundImage: backgroundImage),
                 if (member.isLive == 0) ...[
                   Container(
                     width: 80,
@@ -450,7 +485,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                       shape: BoxShape.circle,
                     ),
                   ),
-                  const Icon(Icons.not_interested, color: Colors.white, size: 40),
+                  const Icon(
+                    Icons.not_interested,
+                    color: Colors.white,
+                    size: 40,
+                  ),
                 ],
               ],
             ),
@@ -463,8 +502,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             Text(
               member.name ?? '',
               style: isSearchResult
-                  ? AppStyles.styleSemiBold14(context)
-                  .copyWith(color: AppColors.primaryColor)
+                  ? AppStyles.styleSemiBold14(
+                      context,
+                    ).copyWith(color: AppColors.primaryColor)
                   : AppStyles.styleRegular14(context),
             ),
             if (member.children != null && member.children!.isNotEmpty)
@@ -472,7 +512,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 onTap: () {
                   setState(() {
                     _expandedNodes[member.id!] =
-                    !(_expandedNodes[member.id!] ?? false);
+                        !(_expandedNodes[member.id!] ?? false);
                   });
                 },
                 child: Icon(
@@ -497,8 +537,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                         ),
                       );
                     },
-                    child: Icon(Icons.add_circle,
-                        color: AppColors.greenColor, size: 20),
+                    child: Icon(
+                      Icons.add_circle,
+                      color: AppColors.greenColor,
+                      size: 20,
+                    ),
                   ),
                   SizedBox(width: 5.w),
                   GestureDetector(
@@ -511,7 +554,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                         ),
                       );
                     },
-                    child: Icon(Icons.edit, color: AppColors.primaryColor, size: 20),
+                    child: Icon(
+                      Icons.edit,
+                      color: AppColors.primaryColor,
+                      size: 20,
+                    ),
                   ),
                   if (accountType == 'provider') ...[
                     SizedBox(width: 5.w),
@@ -523,7 +570,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                           builder: (BuildContext dialogContext) {
                             return Dialog(
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               child: Container(
                                 padding: const EdgeInsets.all(24),
                                 decoration: BoxDecoration(
@@ -539,50 +587,59 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                         color: Colors.red.shade50,
                                         shape: BoxShape.circle,
                                       ),
-                                      child: Icon(Icons.delete_outline,
-                                          color: Colors.red.shade400, size: 32),
+                                      child: Icon(
+                                        Icons.delete_outline,
+                                        color: Colors.red.shade400,
+                                        size: 32,
+                                      ),
                                     ),
                                     const SizedBox(height: 20),
                                     Text(
                                       AppStrings.deleteMember.tr(),
                                       style: TextStyle(
-                                          fontSize: 20.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey.shade800),
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade800,
+                                      ),
                                     ),
                                     const SizedBox(height: 12),
                                     Text(
                                       AppStrings.deleteMemberTitle.tr(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          fontSize: 14.sp,
-                                          color: Colors.grey.shade600,
-                                          height: 1.5),
+                                        fontSize: 14.sp,
+                                        color: Colors.grey.shade600,
+                                        height: 1.5,
+                                      ),
                                     ),
                                     const SizedBox(height: 24),
                                     Row(
                                       children: [
                                         Expanded(
                                           child: TextButton(
-                                            onPressed: () =>
-                                                Navigator.of(dialogContext).pop(),
+                                            onPressed: () => Navigator.of(
+                                              dialogContext,
+                                            ).pop(),
                                             style: TextButton.styleFrom(
-                                              padding: const EdgeInsets.symmetric(
-                                                  vertical: 14),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 14,
+                                                  ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(12),
+                                                    BorderRadius.circular(12),
                                                 side: BorderSide(
-                                                    color:
-                                                    Colors.grey.shade300),
+                                                  color: Colors.grey.shade300,
+                                                ),
                                               ),
                                             ),
                                             child: Text(
                                               AppStrings.cancel.tr(),
                                               style: TextStyle(
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.grey.shade700),
+                                                fontSize: 15.sp,
+                                                fontWeight: FontWeight.w600,
+                                                color: Colors.grey.shade700,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -593,7 +650,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                               context
                                                   .read<FamilyTreeCubit>()
                                                   .deleteFamilyMember(
-                                                  memberId: member.id!);
+                                                    memberId: member.id!,
+                                                  );
                                               Navigator.of(dialogContext).pop();
                                             },
                                             text: AppStrings.delete.tr(),
@@ -618,4 +676,84 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
       ],
     );
   }
+}
+
+Widget _buildLegendWidget(BuildContext context) {
+  return Positioned(
+    bottom: 20,
+    right: 20,
+    child: SizedBox(
+      width: 130.w,
+      child: Card(
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                AppStrings.legend.tr(),
+                style: AppStyles.styleSemiBold14(
+                  context,
+                ).copyWith(color: AppColors.primaryColor),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.not_interested,
+                    color: Colors.black54,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    AppStrings.deceasedStatus.tr(),
+                    style: AppStyles.styleRegular12(context).copyWith(
+                      color: AppColors.secondaryColor
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h,),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.edit,
+                    color: Colors.black54,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    AppStrings.edit.tr(),
+                    style: AppStyles.styleRegular12(context).copyWith(
+                        color: AppColors.secondaryColor
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h,),
+              Row(
+                children: [
+                  const Icon(
+                    Icons.add_circle_outlined,
+                    color: Colors.black54,
+                    size: 20,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    AppStrings.addMember.tr(),
+                    style: AppStyles.styleRegular12(context).copyWith(
+                        color: AppColors.secondaryColor
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }

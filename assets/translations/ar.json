@@ -185,7 +185,9 @@
   "search": "بحث",
   "familyDescriptionAr": "وصف العائلة (بالعربية)",
   "familyDescriptionEn": "وصف العائلة (بالانجليزية)",
-  "familyHistory": "تاريخ العائلة"
+  "familyHistory": "تاريخ العائلة",
+  "legend": "مفتاح الخريطة",
+  "deceasedStatus": "متوفى"
 
 
 }

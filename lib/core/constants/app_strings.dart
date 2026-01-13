@@ -163,6 +163,8 @@ class AppStrings {
   static const String familyDescriptionAr = 'familyDescriptionAr';
   static const String familyDescriptionEn = 'familyDescriptionEn';
   static const String familyHistory = 'familyHistory';
+  static const String legend = 'legend';
+  static const String deceasedStatus = 'deceasedStatus';
 
 
 }
