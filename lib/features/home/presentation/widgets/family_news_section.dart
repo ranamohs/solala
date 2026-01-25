@@ -154,46 +154,59 @@ class _FamilyNewsCard extends StatelessWidget {
     final familyName =
     isArabic ? item.familyDetails?.name?.ar : item.familyDetails?.name?.en;
 
-    return Container(
-      width: 140.w,
-      decoration: BoxDecoration(
-        color: AppColors.primaryColor,
-        borderRadius: BorderRadius.circular(16.r),
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 6.r,
-            offset: const Offset(0, 3),
-            color: Colors.black.withOpacity(0.15),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => BlocProvider.value(
+              value: context.read<NewsCubit>(),
+              child: AllNewsView(report: item),
+            ),
           ),
-        ],
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Text(
-          //   familyName ?? '',
-          //   style: AppStyles.styleBold16(context)
-          //       .copyWith(color: AppColors.pureWhiteColor),
-          // ),
-          // SizedBox(height: 4.h),
-          Text(
-            title ?? '',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppStyles.styleBold16(context)
-                .copyWith(color: AppColors.pureWhiteColor),
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            description ?? '',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: AppStyles.styleMedium14(context)
-                .copyWith(color: AppColors.pureWhiteColor),
-          ),
-        ],
+        );
+      },
+      child: Container(
+        width: 140.w,
+        decoration: BoxDecoration(
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.circular(16.r),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 6.r,
+              offset: const Offset(0, 3),
+              color: Colors.black.withOpacity(0.15),
+            ),
+          ],
+        ),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Text(
+            //   familyName ?? '',
+            //   style: AppStyles.styleBold16(context)
+            //       .copyWith(color: AppColors.pureWhiteColor),
+            // ),
+            // SizedBox(height: 4.h),
+            Text(
+              title ?? '',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppStyles.styleBold16(context)
+                  .copyWith(color: AppColors.pureWhiteColor),
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              description ?? '',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppStyles.styleMedium14(context)
+                  .copyWith(color: AppColors.pureWhiteColor),
+            ),
+          ],
+        ),
       ),
     );
   }
