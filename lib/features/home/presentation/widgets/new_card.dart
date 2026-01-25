@@ -42,70 +42,69 @@ class _NewsCardState extends State<NewsCard> {
         ),
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
-              margin: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: AppColors.lightGreenColor,
-                borderRadius: BorderRadius.circular(22.r),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(16.r),
-                    child: CachedNetworkImage(
-                      imageUrl: newsImage ?? AppConstants.noImageUrl,
-                      width: 70.w,
-                      height: 70.w,
-                      fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _isExpanded = !_isExpanded;
+                  if (_isExpanded) {
+                    context
+                        .read<NewsCubit>()
+                        .getReportDetails(widget.report.id!);
+                  }
+                });
+              },
+              child: Container(
+                padding:
+                EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+                margin: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: AppColors.lightGreenColor,
+                  borderRadius: BorderRadius.circular(22.r),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(16.r),
+                      child: CachedNetworkImage(
+                        imageUrl: newsImage ?? AppConstants.noImageUrl,
+                        width: 70.w,
+                        height: 70.w,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-
-                  SizedBox(width: 14.w),
-
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          title ?? '',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppStyles.styleBold16(context).copyWith(
-                            color: AppColors.secondaryColor,
-                            height: 1.2,
+                    SizedBox(width: 14.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            title ?? '',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppStyles.styleBold16(context).copyWith(
+                              color: AppColors.secondaryColor,
+                              height: 1.2,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 6.h),
-                        Text(
-                          description ?? '',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppStyles.styleMedium14(context).copyWith(
-                            color: AppColors.secondaryColor.withOpacity(0.85),
-                            fontSize: 12.sp,
-                            height: 1.4,
+                          SizedBox(height: 6.h),
+                          Text(
+                            description ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppStyles.styleMedium14(context).copyWith(
+                              color:
+                              AppColors.secondaryColor.withOpacity(0.85),
+                              fontSize: 12.sp,
+                              height: 1.4,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-
-                  SizedBox(width: 10.w),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isExpanded = !_isExpanded;
-                        if (_isExpanded) {
-                          context
-                              .read<NewsCubit>()
-                              .getReportDetails(widget.report.id!);
-                        }
-                      });
-                    },
-                    child: Container(
+                    SizedBox(width: 10.w),
+                    Container(
                       width: 34.w,
                       height: 34.w,
                       decoration: BoxDecoration(
@@ -120,11 +119,10 @@ class _NewsCardState extends State<NewsCard> {
                         size: 22.sp,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-
             if (_isExpanded)
               BlocBuilder<NewsCubit, NewsState>(
                 builder: (context, state) {
