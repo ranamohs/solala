@@ -43,40 +43,57 @@ class _NewsCardState extends State<NewsCard> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
               margin: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: AppColors.lightGreenColor,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(22.r),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CircleAvatar(
-                    radius: 32.5,
-                    backgroundImage: CachedNetworkImageProvider(
-                      newsImage ?? AppConstants.noImageUrl,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16.r),
+                    child: CachedNetworkImage(
+                      imageUrl: newsImage ?? AppConstants.noImageUrl,
+                      width: 70.w,
+                      height: 70.w,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  SizedBox(width: 20.w),
+
+                  SizedBox(width: 14.w),
+
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           title ?? '',
-                          style: AppStyles.styleBold16(context)
-                              .copyWith(color: AppColors.secondaryColor),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.styleBold16(context).copyWith(
+                            color: AppColors.secondaryColor,
+                            height: 1.2,
+                          ),
                         ),
-                        const SizedBox(height: 3),
+                        SizedBox(height: 6.h),
                         Text(
                           description ?? '',
-                          style: AppStyles.styleMedium14(context)
-                              .copyWith(color: AppColors.secondaryColor),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.styleMedium14(context).copyWith(
+                            color: AppColors.secondaryColor.withOpacity(0.85),
+                            fontSize: 12.sp,
+                            height: 1.4,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const Spacer(),
+
+                  SizedBox(width: 10.w),
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -89,16 +106,16 @@ class _NewsCardState extends State<NewsCard> {
                       });
                     },
                     child: Container(
-                      width: 32.w,
-                      height: 32.h,
+                      width: 34.w,
+                      height: 34.w,
                       decoration: BoxDecoration(
                         color: AppColors.secondaryColor,
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
                         _isExpanded
-                            ? Icons.keyboard_arrow_up
-                            : Icons.keyboard_arrow_down,
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded,
                         color: Colors.white,
                         size: 22.sp,
                       ),
@@ -107,6 +124,7 @@ class _NewsCardState extends State<NewsCard> {
                 ],
               ),
             ),
+
             if (_isExpanded)
               BlocBuilder<NewsCubit, NewsState>(
                 builder: (context, state) {
