@@ -31,7 +31,7 @@ class FamilyTreeView extends StatefulWidget {
 class _FamilyTreeViewState extends State<FamilyTreeView> {
   final GlobalKey _graphKey = GlobalKey();
   final TransformationController _transformationController =
-      TransformationController();
+  TransformationController();
   final Map<int, bool> _expandedNodes = {};
   final TextEditingController _searchController = TextEditingController();
   Map<int, FamilyMember> _memberMap = {};
@@ -80,10 +80,10 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   void _buildParentMap(
-    FamilyMember member,
-    FamilyMember? parent,
-    Map<int, FamilyMember> map,
-  ) {
+      FamilyMember member,
+      FamilyMember? parent,
+      Map<int, FamilyMember> map,
+      ) {
     if (parent != null && member.id != null) {
       map[member.id!] = parent;
     }
@@ -95,9 +95,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   Set<int> _getNodesToDisplay(
-    List<int> searchResultIds,
-    List<FamilyMember> fullTree,
-  ) {
+      List<int> searchResultIds,
+      List<FamilyMember> fullTree,
+      ) {
     final nodesToDisplay = Set<int>.from(searchResultIds);
     final parentMap = <int, FamilyMember>{};
 
@@ -297,10 +297,10 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (mounted) {
                                 final RenderBox? graphRenderBox =
-                                    _graphKey.currentContext?.findRenderObject()
-                                        as RenderBox?;
+                                _graphKey.currentContext?.findRenderObject()
+                                as RenderBox?;
                                 final RenderBox? viewportRenderBox =
-                                    context.findRenderObject() as RenderBox?;
+                                context.findRenderObject() as RenderBox?;
                                 if (graphRenderBox != null &&
                                     viewportRenderBox != null) {
                                   _centerGraph(
@@ -315,7 +315,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                               onHorizontalDragStart: (details) {},
                               child: InteractiveViewer(
                                 transformationController:
-                                    _transformationController,
+                                _transformationController,
                                 constrained: false,
                                 boundaryMargin: const EdgeInsets.all(
                                   double.infinity,
@@ -335,15 +335,15 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                     ..style = PaintingStyle.stroke,
                                   builder: (Node node) {
                                     final familyMember =
-                                        node.key!.value as FamilyMember;
+                                    node.key!.value as FamilyMember;
                                     return _buildMemberNode(
                                       member: familyMember,
                                       familyId: getIt<UserDataManager>()
                                           .getUserFamilyId(),
                                       isSearchResult:
-                                          searchIds?.contains(
-                                            familyMember.id,
-                                          ) ??
+                                      searchIds?.contains(
+                                        familyMember.id,
+                                      ) ??
                                           false,
                                     );
                                   },
@@ -357,9 +357,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                     ),
                   ),
                 ),
-                _buildLegendWidget(context),
               ],
             ),
+            _buildLegendWidget(context),
           ],
         ),
       ),
@@ -401,11 +401,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   void _buildFilteredGraph(
-    Graph graph,
-    FamilyMember member,
-    FamilyMember? parent,
-    Set<int> nodesToDisplay,
-  ) {
+      Graph graph,
+      FamilyMember member,
+      FamilyMember? parent,
+      Set<int> nodesToDisplay,
+      ) {
     if (!nodesToDisplay.contains(member.id)) {
       return;
     }
@@ -503,8 +503,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
               member.name ?? '',
               style: isSearchResult
                   ? AppStyles.styleSemiBold14(
-                      context,
-                    ).copyWith(color: AppColors.primaryColor)
+                context,
+              ).copyWith(color: AppColors.primaryColor)
                   : AppStyles.styleRegular14(context),
             ),
             if (member.children != null && member.children!.isNotEmpty)
@@ -512,7 +512,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 onTap: () {
                   setState(() {
                     _expandedNodes[member.id!] =
-                        !(_expandedNodes[member.id!] ?? false);
+                    !(_expandedNodes[member.id!] ?? false);
                   });
                 },
                 child: Icon(
@@ -622,12 +622,12 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                             ).pop(),
                                             style: TextButton.styleFrom(
                                               padding:
-                                                  const EdgeInsets.symmetric(
-                                                    vertical: 14,
-                                                  ),
+                                              const EdgeInsets.symmetric(
+                                                vertical: 14,
+                                              ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(12),
+                                                BorderRadius.circular(12),
                                                 side: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
@@ -650,8 +650,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                               context
                                                   .read<FamilyTreeCubit>()
                                                   .deleteFamilyMember(
-                                                    memberId: member.id!,
-                                                  );
+                                                memberId: member.id!,
+                                              );
                                               Navigator.of(dialogContext).pop();
                                             },
                                             text: AppStrings.delete.tr(),
@@ -711,7 +711,7 @@ Widget _buildLegendWidget(BuildContext context) {
                   Text(
                     AppStrings.deceasedStatus.tr(),
                     style: AppStyles.styleRegular12(context).copyWith(
-                      color: AppColors.secondaryColor
+                        color: AppColors.secondaryColor
                     ),
                   ),
                 ],
