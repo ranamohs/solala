@@ -18,16 +18,22 @@ import '../models/family_model.dart';
 import 'family_repo.dart';
 
 
+import '../../../../core/databases/cache/user_data_manager.dart';
+import '../../../../core/services/service_locator.dart';
+
+
 class FamilyTreeRepoImpl implements FamilyTreeRepo {
   final DioConsumer dioConsumer;
   final NetworkConnectionCubit networkCubit;
   final SecureStorageHelper? secureStorageHelper;
+  final UserDataManager? userDataManager;
 
 
   FamilyTreeRepoImpl({
     required this.dioConsumer,
     required this.networkCubit,
     required this.secureStorageHelper,
+    this.userDataManager,
   });
 
   @override
@@ -92,7 +98,18 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
       );
 
       if (response != null && response is Map<String, dynamic>) {
-        if (response.containsKey('data') && response['status'] == true) {
+        if (response.containsKey('status') && response['status'] == true) {
+          if (response.containsKey('family') && response['family'] is Map<String, dynamic>) {
+            final familyData = response['family'];
+            final familyId = familyData['id']?.toString();
+            final familyName = familyData['name'];
+            if (familyId != null) {
+              userDataManager?.saveUserFamilyId(familyId: familyId);
+            }
+            if (familyName != null && familyName is String) {
+              userDataManager?.saveUserFamilyName(familyName: familyName);
+            }
+          }
           final familyTreeModel = FamilyTreeModel.fromJson(response);
           return Right(familyTreeModel);
         } else {
@@ -149,7 +166,18 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
       );
 
       if (response != null && response is Map<String, dynamic>) {
-        if (response.containsKey('data') && response['status'] == true) {
+        if (response.containsKey('status') && response['status'] == true) {
+          if (response.containsKey('data') && response['data'] is Map<String, dynamic>) {
+            final data = response['data'];
+            final familyId = data['id']?.toString();
+            final familyName = data['name'];
+            if (familyId != null) {
+              userDataManager?.saveUserFamilyId(familyId: familyId);
+            }
+            if (familyName != null && familyName is String) {
+              userDataManager?.saveUserFamilyName(familyName: familyName);
+            }
+          }
           final basicModel = BasicModel.fromJson(response);
           return Right(basicModel);
         } else {

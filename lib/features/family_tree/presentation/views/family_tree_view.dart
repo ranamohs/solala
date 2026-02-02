@@ -31,7 +31,7 @@ class FamilyTreeView extends StatefulWidget {
 class _FamilyTreeViewState extends State<FamilyTreeView> {
   final GlobalKey _graphKey = GlobalKey();
   final TransformationController _transformationController =
-  TransformationController();
+      TransformationController();
   final Map<int, bool> _expandedNodes = {};
   final TextEditingController _searchController = TextEditingController();
   Map<int, FamilyMember> _memberMap = {};
@@ -80,10 +80,10 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   void _buildParentMap(
-      FamilyMember member,
-      FamilyMember? parent,
-      Map<int, FamilyMember> map,
-      ) {
+    FamilyMember member,
+    FamilyMember? parent,
+    Map<int, FamilyMember> map,
+  ) {
     if (parent != null && member.id != null) {
       map[member.id!] = parent;
     }
@@ -95,9 +95,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   Set<int> _getNodesToDisplay(
-      List<int> searchResultIds,
-      List<FamilyMember> fullTree,
-      ) {
+    List<int> searchResultIds,
+    List<FamilyMember> fullTree,
+  ) {
     final nodesToDisplay = Set<int>.from(searchResultIds);
     final parentMap = <int, FamilyMember>{};
 
@@ -257,7 +257,21 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                             final searchIds = state.searchResultIds;
 
                             if (members.isEmpty) {
-                              return _buildEmptyState();
+                              final familyName = getIt<UserDataManager>()
+                                  .getUserFamilyName();
+                              final familyId = getIt<UserDataManager>()
+                                  .getUserFamilyId();
+                              if (familyId != null &&
+                                  familyId.isNotEmpty &&
+                                  familyName != null &&
+                                  familyName.isNotEmpty &&
+                                  searchIds == null) {
+                                members.add(
+                                  FamilyMember(id: 0, name: familyName),
+                                );
+                              } else {
+                                return _buildEmptyState();
+                              }
                             }
 
                             final graph = Graph();
@@ -297,10 +311,10 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                             WidgetsBinding.instance.addPostFrameCallback((_) {
                               if (mounted) {
                                 final RenderBox? graphRenderBox =
-                                _graphKey.currentContext?.findRenderObject()
-                                as RenderBox?;
+                                    _graphKey.currentContext?.findRenderObject()
+                                        as RenderBox?;
                                 final RenderBox? viewportRenderBox =
-                                context.findRenderObject() as RenderBox?;
+                                    context.findRenderObject() as RenderBox?;
                                 if (graphRenderBox != null &&
                                     viewportRenderBox != null) {
                                   _centerGraph(
@@ -315,7 +329,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                               onHorizontalDragStart: (details) {},
                               child: InteractiveViewer(
                                 transformationController:
-                                _transformationController,
+                                    _transformationController,
                                 constrained: false,
                                 boundaryMargin: const EdgeInsets.all(
                                   double.infinity,
@@ -335,15 +349,15 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                     ..style = PaintingStyle.stroke,
                                   builder: (Node node) {
                                     final familyMember =
-                                    node.key!.value as FamilyMember;
+                                        node.key!.value as FamilyMember;
                                     return _buildMemberNode(
                                       member: familyMember,
                                       familyId: getIt<UserDataManager>()
                                           .getUserFamilyId(),
                                       isSearchResult:
-                                      searchIds?.contains(
-                                        familyMember.id,
-                                      ) ??
+                                          searchIds?.contains(
+                                            familyMember.id,
+                                          ) ??
                                           false,
                                     );
                                   },
@@ -368,7 +382,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
 
   Widget _buildEmptyState() {
     final accountType = getIt<UserDataManager>().getAccountType();
-    if (accountType == 'provider') {
+    final familyId = getIt<UserDataManager>().getUserFamilyId();
+
+    if (accountType == 'provider' && (familyId == null || familyId.isEmpty)) {
       return const ProviderFamilyView();
     } else {
       return Center(
@@ -394,6 +410,23 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 context,
               ).copyWith(color: AppColors.greyColor),
             ),
+            if (accountType == 'provider' ||
+                (familyId != null && familyId.isNotEmpty))
+              Padding(
+                padding: EdgeInsets.only(top: 24.h),
+                child: PrimaryButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<FamilyTreeCubit>(),
+                        child: const AddMemberDialog(),
+                      ),
+                    );
+                  },
+                  text: AppStrings.addMember.tr(),
+                ),
+              ),
           ],
         ),
       );
@@ -401,11 +434,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   }
 
   void _buildFilteredGraph(
-      Graph graph,
-      FamilyMember member,
-      FamilyMember? parent,
-      Set<int> nodesToDisplay,
-      ) {
+    Graph graph,
+    FamilyMember member,
+    FamilyMember? parent,
+    Set<int> nodesToDisplay,
+  ) {
     if (!nodesToDisplay.contains(member.id)) {
       return;
     }
@@ -458,7 +491,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
       children: [
         GestureDetector(
           onTap: () {
-            if (member.id != null) {
+            if (member.id != null && member.id != 0) {
               context.read<FamilyTreeCubit>().getFamilyMemberDetails(
                 memberId: member.id!,
               );
@@ -503,8 +536,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
               member.name ?? '',
               style: isSearchResult
                   ? AppStyles.styleSemiBold14(
-                context,
-              ).copyWith(color: AppColors.primaryColor)
+                      context,
+                    ).copyWith(color: AppColors.primaryColor)
                   : AppStyles.styleRegular14(context),
             ),
             if (member.children != null && member.children!.isNotEmpty)
@@ -512,7 +545,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 onTap: () {
                   setState(() {
                     _expandedNodes[member.id!] =
-                    !(_expandedNodes[member.id!] ?? false);
+                        !(_expandedNodes[member.id!] ?? false);
                   });
                 },
                 child: Icon(
@@ -524,25 +557,27 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 ),
               ),
             const SizedBox(width: 5),
-            if (member.id != 0)
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) => BlocProvider.value(
-                          value: context.read<FamilyTreeCubit>(),
-                          child: AddMemberDialog(parentId: member.id!),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<FamilyTreeCubit>(),
+                        child: AddMemberDialog(
+                          parentId: member.id == 0 ? null : member.id,
                         ),
-                      );
-                    },
-                    child: Icon(
-                      Icons.add_circle,
-                      color: AppColors.greenColor,
-                      size: 20,
-                    ),
+                      ),
+                    );
+                  },
+                  child: Icon(
+                    Icons.add_circle,
+                    color: AppColors.greenColor,
+                    size: 20,
                   ),
+                ),
+                if (member.id != 0) ...[
                   SizedBox(width: 5.w),
                   GestureDetector(
                     onTap: () {
@@ -622,12 +657,12 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                             ).pop(),
                                             style: TextButton.styleFrom(
                                               padding:
-                                              const EdgeInsets.symmetric(
-                                                vertical: 14,
-                                              ),
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 14,
+                                                  ),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
-                                                BorderRadius.circular(12),
+                                                    BorderRadius.circular(12),
                                                 side: BorderSide(
                                                   color: Colors.grey.shade300,
                                                 ),
@@ -650,8 +685,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                               context
                                                   .read<FamilyTreeCubit>()
                                                   .deleteFamilyMember(
-                                                memberId: member.id!,
-                                              );
+                                                    memberId: member.id!,
+                                                  );
                                               Navigator.of(dialogContext).pop();
                                             },
                                             text: AppStrings.delete.tr(),
@@ -670,7 +705,8 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                     ),
                   ],
                 ],
-              ),
+              ],
+            ),
           ],
         ),
       ],
@@ -710,30 +746,26 @@ Widget _buildLegendWidget(BuildContext context) {
                   const SizedBox(width: 8),
                   Text(
                     AppStrings.deceasedStatus.tr(),
-                    style: AppStyles.styleRegular12(context).copyWith(
-                        color: AppColors.secondaryColor
-                    ),
+                    style: AppStyles.styleRegular12(
+                      context,
+                    ).copyWith(color: AppColors.secondaryColor),
                   ),
                 ],
               ),
-              SizedBox(height: 10.h,),
+              SizedBox(height: 10.h),
               Row(
                 children: [
-                  const Icon(
-                    Icons.edit,
-                    color: Colors.black54,
-                    size: 20,
-                  ),
+                  const Icon(Icons.edit, color: Colors.black54, size: 20),
                   const SizedBox(width: 8),
                   Text(
                     AppStrings.edit.tr(),
-                    style: AppStyles.styleRegular12(context).copyWith(
-                        color: AppColors.secondaryColor
-                    ),
+                    style: AppStyles.styleRegular12(
+                      context,
+                    ).copyWith(color: AppColors.secondaryColor),
                   ),
                 ],
               ),
-              SizedBox(height: 10.h,),
+              SizedBox(height: 10.h),
               Row(
                 children: [
                   const Icon(
@@ -744,9 +776,9 @@ Widget _buildLegendWidget(BuildContext context) {
                   const SizedBox(width: 8),
                   Text(
                     AppStrings.addMember.tr(),
-                    style: AppStyles.styleRegular12(context).copyWith(
-                        color: AppColors.secondaryColor
-                    ),
+                    style: AppStyles.styleRegular12(
+                      context,
+                    ).copyWith(color: AppColors.secondaryColor),
                   ),
                 ],
               ),

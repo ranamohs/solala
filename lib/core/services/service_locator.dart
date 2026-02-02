@@ -207,6 +207,7 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<FamilyTreeRepo>(() => FamilyTreeRepoImpl(
       secureStorageHelper: getIt<SecureStorageHelper>(),
       dioConsumer: getIt<DioConsumer>(),
+      userDataManager: getIt<UserDataManager>(),
       networkCubit: getIt<NetworkConnectionCubit>()));
   getIt.registerFactory<FamilyTreeCubit>(() => FamilyTreeCubit(
     familyTreeRepo: getIt<FamilyTreeRepo>(),
