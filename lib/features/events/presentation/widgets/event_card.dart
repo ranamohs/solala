@@ -13,7 +13,6 @@ import 'package:solala/features/events/presentation/views/event_details_view.dar
 import '../manager/events_cuibt/events_cubit.dart';
 import '../manager/events_cuibt/events_state.dart';
 
-
 class EventCard extends StatefulWidget {
   const EventCard({super.key, required this.event});
   final EventModel event;
@@ -38,36 +37,51 @@ class _EventCardState extends State<EventCard> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 18.h),
               margin: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: AppColors.lightGreenColor,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 32.5,
+                    radius: 30.r,
                     backgroundImage: CachedNetworkImageProvider(
                       widget.event.image ?? AppConstants.noImageUrl,
                     ),
                   ),
-                  SizedBox(width: 20.w),
+
+                  SizedBox(width: 15.w),
+
+                  /// Title + Date
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.event.title?.ar ?? '',
-                            style: AppStyles.styleBold16(context)
-                                .copyWith(color: AppColors.secondaryColor)),
-                        SizedBox(height: 3),
-                        Text(widget.event.eventDate?.split('T')[0] ?? '',
-                            style: AppStyles.styleMedium14(context)
-                                .copyWith(color: AppColors.secondaryColor)),
+                        Text(
+                          widget.event.title?.ar ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.styleSemiBold14(context)
+                              .copyWith(color: AppColors.secondaryColor),
+                        ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          widget.event.eventDate?.split('T')[0] ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppStyles.styleMedium14(context)
+                              .copyWith(color: AppColors.secondaryColor),
+                        ),
                       ],
                     ),
                   ),
-                  const Spacer(),
+
+                  SizedBox(width: 10.w),
+
+                  /// Expand Button
                   GestureDetector(
                     onTap: () {
                       setState(() {
@@ -87,24 +101,29 @@ class _EventCardState extends State<EventCard> {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                          _isExpanded
-                              ? Icons.keyboard_arrow_up
-                              : Icons.keyboard_arrow_down,
-                          color: Colors.white,
-                          size: 22.sp),
+                        _isExpanded
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        color: Colors.white,
+                        size: 22.sp,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
+
+            /// Expanded Details
             if (_isExpanded)
               BlocBuilder<EventsCubit, EventsState>(
                 builder: (context, state) {
                   if (state is EventsSuccess) {
                     final isLoading =
                     state.loadingEvents.contains(widget.event.id);
-                    final eventDetails = state.eventDetails[widget.event.id];
-                    final error = state.errorEvents[widget.event.id];
+                    final eventDetails =
+                    state.eventDetails[widget.event.id];
+                    final error =
+                    state.errorEvents[widget.event.id];
 
                     if (isLoading) {
                       return Center(
@@ -115,11 +134,18 @@ class _EventCardState extends State<EventCard> {
                         ),
                       );
                     } else if (error != null) {
-                      return RetryWidget(message: error   ,onPressed: () {
-                        context.read<EventsCubit>().getEventDetails(widget.event.id!);
-                      }, );
+                      return RetryWidget(
+                        message: error,
+                        onPressed: () {
+                          context
+                              .read<EventsCubit>()
+                              .getEventDetails(widget.event.id!);
+                        },
+                      );
                     } else if (eventDetails != null) {
-                      return EventDetailsView(eventDetails: eventDetails);
+                      return EventDetailsView(
+                        eventDetails: eventDetails,
+                      );
                     }
                   }
                   return const SizedBox.shrink();

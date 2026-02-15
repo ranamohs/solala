@@ -19,19 +19,14 @@ class EventDetailsView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            eventDetails.title?.ar ?? '',
-            style: AppStyles.styleBold20(context),
-          ),
-          SizedBox(height: 8.h),
-          Text(
-            eventDetails.decription?.ar ?? '',
+            eventDetails.decription?.ar ?? 'لا يوجد وصف',
             style: AppStyles.styleMedium16(context),
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 8.h),
           _buildDetailRow(AppStrings.inviter.tr(), eventDetails.familyDetails?.name?.ar ?? '' , context),
           _buildDetailRow(AppStrings.date.tr(), eventDetails.eventDate?.split('T')[0] ?? '' , context),
           _buildDetailRow(AppStrings.place.tr(), eventDetails.address?.ar ?? '' , context),
-          _buildDetailRow(AppStrings.invitees.tr(), 'Family' , context),
+          // _buildDetailRow(AppStrings.invitees.tr(), 'Family' , context),
         ],
       ),
     );

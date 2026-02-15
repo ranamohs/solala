@@ -2,6 +2,7 @@ import 'package:solala/core/constants/app_assets.dart';
 import 'package:solala/core/constants/app_colors.dart';
 import 'package:solala/core/constants/app_strings.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:solala/core/constants/app_styles.dart';
 import 'package:solala/core/services/service_locator.dart';
 import 'package:solala/features/events/presentation/manager/events_cuibt/events_cubit.dart';
 import 'package:solala/features/home/presentation/views/home_view.dart';
@@ -65,8 +66,10 @@ class _AppLayoutState extends State<AppLayout> {
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
         type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
-        unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.normal),
+        selectedLabelStyle: AppStyles.styleMedium10(context).copyWith(
+          fontWeight: FontWeight.bold
+        ),
+        unselectedLabelStyle: AppStyles.styleMedium10(context),
         selectedItemColor: AppColors.primaryColor,
         unselectedItemColor: AppColors.lightGreyColor,
         items: [
