@@ -37,6 +37,18 @@ class EventModel {
   }
 }
 
+class DeleteEventModel {
+  bool? status;
+  String? message;
+
+  DeleteEventModel({this.status, this.message});
+
+  DeleteEventModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+  }
+}
+
 class MultiLangText {
   String? ar;
   String? en;

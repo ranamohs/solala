@@ -53,3 +53,23 @@ class CreateEventFailure extends EventsState {
 
   CreateEventFailure({required this.message});
 }
+
+class DeleteEventLoading extends EventsState {
+  final int eventId;
+
+  DeleteEventLoading({required this.eventId});
+}
+
+class DeleteEventSuccess extends EventsState {
+  final String message;
+  final int eventId;
+
+  DeleteEventSuccess({required this.message, required this.eventId});
+}
+
+class DeleteEventFailure extends EventsState {
+  final String message;
+  final int eventId;
+
+  DeleteEventFailure({required this.message, required this.eventId});
+}

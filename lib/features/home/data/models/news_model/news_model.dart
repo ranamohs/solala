@@ -207,6 +207,19 @@ class NewsDetailsModel {
 
 }
 
+class DeleteNewsModel {
+  bool? status;
+  Message? message;
+
+  DeleteNewsModel({this.status, this.message});
+
+  DeleteNewsModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message =
+    json['message'] != null ? Message.fromJson(json['message']) : null;
+  }
+}
+
 
 
 

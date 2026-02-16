@@ -8,4 +8,5 @@ abstract class NewsRepo {
   Future<Either<Failure, NewsDetailsModel>> getReportDetails(int reportId);
   Future<Either<Failure, void>> createNews(
       CreateNewsRequestModel createNewsRequestModel);
+  Future<Either<Failure, DeleteNewsModel>> deleteNews(int reportId);
 }

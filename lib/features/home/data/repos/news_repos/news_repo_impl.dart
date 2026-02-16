@@ -87,4 +87,29 @@ class NewsRepoImpl implements NewsRepo {
       return left(ServerFailure.fromDioException(e));
     }
   }
+
+  @override
+  Future<Either<Failure, DeleteNewsModel>> deleteNews(int reportId) async {
+    try {
+      final isConnected = await networkCubit.networkInfo.isConnected;
+
+      if (!isConnected) {
+        return Left(
+            NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+      }
+      final token = await secureStorageHelper?.getToken();
+      final response = await dioConsumer.delete(
+        '${EndPoints.news}/$reportId',
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+      return right(DeleteNewsModel.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioException(e));
+    } catch (e) {
+      return left(ServerFailure(errMessage: AppStrings.unexpectedError.tr()));
+    }
+  }
 }

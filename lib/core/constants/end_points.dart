@@ -32,7 +32,7 @@ class EndPoints {
   static const String deleteFamilyMember = "/family/tree-delete/";
   static const String events = "/events";
   static const String addEvent = "/events/add";
-  static const String eventDetails = "/events/";
+  static const String eventDetails = "/events";
   static const String numberingEvents = "/family/numbering-events";
   static const String familyInfo = "/family/";
   static const String news = "/reports";

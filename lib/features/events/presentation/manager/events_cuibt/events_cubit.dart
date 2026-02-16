@@ -77,4 +77,20 @@ class EventsCubit extends Cubit<EventsState> {
       },
     );
   }
+
+  Future<void> deleteEvent(int eventId, BuildContext context) async {
+    emit(DeleteEventLoading(eventId: eventId));
+    final result = await eventsRepo.deleteEvent(eventId);
+    result.fold(
+          (failure) =>
+          emit(DeleteEventFailure(message: failure.errMessage, eventId: eventId)),
+          (deleteEventModel) {
+        emit(DeleteEventSuccess(
+          message: deleteEventModel.message ?? 'Event Deleted Successfully',
+          eventId: eventId,
+        ));
+        getEvents();
+      },
+    );
+  }
 }

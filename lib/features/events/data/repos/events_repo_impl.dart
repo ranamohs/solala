@@ -74,7 +74,7 @@ class EventsRepoImpl implements EventsRepo {
     try {
       final token = await secureStorageHelper?.getToken();
       final response = await dioConsumer.get(
-        '${EndPoints.eventDetails}$eventId',
+        '${EndPoints.eventDetails}/$eventId',
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
@@ -119,6 +119,31 @@ class EventsRepoImpl implements EventsRepo {
       return Right(response);
     } on DioException catch (e) {
       return Left(ServerFailure.fromDioException(e));
+    } catch (e) {
+      return Left(ServerFailure(errMessage: AppStrings.unexpectedError.tr()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DeleteEventModel>> deleteEvent(int eventId) async {
+    final isConnected = await networkCubit.networkInfo.isConnected;
+
+    if (!isConnected) {
+      return Left(NoInternetFailure(errMessage: AppStrings.noInternetConnection.tr()));
+    }
+
+    try {
+      final token = await secureStorageHelper?.getToken();
+      final response = await dioConsumer.delete(
+        '${EndPoints.eventDetails}/$eventId',
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+      return right(DeleteEventModel.fromJson(response));
+    } on DioException catch (e) {
+      return left(ServerFailure.fromDioException(e));
     } catch (e) {
       return Left(ServerFailure(errMessage: AppStrings.unexpectedError.tr()));
     }

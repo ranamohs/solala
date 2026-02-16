@@ -54,3 +54,23 @@ class CreateNewsError extends NewsState {
 
   CreateNewsError({required this.message});
 }
+
+class DeleteNewsLoading extends NewsState {
+  final int reportId;
+
+  DeleteNewsLoading({required this.reportId});
+}
+
+class DeleteNewsSuccess extends NewsState {
+  final String message;
+  final int reportId;
+
+  DeleteNewsSuccess({required this.message, required this.reportId});
+}
+
+class DeleteNewsError extends NewsState {
+  final String message;
+  final int reportId;
+
+  DeleteNewsError({required this.message, required this.reportId});
+}

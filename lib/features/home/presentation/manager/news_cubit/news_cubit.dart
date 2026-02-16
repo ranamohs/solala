@@ -1,3 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data/models/news_model/news_model.dart';
@@ -56,6 +58,25 @@ class NewsCubit extends Cubit<NewsState> {
           (failure) => emit(CreateNewsError(message: failure.errMessage)),
           (_) {
         emit(CreateNewsSuccess(message: 'News Created Successfully'));
+        getReports();
+      },
+    );
+  }
+
+  Future<void> deleteNews(int reportId, BuildContext context) async {
+    emit(DeleteNewsLoading(reportId: reportId));
+    final result = await reportsRepo.deleteNews(reportId);
+    result.fold(
+          (failure) =>
+          emit(DeleteNewsError(message: failure.errMessage, reportId: reportId)),
+          (deleteNewsModel) {
+        final isArabic = context.locale.languageCode == 'ar';
+        final message = isArabic
+            ? deleteNewsModel.message?.ar
+            : deleteNewsModel.message?.en;
+        emit(DeleteNewsSuccess(
+            message: message ?? 'News Deleted Successfully',
+            reportId: reportId));
         getReports();
       },
     );
