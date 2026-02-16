@@ -165,6 +165,7 @@ class AppStrings {
   static const String familyHistory = 'familyHistory';
   static const String legend = 'legend';
   static const String deceasedStatus = 'deceasedStatus';
+  static const String description = 'description';
 
 
 }

@@ -67,7 +67,7 @@ class _HomeViewState extends State<HomeView> {
             }
           },
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 22.w),
+            padding: EdgeInsets.symmetric(vertical: 6.h, horizontal: 22.w),
             child: PrimaryRefreshIndicator(
               onRefresh: () async {
                 context.read<BannersCubit>().getBanners();

@@ -9,7 +9,6 @@ import 'package:solala/features/home/presentation/views/home_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../../account/presentation/views/update_profile_view.dart';
-import '../../../app_info/presentation/views/contact_us_view.dart';
 import '../../../events/presentation/views/events_view.dart';
 import '../../../family_tree/presentation/manager/family_cubit/family_cubit.dart';
 import '../../../family_tree/presentation/views/family_tree_view.dart';
@@ -25,81 +24,90 @@ class AppLayout extends StatefulWidget {
 class _AppLayoutState extends State<AppLayout> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
+  late final EventsCubit _eventsCubit;
+  late final FamilyTreeCubit _familyTreeCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventsCubit = getIt<EventsCubit>();
+    _familyTreeCubit = getIt<FamilyTreeCubit>();
+  }
 
   void _onPageChanged(int index) {
     setState(() {
       _currentIndex = index;
     });
+    if (index == 1) {
+      _eventsCubit.getEvents();
+    } else if (index == 2) {
+      _familyTreeCubit.getFamilyTree();
+    }
   }
 
   void _onTabTapped(int index) {
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+    _pageController.jumpToPage(index);
   }
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _screens = [
-      HomeView(),
-      BlocProvider(
-        create: (context) => getIt<EventsCubit>()..getEvents(),
-        child: EventsView(),
-      ),
-      BlocProvider(
-        create: (context) => getIt<FamilyTreeCubit>(),
-        child: FamilyTreeView(),
-      ),
-      SettingsView(),
-      UpdateProfileView(),
+    final List<Widget> screens = [
+      const HomeView(),
+      const EventsView(),
+      const FamilyTreeView(),
+      const SettingsView(),
+      const UpdateProfileView(),
     ];
-    return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
-        children: _screens,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColors.bottomColor,
-        currentIndex: _currentIndex,
-        onTap: _onTabTapped,
-        type: BottomNavigationBarType.fixed,
-        selectedLabelStyle: AppStyles.styleMedium10(context).copyWith(
-          fontWeight: FontWeight.bold
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _eventsCubit),
+        BlocProvider.value(value: _familyTreeCubit),
+      ],
+      child: Scaffold(
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: _onPageChanged,
+          children: screens,
         ),
-        unselectedLabelStyle: AppStyles.styleMedium10(context),
-        selectedItemColor: AppColors.primaryColor,
-        unselectedItemColor: AppColors.lightGreyColor,
-        items: [
-          _buildNavItem(
-            iconPath: AppAssets.homeIcon,
-            label: AppStrings.home.tr(),
-            isSelected: _currentIndex == 0,
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: AppColors.bottomColor,
+          currentIndex: _currentIndex,
+          onTap: _onTabTapped,
+          type: BottomNavigationBarType.fixed,
+          selectedLabelStyle: AppStyles.styleMedium10(context).copyWith(
+            fontWeight: FontWeight.bold,
           ),
-          _buildNavItem(
-            iconPath: AppAssets.eventsIcon ,
-            label: AppStrings.events.tr(),
-            isSelected: _currentIndex == 1,
-          ),
-          _buildNavItem(
-            iconPath: AppAssets.treeImage ,
-            label: AppStrings.familyTree.tr(),
-            isSelected: _currentIndex == 2,
-          ),
-          _buildNavItem(
-            iconPath: AppAssets.settingsIcon,
-            label: AppStrings.settings.tr(),
-            isSelected: _currentIndex == 3,
-          ),
-
-          _buildNavItem(
-            iconPath: AppAssets.accountIcon,
-            label: AppStrings.myAccount.tr(),
-            isSelected: _currentIndex == 4,
-          ),
-        ],
+          unselectedLabelStyle: AppStyles.styleMedium10(context),
+          selectedItemColor: AppColors.primaryColor,
+          unselectedItemColor: AppColors.lightGreyColor,
+          items: [
+            _buildNavItem(
+              iconPath: AppAssets.homeIcon,
+              label: AppStrings.home.tr(),
+              isSelected: _currentIndex == 0,
+            ),
+            _buildNavItem(
+              iconPath: AppAssets.eventsIcon,
+              label: AppStrings.events.tr(),
+              isSelected: _currentIndex == 1,
+            ),
+            _buildNavItem(
+              iconPath: AppAssets.treeImage,
+              label: AppStrings.familyTree.tr(),
+              isSelected: _currentIndex == 2,
+            ),
+            _buildNavItem(
+              iconPath: AppAssets.settingsIcon,
+              label: AppStrings.settings.tr(),
+              isSelected: _currentIndex == 3,
+            ),
+            _buildNavItem(
+              iconPath: AppAssets.accountIcon,
+              label: AppStrings.myAccount.tr(),
+              isSelected: _currentIndex == 4,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -114,7 +122,6 @@ class _AppLayoutState extends State<AppLayout> {
         iconPath,
         height: 24,
         color: isSelected ? AppColors.primaryColor : AppColors.greenColor,
-
       ),
       label: label,
     );

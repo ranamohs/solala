@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/end_points.dart';
 import 'package:solala/core/databases/api/dio_consumer.dart';
@@ -19,7 +19,6 @@ import 'family_repo.dart';
 
 
 import '../../../../core/databases/cache/user_data_manager.dart';
-import '../../../../core/services/service_locator.dart';
 
 
 class FamilyTreeRepoImpl implements FamilyTreeRepo {
@@ -110,7 +109,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
               userDataManager?.saveUserFamilyName(familyName: familyName);
             }
           }
-          final familyTreeModel = FamilyTreeModel.fromJson(response);
+          final familyTreeModel = await compute(_parseFamilyTreeModel, response);
           return Right(familyTreeModel);
         } else {
           String errorMessage = AppStrings.unexpectedError.tr();
@@ -127,6 +126,10 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     } on ServerException catch (e) {
       return Left(ServerFailure(errMessage: e.errorModel.errorMessage));
     }
+  }
+
+  static FamilyTreeModel _parseFamilyTreeModel(Map<String, dynamic> json) {
+    return FamilyTreeModel.fromJson(json);
   }
 
   @override

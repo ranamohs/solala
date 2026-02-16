@@ -9,6 +9,7 @@ import 'package:solala/features/home/presentation/manager/news_cubit/news_cubit.
 import 'package:solala/features/home/presentation/manager/news_cubit/news_state.dart';
 import 'package:solala/features/home/presentation/views/create_news_view.dart';
 
+import '../../../../../core/functions/strip_html.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_styles.dart';
@@ -109,7 +110,7 @@ class _FamilyNewsSectionState extends State<FamilyNewsSection> {
                 );
               }
               return SizedBox(
-                height: 80.h,
+                height: 100.h,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
@@ -150,7 +151,7 @@ class _FamilyNewsCard extends StatelessWidget {
     final isArabic = context.locale.languageCode == 'ar';
     final title = isArabic ? item.title?.ar : item.title?.en;
     final description =
-    isArabic ? item.decription?.ar : item.decription?.en;
+    stripHtml(isArabic ? item.description?.ar : item.description?.en);
     final familyName =
     isArabic ? item.familyDetails?.name?.ar : item.familyDetails?.name?.en;
 
@@ -167,7 +168,7 @@ class _FamilyNewsCard extends StatelessWidget {
         );
       },
       child: Container(
-        width: 140.w,
+        width: 230.w,
         decoration: BoxDecoration(
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(16.r),
@@ -179,7 +180,7 @@ class _FamilyNewsCard extends StatelessWidget {
             ),
           ],
         ),
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -192,7 +193,7 @@ class _FamilyNewsCard extends StatelessWidget {
             // SizedBox(height: 4.h),
             Text(
               title ?? '',
-              maxLines: 1,
+              maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: AppStyles.styleBold16(context)
                   .copyWith(color: AppColors.pureWhiteColor),

@@ -7,6 +7,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:solala/core/constants/app_colors.dart';
 import 'package:solala/core/constants/app_constants.dart';
 import 'package:solala/core/constants/app_styles.dart';
+import 'package:solala/core/functions/strip_html.dart';
 import 'package:solala/core/widgets/retry_widget.dart';
 import 'package:solala/features/home/data/models/news_model/news_model.dart';
 import 'package:solala/features/home/presentation/manager/news_cubit/news_cubit.dart';
@@ -28,8 +29,8 @@ class _NewsCardState extends State<NewsCard> {
   Widget build(BuildContext context) {
     final isArabic = context.locale.languageCode == 'ar';
     final title = isArabic ? widget.report.title?.ar : widget.report.title?.en;
-    final description =
-    isArabic ? widget.report.decription?.ar : widget.report.decription?.en;
+    final description = stripHtml(
+        isArabic ? widget.report.description?.ar : widget.report.description?.en);
     final newsImage = widget.report.image;
 
     return Padding(
@@ -81,25 +82,13 @@ class _NewsCardState extends State<NewsCard> {
                         children: [
                           Text(
                             title ?? '',
-                            maxLines: 1,
+                            maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: AppStyles.styleBold16(context).copyWith(
                               color: AppColors.secondaryColor,
-                              height: 1.2,
                             ),
                           ),
-                          SizedBox(height: 6.h),
-                          Text(
-                            description ?? '',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppStyles.styleMedium14(context).copyWith(
-                              color:
-                              AppColors.secondaryColor.withOpacity(0.85),
-                              fontSize: 12.sp,
-                              height: 1.4,
-                            ),
-                          ),
+
                         ],
                       ),
                     ),

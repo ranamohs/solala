@@ -40,18 +40,18 @@ class Message {
 
 class ReportData {
   int? id;
-  Decription? decription;
+  Description? description;
   Title? title;
   FamilyDetails? familyDetails;
   String? image;
 
   ReportData(
-      {this.id, this.decription, this.title, this.familyDetails, this.image});
+      {this.id, this.description, this.title, this.familyDetails, this.image});
 
   ReportData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    decription = json['decription'] != null
-        ? Decription.fromJson(json['decription'])
+    description = json['description'] != null
+        ? Description.fromJson(json['description'])
         : null;
     title = json['title'] != null ? Title.fromJson(json['title']) : null;
     familyDetails = json['family_details'] != null
@@ -61,13 +61,13 @@ class ReportData {
   }
 }
 
-class Decription {
+class Description {
   String? ar;
   String? en;
 
-  Decription({this.ar, this.en});
+  Description({this.ar, this.en});
 
-  Decription.fromJson(Map<String, dynamic> json) {
+  Description.fromJson(Map<String, dynamic> json) {
     ar = json['ar'];
     en = json['en'];
   }

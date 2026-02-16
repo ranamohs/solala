@@ -1,7 +1,7 @@
 class EventModel {
   int? id;
   MultiLangText? type;
-  MultiLangText? decription;
+  MultiLangText? description;
   MultiLangText? title;
   MultiLangText? address;
   FamilyDetails? familyDetails;
@@ -11,7 +11,7 @@ class EventModel {
   EventModel({
     this.id,
     this.type,
-    this.decription,
+    this.description,
     this.title,
     this.address,
     this.familyDetails,
@@ -22,8 +22,8 @@ class EventModel {
   EventModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     type = json['type'] != null ? MultiLangText.fromJson(json['type']) : null;
-    decription = json['decription'] != null
-        ? MultiLangText.fromJson(json['decription'])
+    description = json['description'] != null
+        ? MultiLangText.fromJson(json['description'])
         : null;
     title =
     json['title'] != null ? MultiLangText.fromJson(json['title']) : null;
