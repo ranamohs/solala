@@ -108,6 +108,20 @@ class _NewsCardState extends State<NewsCard> {
                         size: 22.sp,
                       ),
                     ),
+                    SizedBox(width: 10.w),
+                    Container(
+                      width: 34.w,
+                      height: 34.w,
+                      decoration: BoxDecoration(
+                        color: AppColors.offRedColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                       Icons.delete,
+                        color: Colors.white,
+                        size: 22.sp,
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -27,28 +27,6 @@ class NewsDetailsView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    familyName ?? '',
-                    style: AppStyles.styleBold16(context),
-                  ),
-
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 10.h),
-          Text(
-            title ?? '',
-            style: AppStyles.styleBold16(context),
-          ),
-          SizedBox(height: 10.h),
           Text(
             '${AppStrings.description.tr()}:',
             style: AppStyles.styleBold16(context).copyWith(color: AppColors.secondaryColor),

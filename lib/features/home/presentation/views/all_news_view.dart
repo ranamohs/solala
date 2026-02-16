@@ -21,12 +21,9 @@ class AllNewsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // If we're showing a single report, we assume the Bloc is provided.
     if (report != null) {
       return _buildView(context);
     }
-
-    // Otherwise, for the "All News" case, we provide the Bloc.
     return BlocProvider(
       create: (context) => getIt<NewsCubit>()..getReports(),
       child: _buildView(context),
