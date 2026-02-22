@@ -33,7 +33,7 @@ class EventDetailsView extends StatelessWidget {
               : (isArabic ? 'لا يوجد وصف' : 'No description'),
           context,
         ),
-        _buildDetailRow(AppStrings.inviter.tr(), inviter ?? '', context),
+        // _buildDetailRow(AppStrings.inviter.tr(), inviter ?? '', context),
         _buildDetailRow(
             AppStrings.date.tr(),
             eventDetails.eventDate?.split('T')[0] ?? '',

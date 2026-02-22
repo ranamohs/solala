@@ -129,7 +129,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
           children: [
             Column(
               children: [
-                if (accountType != 'provider')
+                // if (accountType != 'provider')
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: TextField(

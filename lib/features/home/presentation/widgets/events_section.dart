@@ -36,7 +36,10 @@ class _EventsSectionState extends State<EventsSection> {
         if (state is NumberingEventsSuccess) {
           final data = state.numberingEventsModel.data;
           if (accountType == 'provider' &&
-              (data == null || (data.eventsCount ?? 0) == 0)) {
+              (data == null ||
+                  ((data.eventsCount ?? 0) == 0 &&
+                      (data.familiesMemberCount ?? 0) == 0 &&
+                      (data.newsCount ?? 0) == 0))) {
             return Column(
               children: [
                 Row(
@@ -45,7 +48,6 @@ class _EventsSectionState extends State<EventsSection> {
                     Text(AppStrings.events.tr(),
                         style: AppStyles.styleBold16(context)
                             .copyWith(color: AppColors.secondaryColor)),
-
                   ],
                 ),
                 Center(
