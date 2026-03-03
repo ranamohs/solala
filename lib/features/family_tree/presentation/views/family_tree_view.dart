@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,6 +36,15 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
   final Map<int, bool> _expandedNodes = {};
   final TextEditingController _searchController = TextEditingController();
 
+  Map<int, FamilyMember>? _cachedParentMap;
+  List<FamilyMember>? _lastTreeData;
+  Set<int>? _cachedNodesToDisplay;
+  List<int>? _lastSearchResultIds;
+
+  Graph? _cachedGraph;
+  Map<int, bool>? _lastExpandedNodes;
+  bool _isFirstLoad = true;
+
   @override
   void initState() {
     super.initState();
@@ -57,14 +67,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
       ..scale(scale);
   }
 
-  void _initializeExpansionState(List<FamilyMember> memberList) {
-    for (var member in memberList) {
-      if (member.children != null && member.children!.isNotEmpty) {
-        _expandedNodes.putIfAbsent(member.id!, () => false);
-        _initializeExpansionState(member.children!);
-      }
-    }
-  }
 
   void _buildParentMap(
       FamilyMember member,
@@ -85,12 +87,14 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
       List<int> searchResultIds,
       List<FamilyMember> fullTree,
       ) {
-    final nodesToDisplay = Set<int>.from(searchResultIds);
-    final parentMap = <int, FamilyMember>{};
-
-    for (var member in fullTree) {
-      _buildParentMap(member, null, parentMap);
+    if (_cachedNodesToDisplay != null &&
+        _lastSearchResultIds == searchResultIds &&
+        _lastTreeData == fullTree) {
+      return _cachedNodesToDisplay!;
     }
+
+    final nodesToDisplay = Set<int>.from(searchResultIds);
+    final parentMap = _getParentMap(fullTree);
 
     for (var id in searchResultIds) {
       var current = parentMap[id];
@@ -101,7 +105,28 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
         current = parentMap[current.id];
       }
     }
+
+    _cachedNodesToDisplay = nodesToDisplay;
+    _lastSearchResultIds = searchResultIds;
+    _lastTreeData = fullTree;
+
     return nodesToDisplay;
+  }
+
+  Map<int, FamilyMember> _getParentMap(List<FamilyMember> fullTree) {
+    if (_cachedParentMap != null && _lastTreeData == fullTree) {
+      return _cachedParentMap!;
+    }
+
+    final parentMap = <int, FamilyMember>{};
+    for (var member in fullTree) {
+      _buildParentMap(member, null, parentMap);
+    }
+
+    _cachedParentMap = parentMap;
+    _lastTreeData = fullTree;
+
+    return parentMap;
   }
 
   @override
@@ -130,38 +155,38 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
             Column(
               children: [
                 // if (accountType != 'provider')
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: AppStrings.search.tr(),
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.clear),
-                          onPressed: () {
-                            _searchController.clear();
-                            context.read<FamilyTreeCubit>().clearSearch();
-                          },
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      onSubmitted: (query) {
-                        if (query.trim().isNotEmpty) {
-                          context.read<FamilyTreeCubit>().searchFamilyTree(
-                            query: query,
-                          );
-                        } else {
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: AppStrings.search.tr(),
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          _searchController.clear();
                           context.read<FamilyTreeCubit>().clearSearch();
-                        }
-                      },
+                        },
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30.0),
+                        borderSide: BorderSide.none,
+                      ),
                     ),
+                    onSubmitted: (query) {
+                      if (query.trim().isNotEmpty) {
+                        context.read<FamilyTreeCubit>().searchFamilyTree(
+                          query: query,
+                        );
+                      } else {
+                        context.read<FamilyTreeCubit>().clearSearch();
+                      }
+                    },
                   ),
+                ),
                 Expanded(
                   child: MultiBlocListener(
                     listeners: [
@@ -171,11 +196,6 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                               state is UpdateFamilyMemberSuccess ||
                               state is DeleteFamilyMemberSuccess) {
                             context.read<FamilyTreeCubit>().getFamilyTree();
-                          }
-                          if (state is FamilyTreeSuccess) {
-                            _initializeExpansionState(
-                              state.familyTreeModel.data ?? [],
-                            );
                           }
                         },
                       ),
@@ -236,12 +256,11 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                             );
                           }
                           if (state is FamilyTreeSuccess) {
-                            List<FamilyMember> members = List.from(
-                              state.familyTreeModel.data ?? [],
-                            );
+                            final members = state.familyTreeModel.data ?? [];
                             final searchIds = state.searchResultIds;
 
-                            if (members.isEmpty) {
+                            final displayMembers = List<FamilyMember>.from(members);
+                            if (displayMembers.isEmpty) {
                               final familyName = getIt<UserDataManager>()
                                   .getUserFamilyName();
                               final familyId = getIt<UserDataManager>()
@@ -251,7 +270,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                                   familyName != null &&
                                   familyName.isNotEmpty &&
                                   searchIds == null) {
-                                members.add(
+                                displayMembers.add(
                                   FamilyMember(id: 0, name: familyName),
                                 );
                               } else {
@@ -259,7 +278,39 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                               }
                             }
 
-                            final graph = Graph();
+                            // Memoize Graph construction
+                            final bool expandedChanged = _lastExpandedNodes == null ||
+                                !mapEquals(_lastExpandedNodes, _expandedNodes);
+                            final bool dataChanged = _lastTreeData != displayMembers ||
+                                _lastSearchResultIds != searchIds;
+
+                            if (_cachedGraph == null || expandedChanged || dataChanged) {
+                              _cachedGraph = Graph();
+                              if (searchIds != null && searchIds.isNotEmpty) {
+                                final nodesToDisplay = _getNodesToDisplay(
+                                  searchIds,
+                                  displayMembers,
+                                );
+                                for (var member in displayMembers) {
+                                  _buildFilteredGraph(
+                                    _cachedGraph!,
+                                    member,
+                                    null,
+                                    nodesToDisplay,
+                                  );
+                                }
+                              } else {
+                                for (var member in displayMembers) {
+                                  _buildGraph(_cachedGraph!, member, null);
+                                }
+                              }
+                              _lastExpandedNodes = Map.from(_expandedNodes);
+                              _lastTreeData = displayMembers;
+                              _lastSearchResultIds = searchIds;
+                            }
+
+                            final graph = _cachedGraph!;
+
                             final builder = BuchheimWalkerConfiguration()
                               ..siblingSeparation = (100)
                               ..levelSeparation = (150)
@@ -267,87 +318,109 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                               ..orientation = (BuchheimWalkerConfiguration
                                   .ORIENTATION_TOP_BOTTOM);
 
-                            Set<int>? nodesToDisplay;
-                            if (searchIds != null && searchIds.isNotEmpty) {
-                              nodesToDisplay = _getNodesToDisplay(
-                                searchIds,
-                                members,
-                              );
-                              for (var member in members) {
-                                _buildFilteredGraph(
-                                  graph,
-                                  member,
-                                  null,
-                                  nodesToDisplay,
-                                );
-                              }
-                            } else {
-                              for (var member in members) {
-                                _buildGraph(graph, member, null);
-                              }
-                            }
-
                             if (graph.nodeCount() == 0 && searchIds != null) {
                               return Center(
                                 child: Text(AppStrings.noDataFound.tr()),
                               );
                             }
 
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              if (mounted) {
-                                final RenderBox? graphRenderBox =
-                                _graphKey.currentContext?.findRenderObject()
-                                as RenderBox?;
-                                final RenderBox? viewportRenderBox =
-                                context.findRenderObject() as RenderBox?;
-                                if (graphRenderBox != null &&
-                                    viewportRenderBox != null) {
-                                  _centerGraph(
-                                    graphRenderBox.size,
-                                    viewportRenderBox.size,
-                                  );
-                                }
-                              }
-                            });
-
-                            return GestureDetector(
-                              onHorizontalDragStart: (details) {},
-                              child: InteractiveViewer(
-                                transformationController:
-                                _transformationController,
-                                constrained: false,
-                                boundaryMargin: const EdgeInsets.all(
-                                  double.infinity,
-                                ),
-                                minScale: 0.01,
-                                maxScale: 5.6,
-                                child: GraphView(
-                                  key: _graphKey,
-                                  graph: graph,
-                                  algorithm: BuchheimWalkerAlgorithm(
-                                    builder,
-                                    TreeEdgeRenderer(builder),
-                                  ),
-                                  paint: Paint()
-                                    ..color = Colors.green
-                                    ..strokeWidth = 1
-                                    ..style = PaintingStyle.stroke,
-                                  builder: (Node node) {
-                                    final familyMember =
-                                    node.key!.value as FamilyMember;
-                                    return _buildMemberNode(
-                                      member: familyMember,
-                                      familyId: getIt<UserDataManager>()
-                                          .getUserFamilyId(),
-                                      isSearchResult:
-                                      searchIds?.contains(
-                                        familyMember.id,
-                                      ) ??
-                                          false,
+                            if (_isFirstLoad) {
+                              _isFirstLoad = false;
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (mounted) {
+                                  final RenderBox? graphRenderBox =
+                                  _graphKey.currentContext
+                                      ?.findRenderObject() as RenderBox?;
+                                  final RenderBox? viewportRenderBox =
+                                  context.findRenderObject() as RenderBox?;
+                                  if (graphRenderBox != null &&
+                                      viewportRenderBox != null) {
+                                    _centerGraph(
+                                      graphRenderBox.size,
+                                      viewportRenderBox.size,
                                     );
-                                  },
+                                  }
+                                }
+                              });
+                            }
+
+                            return Stack(
+                              children: [
+                                GestureDetector(
+                                  onHorizontalDragStart: (details) {},
+                                  child: InteractiveViewer(
+                                    transformationController:
+                                    _transformationController,
+                                    constrained: false,
+                                    boundaryMargin: const EdgeInsets.all(
+                                      double.infinity,
+                                    ),
+                                    minScale: 0.01,
+                                    maxScale: 5.6,
+                                    child: RepaintBoundary(
+                                      child: GraphView(
+                                        key: _graphKey,
+                                        graph: graph,
+                                        algorithm: BuchheimWalkerAlgorithm(
+                                          builder,
+                                          TreeEdgeRenderer(builder),
+                                        ),
+                                        paint: Paint()
+                                          ..color = Colors.green
+                                          ..strokeWidth = 1
+                                          ..style = PaintingStyle.stroke,
+                                        builder: (Node node) {
+                                          final familyMember =
+                                          node.key!.value as FamilyMember;
+                                          return _buildMemberNode(
+                                            member: familyMember,
+                                            familyId: getIt<UserDataManager>()
+                                                .getUserFamilyId(),
+                                            isSearchResult:
+                                            searchIds?.contains(
+                                              familyMember.id,
+                                            ) ??
+                                                false,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                if (state.isPaginationLoading)
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: LoadingAnimationWidget.flickr(
+                                      leftDotColor: AppColors.primaryColor,
+                                      rightDotColor: AppColors.greenColor,
+                                      size: 32,
+                                    ),
+                                  ),
+                                if (!state.isPaginationLoading &&
+                                    state.familyTreeModel.meta?.currentPage !=
+                                        state.familyTreeModel.meta?.lastPage)
+                                  Positioned(
+                                    bottom: 20,
+                                    left: 20,
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        context
+                                            .read<FamilyTreeCubit>()
+                                            .getFamilyTree(isPagination: true);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: AppColors.primaryColor,
+                                        foregroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.circular(20),
+                                        ),
+                                      ),
+                                      child: Text(AppStrings.viewAll.tr()),
+                                    ),
+                                  ),
+                              ],
                             );
                           }
                           return const SizedBox.shrink();

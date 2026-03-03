@@ -8,7 +8,7 @@ import '../models/family_model.dart';
 abstract class FamilyTreeRepo {
   Future<Either<Failure, FamilyMemberDetailsModel>> getFamilyMemberDetails(
       {required int memberId});
-  Future<Either<Failure, FamilyTreeModel>> getFamilyTree();
+  Future<Either<Failure, FamilyTreeModel>> getFamilyTree({int page = 1});
   Future<Either<Failure, BasicModel>> addFamilyMember({
     required String name,
     required String gender,

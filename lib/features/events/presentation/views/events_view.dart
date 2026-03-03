@@ -82,11 +82,12 @@ class EventsView extends StatelessWidget {
                   ),
                 );
               }
+              final reversedEvents = state.events.reversed.toList();
               return ListView.builder(
                 padding: const EdgeInsets.all(20),
-                itemCount: state.events.length,
+                itemCount: reversedEvents.length,
                 itemBuilder: (context, index) {
-                  return EventCard(event: state.events[index]);
+                  return EventCard(event: reversedEvents[index]);
                 },
               );
             } else if (state is EventsFailure) {

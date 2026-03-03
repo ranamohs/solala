@@ -1,7 +1,7 @@
 
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:solala/core/databases/api/api_consumer.dart';
 import 'package:dio/dio.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../constants/end_points.dart';
 import 'api_consumer.dart';
@@ -14,11 +14,11 @@ class DioConsumer extends ApiConsumer {
     dio.options.validateStatus = (status) {
       return status! < 500;
     };
-    dio.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseHeader: true,
-    ));
+    // dio.interceptors.add(PrettyDioLogger(
+    //   requestHeader: true,
+    //   requestBody: true,
+    //   responseHeader: true,
+    // ));
   }
 
   /// default headers if none passed

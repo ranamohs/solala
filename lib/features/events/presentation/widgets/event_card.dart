@@ -99,7 +99,11 @@ class _EventCardState extends State<EventCard> {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            widget.event.eventDate?.split('T')[0] ?? '',
+                            widget.event.eventDate != null
+                                ? DateFormat('dd/MM/yyyy').format(
+                              DateTime.parse(widget.event.eventDate!).toLocal(),
+                            )
+                                : '',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: AppStyles.styleMedium14(context)

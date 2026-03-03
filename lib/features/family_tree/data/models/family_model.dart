@@ -2,8 +2,10 @@ class FamilyTreeModel {
   bool? status;
   Message? message;
   List<FamilyMember>? data;
+  Links? links;
+  Meta? meta;
 
-  FamilyTreeModel({this.status, this.message, this.data});
+  FamilyTreeModel({this.status, this.message, this.data, this.links, this.meta});
 
   FamilyTreeModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -15,6 +17,8 @@ class FamilyTreeModel {
         data!.add(FamilyMember.fromJson(v));
       });
     }
+    links = json['links'] != null ? Links.fromJson(json['links']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
   }
 }
 
@@ -86,5 +90,72 @@ class FamilyMember {
         children!.add(FamilyMember.fromJson(v));
       });
     }
+  }
+}
+
+class Links {
+  String? first;
+  String? last;
+  String? prev;
+  String? next;
+
+  Links({this.first, this.last, this.prev, this.next});
+
+  Links.fromJson(Map<String, dynamic> json) {
+    first = json['first'];
+    last = json['last'];
+    prev = json['prev'];
+    next = json['next'];
+  }
+}
+
+class Meta {
+  int? currentPage;
+  int? from;
+  int? lastPage;
+  List<MetaLink>? links;
+  String? path;
+  int? perPage;
+  int? to;
+  int? total;
+
+  Meta(
+      {this.currentPage,
+        this.from,
+        this.lastPage,
+        this.links,
+        this.path,
+        this.perPage,
+        this.to,
+        this.total});
+
+  Meta.fromJson(Map<String, dynamic> json) {
+    currentPage = json['current_page'];
+    from = json['from'];
+    lastPage = json['last_page'];
+    if (json['links'] != null) {
+      links = <MetaLink>[];
+      json['links'].forEach((v) {
+        links!.add(MetaLink.fromJson(v));
+      });
+    }
+    path = json['path'];
+    perPage = json['per_page'];
+    to = json['to'];
+    total = json['total'];
+  }
+}
+
+class MetaLink {
+  String? url;
+  String? label;
+  bool? active;
+
+  MetaLink({this.url, this.label, this.active});
+
+  MetaLink.fromJson(Map<String, dynamic> json) {
+    url = json['url'];
+    label = json['label'];
+    active = json['active'];
   }
 }

@@ -79,7 +79,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
   }
 
   @override
-  Future<Either<Failure, FamilyTreeModel>> getFamilyTree() async {
+  Future<Either<Failure, FamilyTreeModel>> getFamilyTree({int page = 1}) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
     if (!isConnected) {
@@ -88,12 +88,16 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
 
     try {
       final token = await secureStorageHelper?.getToken();
-      final response = await dioConsumer.get(EndPoints.familyTree,
+      final response = await dioConsumer.get(
+        EndPoints.familyTree,
+        queryParameters: {
+          'page': page,
+          'per_page': 2,
+        },
         headers: {
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
         },
-
       );
 
       if (response != null && response is Map<String, dynamic>) {
@@ -109,7 +113,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
               userDataManager?.saveUserFamilyName(familyName: familyName);
             }
           }
-          final familyTreeModel = await compute(_parseFamilyTreeModel, response);
+          final familyTreeModel = FamilyTreeModel.fromJson(response);
           return Right(familyTreeModel);
         } else {
           String errorMessage = AppStrings.unexpectedError.tr();

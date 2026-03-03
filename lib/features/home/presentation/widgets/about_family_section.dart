@@ -146,27 +146,27 @@ class AboutFamilySection extends StatelessWidget {
                         ],
                       ),
                     ],
-                    if (hasDescription) ...[
-                      SizedBox(height: 6.h),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${AppStrings.familyHistory.tr()}:   ',
-                            style: AppStyles.styleBold16(context)
-                                .copyWith(color: AppColors.secondaryColor),
-                          ),
-                          Expanded(
-                            child: Text(
-                              description,
-                              style: AppStyles.styleBold16(context)
-                                  .copyWith(color: AppColors.pureBlackColor),
-                              maxLines: 3,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    // if (hasDescription) ...[
+                    //   SizedBox(height: 6.h),
+                    //   Row(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text(
+                    //         '${AppStrings.familyHistory.tr()}:   ',
+                    //         style: AppStyles.styleBold16(context)
+                    //             .copyWith(color: AppColors.secondaryColor),
+                    //       ),
+                    //       Expanded(
+                    //         child: Text(
+                    //           description,
+                    //           style: AppStyles.styleBold16(context)
+                    //               .copyWith(color: AppColors.pureBlackColor),
+                    //           maxLines: 3,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ],
                   ],
                 ),
               ),

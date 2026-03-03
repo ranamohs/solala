@@ -11,21 +11,53 @@ import 'family_state.dart';
 class FamilyTreeCubit extends Cubit<FamilyTreeState> {
   final FamilyTreeRepo familyTreeRepo;
   FamilyTreeModel? _lastSuccessState;
+  int _currentPage = 1;
+  bool _isFetchingMore = false;
 
   FamilyTreeCubit({required this.familyTreeRepo}) : super(FamilyTreeInitial());
 
-  Future<void> getFamilyTree() async {
-    emit(FamilyTreeLoading());
+  Future<void> getFamilyTree({bool isPagination = false}) async {
+    if (isPagination) {
+      if (_isFetchingMore) return;
+      if (_lastSuccessState?.meta?.currentPage ==
+          _lastSuccessState?.meta?.lastPage) return;
+      _isFetchingMore = true;
+      _currentPage++;
+      emit(FamilyTreeSuccess(_lastSuccessState!, isPaginationLoading: true));
+    } else {
+      _currentPage = 1;
+      emit(FamilyTreeLoading());
+    }
 
     final Either<Failure, FamilyTreeModel> result =
-    await familyTreeRepo.getFamilyTree();
+    await familyTreeRepo.getFamilyTree(page: _currentPage);
 
     if (isClosed) return;
+    _isFetchingMore = false;
     result.fold(
-          (failure) => emit(FamilyTreeFailure(failure)),
+          (failure) {
+        if (isPagination) {
+          _currentPage--;
+          emit(FamilyTreeSuccess(_lastSuccessState!));
+        } else {
+          emit(FamilyTreeFailure(failure));
+        }
+      },
           (familyTreeModel) {
-        _lastSuccessState = familyTreeModel;
-        emit(FamilyTreeSuccess(familyTreeModel));
+        if (isPagination && _lastSuccessState != null) {
+          final updatedData = List<FamilyMember>.from(_lastSuccessState!.data ?? [])
+            ..addAll(familyTreeModel.data ?? []);
+          _lastSuccessState = FamilyTreeModel(
+            status: familyTreeModel.status,
+            message: familyTreeModel.message,
+            data: updatedData,
+            meta: familyTreeModel.meta,
+            links: familyTreeModel.links,
+          );
+        } else {
+          _lastSuccessState = familyTreeModel;
+        }
+        emit(FamilyTreeSuccess(_lastSuccessState!));
       },
     );
   }
