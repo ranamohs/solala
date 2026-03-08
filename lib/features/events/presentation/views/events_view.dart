@@ -82,13 +82,99 @@ class EventsView extends StatelessWidget {
                   ),
                 );
               }
-              final reversedEvents = state.events.reversed.toList();
-              return ListView.builder(
-                padding: const EdgeInsets.all(20),
-                itemCount: reversedEvents.length,
-                itemBuilder: (context, index) {
-                  return EventCard(event: reversedEvents[index]);
-                },
+              final now = DateTime.now();
+              final today = DateTime(now.year, now.month, now.day);
+
+              final upcomingEvents = state.events.where((e) {
+                if (e.eventDate == null) return false;
+                try {
+                  final date = DateTime.parse(e.eventDate!);
+                  final eventDay = DateTime(date.year, date.month, date.day);
+                  return eventDay.isAfter(today) ||
+                      eventDay.isAtSameMomentAs(today);
+                } catch (e) {
+                  return false;
+                }
+              }).toList();
+              upcomingEvents.sort((a, b) {
+                final dateA = a.eventDate != null
+                    ? DateTime.tryParse(a.eventDate!) ?? DateTime(0)
+                    : DateTime(0);
+                final dateB = b.eventDate != null
+                    ? DateTime.tryParse(b.eventDate!) ?? DateTime(0)
+                    : DateTime(0);
+                return dateA.compareTo(dateB);
+              });
+
+              final pastEvents = state.events.where((e) {
+                if (e.eventDate == null) return true;
+                try {
+                  final date = DateTime.parse(e.eventDate!);
+                  final eventDay = DateTime(date.year, date.month, date.day);
+                  return eventDay.isBefore(today);
+                } catch (e) {
+                  return true;
+                }
+              }).toList();
+              pastEvents.sort((a, b) {
+                final dateA = a.eventDate != null
+                    ? DateTime.tryParse(a.eventDate!) ?? DateTime(0)
+                    : DateTime(0);
+                final dateB = b.eventDate != null
+                    ? DateTime.tryParse(b.eventDate!) ?? DateTime(0)
+                    : DateTime(0);
+                return dateB.compareTo(dateA);
+              });
+
+              return CustomScrollView(
+                slivers: [
+                  if (upcomingEvents.isNotEmpty) ...[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 10.h),
+                        // child: Text(
+                        //   AppStrings.upcomingEvents.tr(),
+                        //   style: AppStyles.styleBold18(context)
+                        //       .copyWith(color: AppColors.greenColor),
+                        // ),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                              (context, index) =>
+                              EventCard(event: upcomingEvents[index]),
+                          childCount: upcomingEvents.length,
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (pastEvents.isNotEmpty) ...[
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.w, vertical: 10.h),
+                        child: Text(
+                          AppStrings.pastEvents.tr(),
+                          style: AppStyles.styleBold18(context)
+                              .copyWith(color: AppColors.greenColor),
+                        ),
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      sliver: SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                              (context, index) =>
+                              EventCard(event: pastEvents[index]),
+                          childCount: pastEvents.length,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               );
             } else if (state is EventsFailure) {
               return RetryWidget(

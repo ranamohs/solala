@@ -166,6 +166,8 @@ class AppStrings {
   static const String legend = 'legend';
   static const String deceasedStatus = 'deceasedStatus';
   static const String description = 'description';
+  static const String upcomingEvents = 'upcomingEvents';
+  static const String pastEvents = 'pastEvents';
 
 
 }

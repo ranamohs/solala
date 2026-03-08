@@ -264,6 +264,8 @@
   "familyDescriptionEn": "Family Description (EN)",
   "familyHistory": "Family History",
   "legend": "Legend",
-  "deceasedStatus": "Deceased"
+  "deceasedStatus": "Deceased",
+  "upcomingEvents": "Upcoming Events",
+  "pastEvents": "Past Events"
 }
 

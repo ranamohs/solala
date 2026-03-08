@@ -118,7 +118,7 @@
   "pleaseEnterVerificationCode": "برجاء ادخال الكود الصحيح",
   "or": "أو",
   "welcomeToTheFamilyTree": "اهلا بك في شجرة العائلة",
-  "events": "الاحداث",
+  "events": "المناسبات",
   "familyTree": "شجرة العائلة",
   "verificationCode": "كود الارسال",
   "delete": "حذف",
@@ -187,7 +187,9 @@
   "familyDescriptionEn": "وصف العائلة (بالانجليزية)",
   "familyHistory": "تاريخ العائلة",
   "legend": "مفتاح الخريطة",
-  "deceasedStatus": "متوفى"
+  "deceasedStatus": "متوفى",
+  "upcomingEvents": "المناسبات القادمة",
+  "pastEvents": "المناسبات السابقة"
 
 
 
