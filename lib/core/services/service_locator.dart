@@ -2,6 +2,7 @@ import 'package:solala/core/databases/api/dio_consumer.dart';
 import 'package:solala/core/databases/cache/app_data_manager.dart';
 import 'package:solala/core/databases/cache/cache_helper.dart';
 import 'package:solala/core/databases/cache/secure_storage_helper.dart';
+import 'package:solala/core/services/update_service.dart';
 import 'package:solala/core/databases/cache/user_data_manager.dart';
 import 'package:solala/core/state_management/network_connection_cubit/network_connection_cubit.dart';
 import 'package:solala/core/state_management/network_connection_cubit/network_info.dart';
@@ -57,6 +58,7 @@ final getIt = GetIt.instance;
 
 void setupServiceLocator() {
   // Core shops
+  getIt.registerSingleton<UpdateService>(UpdateService());
   getIt.registerLazySingleton<CacheHelper>(() => CacheHelper());
   getIt.registerSingleton<AppDataManager>(AppDataManager(getIt<CacheHelper>()));
   getIt.registerSingleton<UserDataManager>(

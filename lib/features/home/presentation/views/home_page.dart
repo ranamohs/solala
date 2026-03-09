@@ -7,6 +7,8 @@ import 'package:solala/core/services/service_locator.dart';
 import 'package:solala/features/events/presentation/manager/events_cuibt/events_cubit.dart';
 import 'package:solala/features/home/presentation/views/home_view.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:upgrader/upgrader.dart';
+import 'package:solala/core/services/update_service.dart';
 import 'package:flutter/material.dart';
 import '../../../account/presentation/views/update_profile_view.dart';
 import '../../../events/presentation/views/events_view.dart';
@@ -32,6 +34,7 @@ class _AppLayoutState extends State<AppLayout> {
     super.initState();
     _eventsCubit = getIt<EventsCubit>();
     _familyTreeCubit = getIt<FamilyTreeCubit>();
+    getIt<UpdateService>().checkForUpdates();
   }
 
   void _onPageChanged(int index) {
@@ -63,50 +66,52 @@ class _AppLayoutState extends State<AppLayout> {
         BlocProvider.value(value: _eventsCubit),
         BlocProvider.value(value: _familyTreeCubit),
       ],
-      child: Scaffold(
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: _onPageChanged,
-          children: screens,
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: AppColors.bottomColor,
-          currentIndex: _currentIndex,
-          onTap: _onTabTapped,
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: AppStyles.styleMedium10(context).copyWith(
-            fontWeight: FontWeight.bold,
+      child: UpgradeAlert(
+        child: Scaffold(
+          body: PageView(
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: screens,
           ),
-          unselectedLabelStyle: AppStyles.styleMedium10(context),
-          selectedItemColor: AppColors.primaryColor,
-          unselectedItemColor: AppColors.lightGreyColor,
-          items: [
-            _buildNavItem(
-              iconPath: AppAssets.homeIcon,
-              label: AppStrings.home.tr(),
-              isSelected: _currentIndex == 0,
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: AppColors.bottomColor,
+            currentIndex: _currentIndex,
+            onTap: _onTabTapped,
+            type: BottomNavigationBarType.fixed,
+            selectedLabelStyle: AppStyles.styleMedium10(context).copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            _buildNavItem(
-              iconPath: AppAssets.eventsIcon,
-              label: AppStrings.events.tr(),
-              isSelected: _currentIndex == 1,
-            ),
-            _buildNavItem(
-              iconPath: AppAssets.treeImage,
-              label: AppStrings.familyTree.tr(),
-              isSelected: _currentIndex == 2,
-            ),
-            _buildNavItem(
-              iconPath: AppAssets.settingsIcon,
-              label: AppStrings.settings.tr(),
-              isSelected: _currentIndex == 3,
-            ),
-            _buildNavItem(
-              iconPath: AppAssets.accountIcon,
-              label: AppStrings.myAccount.tr(),
-              isSelected: _currentIndex == 4,
-            ),
-          ],
+            unselectedLabelStyle: AppStyles.styleMedium10(context),
+            selectedItemColor: AppColors.primaryColor,
+            unselectedItemColor: AppColors.lightGreyColor,
+            items: [
+              _buildNavItem(
+                iconPath: AppAssets.homeIcon,
+                label: AppStrings.home.tr(),
+                isSelected: _currentIndex == 0,
+              ),
+              _buildNavItem(
+                iconPath: AppAssets.eventsIcon,
+                label: AppStrings.events.tr(),
+                isSelected: _currentIndex == 1,
+              ),
+              _buildNavItem(
+                iconPath: AppAssets.treeImage,
+                label: AppStrings.familyTree.tr(),
+                isSelected: _currentIndex == 2,
+              ),
+              _buildNavItem(
+                iconPath: AppAssets.settingsIcon,
+                label: AppStrings.settings.tr(),
+                isSelected: _currentIndex == 3,
+              ),
+              _buildNavItem(
+                iconPath: AppAssets.accountIcon,
+                label: AppStrings.myAccount.tr(),
+                isSelected: _currentIndex == 4,
+              ),
+            ],
+          ),
         ),
       ),
     );
