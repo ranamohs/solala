@@ -155,7 +155,7 @@ class _PrimaryTextFormFieldState extends State<PrimaryTextFormField> {
           ),
         ),
         // عرض رسالة الخطأ تحت الحقل فقط إذا كان هناك خطأ والمستخدم تفاعل مع الحقل
-        if (_hasUserInteracted && _currentErrorText != null)
+        if (_currentErrorText != null)
           Padding(
             padding: const EdgeInsets.only(top: 4.0, left: 8.0),
             child: Text(
@@ -223,6 +223,8 @@ class SecondaryTextFormField extends StatefulWidget {
 
 class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
   bool _isObscure = true;
+  bool _hasUserInteracted = false;
+  String? _currentErrorText;
 
   @override
   Widget build(BuildContext context) {
@@ -237,20 +239,21 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
         /// LABEL OUTSIDE LIKE THE DESIGN
         if (label.isNotEmpty) ...[
           Text(
-            label,
-            style: AppStyles.styleMedium14(context).copyWith(color: AppColors.white)
+              label,
+              style: AppStyles.styleMedium14(context).copyWith(color: AppColors.white)
           ),
           const SizedBox(height: 6),
         ],
 
         /// FIELD
         Container(
-          height: 50,
           decoration: BoxDecoration(
             color: Colors.white.withOpacity(0.12),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: Colors.white.withOpacity(0.40),
+              color: (_hasUserInteracted && _currentErrorText != null)
+                  ? AppColors.offRedColor
+                  : Colors.white.withOpacity(0.40),
               width: 1,
             ),
           ),
@@ -262,7 +265,25 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
             maxLength: widget.maxLength,
             onTap: widget.onTap,
             onFieldSubmitted: widget.onSubmit,
-            validator: widget.validation ?? widget.validate,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              final error = (widget.validation ?? widget.validate)?.call(value);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  setState(() {
+                    _currentErrorText = error;
+                  });
+                }
+              });
+              return error;
+            },
+            onChanged: (value) {
+              setState(() {
+                _hasUserInteracted = true;
+                _currentErrorText = _getErrorText(value);
+              });
+              widget.onChanged?.call(value);
+            },
             style: AppStyles.styleRegular16(context).copyWith(color: AppColors.white),
             decoration: InputDecoration(
               border: InputBorder.none,
@@ -283,11 +304,30 @@ class _SecondaryTextFormFieldState extends State<SecondaryTextFormField> {
                 },
               )
                   : widget.suffixIcon,
+              errorStyle: const TextStyle(height: 0, fontSize: 0),
             ),
           ),
         ),
+        if (_currentErrorText != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4.0, left: 8.0),
+            child: Text(
+              _currentErrorText!,
+              style: AppStyles.styleRegular12(context).copyWith(
+                color: AppColors.offRedColor,
+              ),
+            ),
+          ),
       ],
     );
+  }
+
+  String? _getErrorText(String? value) {
+    final validator = widget.validation ?? widget.validate;
+    if (validator != null) {
+      return validator(value);
+    }
+    return null;
   }
 }
 

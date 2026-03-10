@@ -168,6 +168,11 @@ class AppStrings {
   static const String description = 'description';
   static const String upcomingEvents = 'upcomingEvents';
   static const String pastEvents = 'pastEvents';
-
+  static const String thisFieldIsRequired = 'thisFieldIsRequired';
+  static const String after = 'after';
+  static const String days = 'days';
+  static const String day = 'day';
+  static const String hijriLetter = 'hijriLetter';
+  static const String gregLetter = 'gregLetter';
 
 }

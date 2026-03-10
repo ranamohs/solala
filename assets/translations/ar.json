@@ -189,7 +189,13 @@
   "legend": "مفتاح الخريطة",
   "deceasedStatus": "متوفى",
   "upcomingEvents": "المناسبات القادمة",
-  "pastEvents": "المناسبات السابقة"
+  "pastEvents": "المناسبات السابقة",
+  "thisFieldIsRequired": "هذا الحقل مطلوب",
+  "after": "بعد",
+  "days": "يوماً",
+  "day": "يوم",
+  "hijriLetter": "هـ",
+  "gregLetter": "م"
 
 
 

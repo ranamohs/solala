@@ -12,6 +12,7 @@ class CreateEventModel {
   final String addressAr;
   final String addressEn;
   final String eventDate;
+  final String? familyId;
   final File image;
 
   CreateEventModel({
@@ -24,11 +25,12 @@ class CreateEventModel {
     required this.addressAr,
     required this.addressEn,
     required this.eventDate,
+    this.familyId,
     required this.image,
   });
 
   Future<Map<String, dynamic>> toJson() async {
-    return {
+    final Map<String, dynamic> data = {
       'title[ar]': titleAr,
       'title[en]': titleEn,
       'type[ar]': typeAr,
@@ -40,5 +42,9 @@ class CreateEventModel {
       'event_date': eventDate,
       'image': await MultipartFile.fromFile(image.path),
     };
+    if (familyId != null) {
+      data['family_id'] = familyId;
+    }
+    return data;
   }
 }

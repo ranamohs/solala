@@ -219,6 +219,7 @@ void setupServiceLocator() {
   getIt.registerLazySingleton<EventsRepo>(() => EventsRepoImpl(
       secureStorageHelper: getIt<SecureStorageHelper>(),
       dioConsumer: getIt<DioConsumer>(),
+      userDataManager: getIt<UserDataManager>(),
       networkCubit: getIt<NetworkConnectionCubit>()));
   getIt.registerFactory<EventsCubit>(() => EventsCubit(
     eventsRepo: getIt<EventsRepo>(),

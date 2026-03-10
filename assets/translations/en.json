@@ -266,6 +266,12 @@
   "legend": "Legend",
   "deceasedStatus": "Deceased",
   "upcomingEvents": "Upcoming Events",
-  "pastEvents": "Past Events"
+  "pastEvents": "Past Events",
+  "thisFieldIsRequired": "This field is required",
+  "after": "After",
+  "days": "days",
+  "day": "day",
+  "hijriLetter": "H",
+  "gregLetter": "M"
 }
 

@@ -10,17 +10,20 @@ import 'package:solala/core/state_management/network_connection_cubit/network_co
 import 'package:solala/features/events/data/models/event_model.dart';
 import 'package:solala/features/events/data/repos/events_repo.dart';
 import '../../../../core/databases/cache/secure_storage_helper.dart';
+import '../../../../core/databases/cache/user_data_manager.dart';
 import '../../../../core/errors/exceptions.dart';
 
 class EventsRepoImpl implements EventsRepo {
   final DioConsumer dioConsumer;
   final NetworkConnectionCubit networkCubit;
   final SecureStorageHelper? secureStorageHelper;
+  final UserDataManager? userDataManager;
 
   EventsRepoImpl({
     required this.dioConsumer,
     required this.networkCubit,
     required this.secureStorageHelper,
+    this.userDataManager,
   });
 
   @override
@@ -107,9 +110,25 @@ class EventsRepoImpl implements EventsRepo {
       {required CreateEventModel createEventModel}) async {
     try {
       final token = await secureStorageHelper?.getToken();
+      final familyId = userDataManager?.getUserFamilyId();
+
+      final requestModel = CreateEventModel(
+        titleAr: createEventModel.titleAr,
+        titleEn: createEventModel.titleEn,
+        typeAr: createEventModel.typeAr,
+        typeEn: createEventModel.typeEn,
+        descriptionAr: createEventModel.descriptionAr,
+        descriptionEn: createEventModel.descriptionEn,
+        addressAr: createEventModel.addressAr,
+        addressEn: createEventModel.addressEn,
+        eventDate: createEventModel.eventDate,
+        image: createEventModel.image,
+        familyId: familyId,
+      );
+
       final response = await dioConsumer.post(
         EndPoints.addEvent,
-        data: createEventModel,
+        data: requestModel,
         isFormData: true,
         headers: {
           'Authorization': 'Bearer $token',

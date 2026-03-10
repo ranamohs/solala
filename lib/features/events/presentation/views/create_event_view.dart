@@ -130,45 +130,105 @@ class _CreateEventViewState extends State<CreateEventView> {
                     ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
-                        controller: _titleArController,
-                        labelText: AppStrings.titleAr.tr()),
+                      controller: _titleArController,
+                      labelText: AppStrings.titleAr.tr(),
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
+                    ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
-                        controller: _titleEnController,
-                        labelText: AppStrings.titleEn.tr()),
+                      controller: _titleEnController,
+                      labelText: AppStrings.titleEn.tr(),
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
+                    ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
-                        controller: _typeArController,
-                        labelText: AppStrings.typeAr.tr()),
+                      controller: _typeArController,
+                      labelText: AppStrings.typeAr.tr(),
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
+                    ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
-                        controller: _typeEnController,
-                        labelText: AppStrings.typeEn.tr()),
+                      controller: _typeEnController,
+                      labelText: AppStrings.typeEn.tr(),
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
+                    ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
                       controller: _descriptionArController,
                       labelText: AppStrings.descriptionAr.tr(),
                       maxLines: 5,
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
                     ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
                       controller: _descriptionEnController,
                       labelText: AppStrings.descriptionEn.tr(),
                       maxLines: 5,
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
                     ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
-                        controller: _addressArController,
-                        labelText: AppStrings.addressAr.tr()),
+                      controller: _addressArController,
+                      labelText: AppStrings.addressAr.tr(),
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
+                    ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
-                        controller: _addressEnController,
-                        labelText: AppStrings.addressEn.tr()),
+                      controller: _addressEnController,
+                      labelText: AppStrings.addressEn.tr(),
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
+                    ),
                     const VerticalSpace(20),
                     SecondaryTextFormField(
                       controller: _eventDateController,
                       labelText: AppStrings.eventDate.tr(),
                       readOnly: true,
+                      validation: (value) {
+                        if (value == null || value.isEmpty) {
+                          return AppStrings.thisFieldIsRequired.tr();
+                        }
+                        return null;
+                      },
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
                           context: context,

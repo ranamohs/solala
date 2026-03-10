@@ -60,6 +60,7 @@ dependencies:
   animated_tree_view: ^2.0.0
   in_app_update: ^4.2.3
   upgrader: ^11.4.0
+  hijri: ^3.0.0
 
 
 dev_dependencies:
