@@ -197,7 +197,7 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
-				25D68A5E564C7233438617A6 /* [CP] Embed Pods Frameworks */,
+				27AE4C36D58CFE49E61D83C9 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -269,7 +269,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		25D68A5E564C7233438617A6 /* [CP] Embed Pods Frameworks */ = {
+		27AE4C36D58CFE49E61D83C9 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -277,13 +277,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -476,7 +472,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = PZ2HA87B47;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.10;
+				FLUTTER_BUILD_NAME = 1.0.11;
 				FLUTTER_BUILD_NUMBER = 1;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Solala;
@@ -664,7 +660,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = PZ2HA87B47;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.10;
+				FLUTTER_BUILD_NAME = 1.0.11;
 				FLUTTER_BUILD_NUMBER = 1;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Solala;
@@ -692,7 +688,7 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = PZ2HA87B47;
 				ENABLE_BITCODE = NO;
-				FLUTTER_BUILD_NAME = 1.0.10;
+				FLUTTER_BUILD_NAME = 1.0.11;
 				FLUTTER_BUILD_NUMBER = 1;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Solala;
