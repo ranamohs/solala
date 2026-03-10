@@ -58,6 +58,8 @@ dependencies:
   graphview: ^1.5.1
   flutter_fancy_tree_view: ^1.3.0
   animated_tree_view: ^2.0.0
+  in_app_update: ^4.2.3
+  upgrader: ^11.4.0
 
 
 dev_dependencies:
@@ -71,6 +73,7 @@ flutter:
   assets:
     - assets/images/
     - assets/translations/
+    - shorebird.yaml
 
 
   fonts:
