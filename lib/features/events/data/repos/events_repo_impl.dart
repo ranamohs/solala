@@ -67,6 +67,44 @@ class EventsRepoImpl implements EventsRepo {
   }
 
   @override
+  Future<Either<Failure, Map<String, dynamic>>> updateEvent(
+      {required int eventId, required CreateEventModel updateEventModel}) async {
+    try {
+      final token = await secureStorageHelper?.getToken();
+      final familyId = userDataManager?.getUserFamilyId();
+
+      final requestModel = CreateEventModel(
+        titleAr: updateEventModel.titleAr,
+        titleEn: updateEventModel.titleEn,
+        typeAr: updateEventModel.typeAr,
+        typeEn: updateEventModel.typeEn,
+        descriptionAr: updateEventModel.descriptionAr,
+        descriptionEn: updateEventModel.descriptionEn,
+        addressAr: updateEventModel.addressAr,
+        addressEn: updateEventModel.addressEn,
+        eventDate: updateEventModel.eventDate,
+        image: updateEventModel.image,
+        familyId: familyId,
+      );
+
+      final response = await dioConsumer.post(
+        '${EndPoints.updateEvent}$eventId',
+        data: await requestModel.toJson(),
+        isFormData: true,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      );
+      return Right(response);
+    } on DioException catch (e) {
+      return Left(ServerFailure.fromDioException(e));
+    } catch (e) {
+      return Left(ServerFailure(errMessage: AppStrings.unexpectedError.tr()));
+    }
+  }
+
+  @override
   Future<Either<Failure, EventModel>> getEventDetails(int eventId) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -128,7 +166,7 @@ class EventsRepoImpl implements EventsRepo {
 
       final response = await dioConsumer.post(
         EndPoints.addEvent,
-        data: requestModel,
+        data: await requestModel.toJson(),
         isFormData: true,
         headers: {
           'Authorization': 'Bearer $token',

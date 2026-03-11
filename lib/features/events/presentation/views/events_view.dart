@@ -50,7 +50,7 @@ class EventsView extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => BlocProvider.value(
                           value: context.read<EventsCubit>(),
-                          child: const CreateEventView(),
+                          child: const AddEditEventView(),
                         ),
                       ),
                     ).then((_) => context.read<EventsCubit>().getEvents());

@@ -3,11 +3,6 @@ class EndPoints {
 
   static const String IMAGE_BASE_URL = 'http://alsulala.com';
   static const String banners = "/banners";
-  static const String categories = "/categories";
-  static const String recentShops = "/shops/recent";
-  static const String shops = "/shops";
-  static const String searchShops = "/shops/search";
-  static const String wishlist = '/wishlist';
   static const String requestService = "/request";
   static const String deleteAccount = "/profile/delete";
   static const String logout = "/logout";
@@ -17,8 +12,6 @@ class EndPoints {
   static const String termsAndConditions = '/general/default-pages/terms-and-conditions';
   static const String contactUs = '/contact-requests';
   static const String defaultPage = '/general/default-pages/';
-  static const String toggleWishlist = '/wishlist/toggle';
-  static const String addReview = '/addReview';
 ////////////////////////////////////////////////////////////////////////////
   static const String register = "/register";
   static const String login = "/login";
@@ -32,6 +25,7 @@ class EndPoints {
   static const String deleteFamilyMember = "/family/tree-delete/";
   static const String events = "/events";
   static const String addEvent = "/events/add";
+  static const String updateEvent = "/events/update/";
   static const String eventDetails = "/events";
   static const String numberingEvents = "/family/numbering-events";
   static const String familyInfo = "/family/";

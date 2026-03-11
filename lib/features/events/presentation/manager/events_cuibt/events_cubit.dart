@@ -68,11 +68,36 @@ class EventsCubit extends Cubit<EventsState> {
           (data) {
         final message = data[ApiKey.message];
         if (message is String) {
-          emit(CreateEventFailure(message: message));
+          emit(CreateEventSuccess(message: message));
         } else {
           final locale = context.locale;
           final successMessage = message[locale.languageCode] ?? message['en'];
           emit(CreateEventSuccess(message: successMessage));
+        }
+      },
+    );
+  }
+
+  Future<void> updateEvent({
+    required int eventId,
+    required CreateEventModel updateEventModel,
+    required BuildContext context,
+  }) async {
+    emit(UpdateEventLoading());
+    final response = await eventsRepo.updateEvent(
+      eventId: eventId,
+      updateEventModel: updateEventModel,
+    );
+    response.fold(
+          (failure) => emit(UpdateEventFailure(message: failure.errMessage)),
+          (data) {
+        final message = data[ApiKey.message];
+        if (message is String) {
+          emit(UpdateEventSuccess(message: message));
+        } else {
+          final locale = context.locale;
+          final successMessage = message[locale.languageCode] ?? message['en'];
+          emit(UpdateEventSuccess(message: successMessage));
         }
       },
     );

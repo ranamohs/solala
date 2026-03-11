@@ -10,5 +10,7 @@ abstract class EventsRepo {
 
   Future<Either<Failure, Map<String, dynamic>>> createEvent(
       {required CreateEventModel createEventModel});
+  Future<Either<Failure, Map<String, dynamic>>> updateEvent(
+      {required int eventId, required CreateEventModel updateEventModel});
   Future<Either<Failure, DeleteEventModel>> deleteEvent(int eventId);
 }

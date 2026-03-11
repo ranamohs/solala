@@ -40,8 +40,10 @@ class CreateEventModel {
       'address[ar]': addressAr,
       'address[en]': addressEn,
       'event_date': eventDate,
-      'image': await MultipartFile.fromFile(image.path),
     };
+    if (image.path.isNotEmpty) {
+      data['image'] = await MultipartFile.fromFile(image.path);
+    }
     if (familyId != null) {
       data['family_id'] = familyId;
     }

@@ -19,6 +19,7 @@ import 'package:solala/features/events/data/models/event_model.dart';
 
 import '../manager/events_cuibt/events_cubit.dart';
 import '../manager/events_cuibt/events_state.dart';
+import '../views/create_event_view.dart';
 
 class EventCard extends StatefulWidget {
   const EventCard({super.key, required this.event});
@@ -127,99 +128,139 @@ class _EventCardState extends State<EventCard> {
                     color: AppColors.lightGreenColor,
                     borderRadius: BorderRadius.circular(22.r),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Column(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16.r),
-                        child: CachedNetworkImage(
-                          imageUrl:
-                          widget.event.image ?? AppConstants.noImageUrl,
-                          width: 70.w,
-                          height: 70.w,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(width: 14.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              isArabic ? (widget.event.type?.ar ?? '') : (widget.event.type?.en ?? ''),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppStyles.styleBold16(
-                                context,
-                              ).copyWith(color: AppColors.secondaryColor),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16.r),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                              widget.event.image ?? AppConstants.noImageUrl,
+                              width: 70.w,
+                              height: 70.w,
+                              fit: BoxFit.cover,
                             ),
-                            if (remainingDays != null && remainingDays >= 0)
-                              Text(
-                                "${AppStrings.after.tr()} $remainingDays ${remainingDays > 2 ? AppStrings.days.tr() : AppStrings.day.tr()}",
-                                style: AppStyles.styleMedium16(context).copyWith(
-                                    color: AppColors.offRedColor,
-                                  fontWeight: FontWeight.w600
-                                        ),
-                              ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: 10.w),
-                      Container(
-                        width: 34.w,
-                        height: 34.w,
-                        decoration: BoxDecoration(
-                          color: AppColors.secondaryColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          _isExpanded
-                              ? Icons.keyboard_arrow_up_rounded
-                              : Icons.keyboard_arrow_down_rounded,
-                          color: Colors.white,
-                          size: 22.sp,
-                        ),
-                      ),
-                      if (_accountType == 'provider') ...[
-                        SizedBox(width: 10.w),
-                        BlocBuilder<EventsCubit, EventsState>(
-                          builder: (context, state) {
-                            if (state is DeleteEventLoading &&
-                                state.eventId == widget.event.id) {
-                              return SizedBox(
-                                width: 34.w,
-                                height: 34.w,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: AppColors.offRedColor,
-                                  ),
+                          ),
+                          SizedBox(width: 14.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  isArabic
+                                      ? (widget.event.type?.ar ?? '')
+                                      : (widget.event.type?.en ?? ''),
+                                  style: AppStyles.styleBold16(
+                                    context,
+                                  ).copyWith(color: AppColors.secondaryColor),
                                 ),
-                              );
-                            }
-                            return GestureDetector(
+                                if (remainingDays != null && remainingDays >= 0)
+                                  Text(
+                                    "${AppStrings.after.tr()} $remainingDays ${remainingDays > 2 ? AppStrings.days.tr() : AppStrings.day.tr()}",
+                                    style: AppStyles.styleMedium16(context)
+                                        .copyWith(
+                                        color: AppColors.offRedColor,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+
+                          if (_accountType == 'provider') ...[
+                            SizedBox(width: 10.w),
+                            GestureDetector(
                               onTap: () {
-                                _showDeleteDialog(context, isArabic);
+                                final cubit = context.read<EventsCubit>();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: cubit,
+                                      child:
+                                      AddEditEventView(event: widget.event),
+                                    ),
+                                  ),
+                                ).then((_) => cubit.getEvents());
                               },
                               child: Container(
                                 width: 34.w,
                                 height: 34.w,
                                 decoration: BoxDecoration(
-                                  color: AppColors.offRedColor,
+                                  color: AppColors.greenColor,
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
-                                  Icons.delete,
+                                  Icons.edit,
                                   color: Colors.white,
                                   size: 20.sp,
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ],
+                            ),
+                            SizedBox(width: 10.w),
+                            BlocBuilder<EventsCubit, EventsState>(
+                              builder: (context, state) {
+                                if (state is DeleteEventLoading &&
+                                    state.eventId == widget.event.id) {
+                                  return SizedBox(
+                                    width: 34.w,
+                                    height: 34.w,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: AppColors.offRedColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return GestureDetector(
+                                  onTap: () {
+                                    _showDeleteDialog(context, isArabic);
+                                  },
+                                  child: Container(
+                                    width: 34.w,
+                                    height: 34.w,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.offRedColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                      size: 20.sp,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                          SizedBox(width:10.w ,),
+                          Container(
+                            width: 34.w,
+                            height: 34.w,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              _isExpanded
+                                  ? Icons.keyboard_arrow_up_rounded
+                                  : Icons.keyboard_arrow_down_rounded,
+                              color: Colors.white,
+                              size: 22.sp,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
