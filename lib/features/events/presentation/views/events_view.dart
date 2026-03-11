@@ -63,21 +63,31 @@ class EventsView extends StatelessWidget {
                 ),
             ],
             bottom: PreferredSize(
-              preferredSize: Size.fromHeight(50.h),
+              preferredSize: Size.fromHeight(60.h),
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.w),
+                height: 50.h,
+                margin: EdgeInsets.symmetric(horizontal: 12.w, vertical: 5.h),
+                padding: EdgeInsets.all(4.r),
                 decoration: BoxDecoration(
-                  color: AppColors.greenColor.withOpacity(0.4),
-                  borderRadius: BorderRadius.circular(10.r),
+                  color: AppColors.beigeColor.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(15.r),
+                  border: Border.all(color: AppColors.secondaryColor.withOpacity(0.2)),
                 ),
                 child: TabBar(
                   indicator: BoxDecoration(
-                    color: AppColors.beigeColor,
-                    borderRadius: BorderRadius.circular(10.r),
+                    color: AppColors.primaryColor,
+                    borderRadius: BorderRadius.circular(12.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  labelColor: AppColors.secondaryColor,
-                  unselectedLabelColor: AppColors.secondaryColor.withOpacity(0.6),
-                  labelStyle: AppStyles.styleBold18(context),
+                  labelColor: Colors.white,
+                  unselectedLabelColor: AppColors.secondaryColor.withOpacity(0.7),
+                  labelStyle: AppStyles.styleBold16(context),
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: Colors.transparent,
                   tabs: [

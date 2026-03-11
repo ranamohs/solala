@@ -148,7 +148,7 @@ class _EventCardState extends State<EventCard> {
                           children: [
                             Text(
                               isArabic ? (widget.event.type?.ar ?? '') : (widget.event.type?.en ?? ''),
-                              maxLines: 2,
+                              maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: AppStyles.styleBold16(
                                 context,
@@ -157,9 +157,10 @@ class _EventCardState extends State<EventCard> {
                             if (remainingDays != null && remainingDays >= 0)
                               Text(
                                 "${AppStrings.after.tr()} $remainingDays ${remainingDays > 2 ? AppStrings.days.tr() : AppStrings.day.tr()}",
-                                style: AppStyles.styleMedium14(context).copyWith(
-                                    color: AppColors.secondaryColor
-                                        .withOpacity(0.7)),
+                                style: AppStyles.styleMedium16(context).copyWith(
+                                    color: AppColors.offRedColor,
+                                  fontWeight: FontWeight.w600
+                                        ),
                               ),
                           ],
                         ),
@@ -269,80 +270,6 @@ class _EventCardState extends State<EventCard> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                /// Header: Type and Remaining Days
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 6.w, vertical: 12.h),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.beigeColor,
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(12.r)),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(Icons.notifications_none,
-                                            color: AppColors.secondaryColor),
-                                        onPressed: () {},
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              isArabic
-                                                  ? (eventDetails.title?.ar ??
-                                                  '')
-                                                  : (eventDetails.title?.en ??
-                                                  ''),
-                                              textAlign: TextAlign.center,
-                                              maxLines: 1,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: AppStyles.styleBold16(
-                                                  context)
-                                                  .copyWith(
-                                                  color: AppColors
-                                                      .secondaryColor),
-                                            ),
-                                            if (remainingDays != null &&
-                                                remainingDays >= 0)
-                                              Text(
-                                                "${AppStrings.after.tr()} $remainingDays ${remainingDays > 2 ? AppStrings.days.tr() : AppStrings.day.tr()}",
-                                                style: AppStyles.styleMedium14(
-                                                    context)
-                                                    .copyWith(
-                                                    color: AppColors
-                                                        .secondaryColor),
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                      if (_accountType == 'provider')
-                                        Row(
-                                          children: [
-                                            IconButton(
-                                              icon: Icon(Icons.edit,
-                                                  color:
-                                                  AppColors.primaryColor),
-                                              onPressed: () {},
-                                            ),
-                                            IconButton(
-                                              icon: Icon(Icons.delete,
-                                                  color:
-                                                  AppColors.primaryColor),
-                                              onPressed: () {
-                                                _showDeleteDialog(context, isArabic);
-                                              },
-                                            ),
-                                          ],
-                                        )
-                                      else
-                                        SizedBox(width: 48.w),
-                                    ],
-                                  ),
-                                ),
-
                                 /// Image
                                 Container(
                                   height: 350.h,
@@ -389,8 +316,6 @@ class _EventCardState extends State<EventCard> {
                                         color: AppColors.secondaryColor),
                                   ),
                                 ),
-
-                                /// Footer: Dates
                                 Padding(
                                   padding: EdgeInsets.only(bottom: 16.h),
                                   child: Column(
@@ -400,13 +325,13 @@ class _EventCardState extends State<EventCard> {
                                               .withOpacity(0.3),
                                           indent: 40.w,
                                           endIndent: 40.w),
-                                      Text(
-                                        "$hijriDate ${AppStrings.hijriLetter.tr()}",
-                                        style: AppStyles.styleBold16(context)
-                                            .copyWith(
-                                            color:
-                                            AppColors.secondaryColor),
-                                      ),
+                                      // Text(
+                                      //   "$hijriDate ${AppStrings.hijriLetter.tr()}",
+                                      //   style: AppStyles.styleBold16(context)
+                                      //       .copyWith(
+                                      //       color:
+                                      //       AppColors.secondaryColor),
+                                      // ),
                                       Text(
                                         "$gregDate ${AppStrings.gregLetter.tr()}",
                                         style: AppStyles.styleBold16(context)
