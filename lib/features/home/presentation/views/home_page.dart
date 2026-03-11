@@ -67,6 +67,14 @@ class _AppLayoutState extends State<AppLayout> {
         BlocProvider.value(value: _familyTreeCubit),
       ],
       child: UpgradeAlert(
+        upgrader: Upgrader(
+          debugLogging: true,
+          durationUntilAlertAgain: const Duration(hours: 1),
+          // Only show Upgrader alert if we are on iOS,
+          // or if on Android and you want it as a fallback.
+          // Since the user is complaining it's not showing on Android,
+          // let's ensure it's not restricted.
+        ),
         child: Scaffold(
           body: PageView(
             controller: _pageController,

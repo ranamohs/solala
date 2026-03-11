@@ -14,6 +14,11 @@ class UpdateService {
   Future<void> _checkAndroidUpdate() async {
     try {
       final info = await InAppUpdate.checkForUpdate();
+      print('Android Update Availability: ${info.updateAvailability}');
+      print('Immediate Update Allowed: ${info.immediateUpdateAllowed}');
+      print('Flexible Update Allowed: ${info.flexibleUpdateAllowed}');
+      print('Available Version Code: ${info.availableVersionCode}');
+
       if (info.updateAvailability == UpdateAvailability.updateAvailable) {
         if (info.immediateUpdateAllowed) {
           await InAppUpdate.performImmediateUpdate();
