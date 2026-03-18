@@ -313,7 +313,7 @@ class _EventCardState extends State<EventCard> {
                               children: [
                                 /// Image
                                 Container(
-                                  height: 350.h,
+                                  height: 200.h,
                                   margin: EdgeInsets.symmetric(
                                       horizontal: 20.w, vertical: 10.h),
                                   decoration: BoxDecoration(

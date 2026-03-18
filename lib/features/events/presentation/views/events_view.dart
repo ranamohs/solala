@@ -87,7 +87,9 @@ class EventsView extends StatelessWidget {
                   ),
                   labelColor: Colors.white,
                   unselectedLabelColor: AppColors.secondaryColor.withOpacity(0.7),
-                  labelStyle: AppStyles.styleBold16(context),
+                  labelStyle: AppStyles.styleMedium14(context).copyWith(
+                    fontWeight: FontWeight.w700
+                  ),
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: Colors.transparent,
                   tabs: [
