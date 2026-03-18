@@ -55,6 +55,20 @@ class CreateNewsError extends NewsState {
   CreateNewsError({required this.message});
 }
 
+class UpdateNewsLoading extends NewsState {}
+
+class UpdateNewsSuccess extends NewsState {
+  final String message;
+
+  UpdateNewsSuccess({required this.message});
+}
+
+class UpdateNewsError extends NewsState {
+  final String message;
+
+  UpdateNewsError({required this.message});
+}
+
 class DeleteNewsLoading extends NewsState {
   final int reportId;
 

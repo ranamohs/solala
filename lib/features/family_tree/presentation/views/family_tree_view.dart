@@ -233,6 +233,10 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                         _searchController.clear();
                       },
                       child: BlocBuilder<FamilyTreeCubit, FamilyTreeState>(
+                        buildWhen: (previous, current) =>
+                        current is FamilyTreeLoading ||
+                            current is FamilyTreeSuccess ||
+                            current is FamilyTreeFailure,
                         builder: (context, state) {
                           if (state is FamilyTreeLoading) {
                             return Center(

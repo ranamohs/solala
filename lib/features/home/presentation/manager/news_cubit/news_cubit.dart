@@ -63,14 +63,29 @@ class NewsCubit extends Cubit<NewsState> {
     );
   }
 
+  Future<void> updateNews(
+      int reportId, CreateNewsRequestModel updateNewsRequestModel) async {
+    emit(UpdateNewsLoading());
+    final result =
+    await reportsRepo.updateNews(reportId, updateNewsRequestModel);
+    result.fold(
+          (failure) => emit(UpdateNewsError(message: failure.errMessage)),
+          (_) {
+        emit(UpdateNewsSuccess(message: 'News Updated Successfully'));
+        getReports();
+      },
+    );
+  }
+
   Future<void> deleteNews(int reportId, BuildContext context) async {
+    final languageCode = context.locale.languageCode;
     emit(DeleteNewsLoading(reportId: reportId));
     final result = await reportsRepo.deleteNews(reportId);
     result.fold(
           (failure) =>
           emit(DeleteNewsError(message: failure.errMessage, reportId: reportId)),
           (deleteNewsModel) {
-        final isArabic = context.locale.languageCode == 'ar';
+        final isArabic = languageCode == 'ar';
         final message = isArabic
             ? deleteNewsModel.message?.ar
             : deleteNewsModel.message?.en;

@@ -174,5 +174,9 @@ class AppStrings {
   static const String day = 'day';
   static const String hijriLetter = 'hijriLetter';
   static const String gregLetter = 'gregLetter';
+  static const String editNews = 'editNews';
+  static const String update = 'update';
+  static const String recentNews = 'recentNews';
+  static const String oldNews = 'oldNews';
 
 }

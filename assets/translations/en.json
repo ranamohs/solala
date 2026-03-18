@@ -272,6 +272,10 @@
   "days": "days",
   "day": "day",
   "hijriLetter": "H",
-  "gregLetter": "M"
+  "gregLetter": "M",
+  "editNews": "Edit News",
+  "update": "Update",
+  "recentNews": "Recent News",
+  "oldNews": "Old News"
 }
 

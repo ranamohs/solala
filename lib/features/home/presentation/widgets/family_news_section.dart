@@ -7,7 +7,6 @@ import 'package:solala/core/widgets/retry_widget.dart';
 import 'package:solala/features/home/data/models/news_model/news_model.dart';
 import 'package:solala/features/home/presentation/manager/news_cubit/news_cubit.dart';
 import 'package:solala/features/home/presentation/manager/news_cubit/news_state.dart';
-import 'package:solala/features/home/presentation/views/create_news_view.dart';
 
 import '../../../../../core/functions/strip_html.dart';
 import '../../../../../core/constants/app_colors.dart';
@@ -54,41 +53,21 @@ class _FamilyNewsSectionState extends State<FamilyNewsSection> {
                 ],
               ),
             ),
-            if (widget.accountType == 'provider')
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<NewsCubit>(),
-                        child: const CreateNewsView(),
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  AppStrings.create.tr(),
-                  style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.greenColor),
-                ),
-              )
-            else
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AllNewsView(),
-                    ),
-                  );
-                },
-                child: Text(
-                  AppStrings.viewAll.tr(),
-                  style: AppStyles.styleBold16(context)
-                      .copyWith(color: AppColors.greenColor),
-                ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AllNewsView(),
+                  ),
+                );
+              },
+              child: Text(
+                AppStrings.viewAll.tr(),
+                style: AppStyles.styleBold16(context)
+                    .copyWith(color: AppColors.greenColor),
               ),
+            ),
           ],
         ),
         SizedBox(height: 8.h),

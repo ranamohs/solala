@@ -137,8 +137,8 @@
   "members": "الأفراد",
   "noNewsFoundTillNow": "لا يوجد اخبار في عائلتك حتي الان",
   "noMembersFoundTillNow": "لم يتم تسجل افراد الي عائلتك حتي الان",
-  "noEventsFoundTillNow": "لا يوجد احداث في عائلتك حتي الان",
-  "createEventForYourFamily": "قم ب انشاء احداث لعائلتك",
+  "noEventsFoundTillNow": "لا يوجد مناسبات في عائلتك حتي الان",
+  "createEventForYourFamily": "قم ب انشاء مناسبه لعائلتك",
   "createNewsForYourFamily": "قم ب انشاء اخبار ل عائلتك",
   "create": "إنشاء",
   "useFamilyCodeToJoin": "استخدم كود العائلة للانضمام",
@@ -195,9 +195,10 @@
   "days": "يوماً",
   "day": "يوم",
   "hijriLetter": "هـ",
-  "gregLetter": "م"
-
-
-
+  "gregLetter": "م",
+  "editNews": "تعديل الخبر",
+  "update": "تعديل",
+  "recentNews": "الأخبار الحديثة",
+  "oldNews": "الأخبار القديمة"
 }
 

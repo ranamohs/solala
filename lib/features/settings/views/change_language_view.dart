@@ -68,11 +68,11 @@ class _ChangeLanguageViewState extends State<ChangeLanguageView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Spacer(flex: 1),
-              Text(
-                AppStrings.selectYourLanguage.tr(),
-                style: AppStyles.styleLight20(context),
-              ),
+              // Spacer(flex: 1),
+              // Text(
+              //   AppStrings.selectYourLanguage.tr(),
+              //   style: AppStyles.styleLight20(context),
+              // ),
              Spacer(flex: 1),
               LanguageSelectionTile(
                 groupValue: selectedLanguage,

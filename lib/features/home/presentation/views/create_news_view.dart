@@ -17,14 +17,15 @@ import 'package:solala/features/home/presentation/manager/news_cubit/news_state.
 import '../../../../core/constants/app_assets.dart';
 import '../../data/models/news_model/news_model.dart';
 
-class CreateNewsView extends StatefulWidget {
-  const CreateNewsView({super.key});
+class AddEditNewsView extends StatefulWidget {
+  const AddEditNewsView({super.key, this.report});
+  final ReportData? report;
 
   @override
-  State<CreateNewsView> createState() => _CreateNewsViewState();
+  State<AddEditNewsView> createState() => _AddEditNewsViewState();
 }
 
-class _CreateNewsViewState extends State<CreateNewsView> {
+class _AddEditNewsViewState extends State<AddEditNewsView> {
   final _formKey = GlobalKey<FormState>();
   final _titleArController = TextEditingController();
   final _titleEnController = TextEditingController();
@@ -32,6 +33,17 @@ class _CreateNewsViewState extends State<CreateNewsView> {
   final _descriptionEnController = TextEditingController();
   File? _image;
   final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.report != null) {
+      _titleArController.text = widget.report!.title?.ar ?? '';
+      _titleEnController.text = widget.report!.title?.en ?? '';
+      _descriptionArController.text = widget.report!.description?.ar ?? '';
+      _descriptionEnController.text = widget.report!.description?.en ?? '';
+    }
+  }
 
   @override
   void dispose() {
@@ -65,25 +77,31 @@ class _CreateNewsViewState extends State<CreateNewsView> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: Text(
-            AppStrings.createNews.tr(),
+            widget.report == null
+                ? AppStrings.createNews.tr()
+                : AppStrings.editNews.tr(),
             style: AppStyles.styleBold18(context)
                 .copyWith(color: AppColors.secondaryColor),
           ),
         ),
         body: BlocListener<NewsCubit, NewsState>(
           listener: (context, state) {
-            if (state is CreateNewsSuccess) {
+            if (state is CreateNewsSuccess || state is UpdateNewsSuccess) {
               fixedSnackBar(
                 context,
-                message: state.message,
+                message: state is CreateNewsSuccess
+                    ? state.message
+                    : (state as UpdateNewsSuccess).message,
                 icon: Icons.check,
                 iconColor: Colors.green,
               );
               Navigator.pop(context);
-            } else if (state is CreateNewsError) {
+            } else if (state is CreateNewsError || state is UpdateNewsError) {
               fixedSnackBar(
                 context,
-                message: state.message,
+                message: state is CreateNewsError
+                    ? state.message
+                    : (state as UpdateNewsError).message,
                 icon: Icons.error,
                 iconColor: Colors.red,
               );
@@ -113,9 +131,12 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                       child: CircleAvatar(
                         radius: 50.r,
                         backgroundColor: Colors.white54,
-                        backgroundImage:
-                        _image != null ? FileImage(_image!) : null,
-                        child: _image == null
+                        backgroundImage: _image != null
+                            ? FileImage(_image!)
+                            : (widget.report?.image != null
+                            ? NetworkImage(widget.report!.image!)
+                            : null) as ImageProvider?,
+                        child: _image == null && widget.report?.image == null
                             ? const Icon(Icons.add_a_photo,
                             size: 50, color: Colors.white)
                             : null,
@@ -145,31 +166,50 @@ class _CreateNewsViewState extends State<CreateNewsView> {
                     BlocBuilder<NewsCubit, NewsState>(
                       builder: (context, state) {
                         return PrimaryButton(
-                          isLoading: state is CreateNewsLoading,
+                          isLoading: state is CreateNewsLoading ||
+                              state is UpdateNewsLoading,
                           onPressed: () {
-                            if (_formKey.currentState!.validate() &&
-                                _image != null) {
-                              context.read<NewsCubit>().createNews(
-                                CreateNewsRequestModel(
-                                  titleAr: _titleArController.text,
-                                  titleEn: _titleEnController.text,
-                                  descriptionAr:
-                                  _descriptionArController.text,
-                                  descriptionEn:
-                                  _descriptionEnController.text,
-                                  image: _image!,
-                                ),
-                              );
-                            } else if (_image == null) {
-                              fixedSnackBar(
-                                context,
-                                message: AppStrings.pleaseSelectImage.tr(),
-                                icon: Icons.error,
-                                iconColor: Colors.red,
-                              );
+                            if (_formKey.currentState!.validate()) {
+                              if (widget.report == null) {
+                                if (_image != null) {
+                                  context.read<NewsCubit>().createNews(
+                                    CreateNewsRequestModel(
+                                      titleAr: _titleArController.text,
+                                      titleEn: _titleEnController.text,
+                                      descriptionAr:
+                                      _descriptionArController.text,
+                                      descriptionEn:
+                                      _descriptionEnController.text,
+                                      image: _image!,
+                                    ),
+                                  );
+                                } else {
+                                  fixedSnackBar(
+                                    context,
+                                    message: AppStrings.pleaseSelectImage.tr(),
+                                    icon: Icons.error,
+                                    iconColor: Colors.red,
+                                  );
+                                }
+                              } else {
+                                context.read<NewsCubit>().updateNews(
+                                  widget.report!.id!,
+                                  CreateNewsRequestModel(
+                                    titleAr: _titleArController.text,
+                                    titleEn: _titleEnController.text,
+                                    descriptionAr:
+                                    _descriptionArController.text,
+                                    descriptionEn:
+                                    _descriptionEnController.text,
+                                    image: _image,
+                                  ),
+                                );
+                              }
                             }
                           },
-                          text: AppStrings.create.tr(),
+                          text: widget.report == null
+                              ? AppStrings.create.tr()
+                              : AppStrings.update.tr(),
                         );
                       },
                     ),

@@ -17,6 +17,8 @@ import 'package:solala/features/home/presentation/manager/news_cubit/news_cubit.
 import 'package:solala/features/home/presentation/manager/news_cubit/news_state.dart';
 import 'package:solala/features/home/presentation/views/news_details_view.dart';
 
+import '../views/create_news_view.dart';
+
 class NewsCard extends StatefulWidget {
   const NewsCard({super.key, required this.report});
   final ReportData report;
@@ -93,142 +95,178 @@ class _NewsCardState extends State<NewsCard> {
                     color: AppColors.lightGreenColor,
                     borderRadius: BorderRadius.circular(22.r),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Column(
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(16.r),
-                        child: CachedNetworkImage(
-                          imageUrl: newsImage ?? AppConstants.noImageUrl,
-                          width: 70.w,
-                          height: 70.w,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      SizedBox(width: 14.w),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              title ?? '',
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppStyles.styleBold16(
-                                context,
-                              ).copyWith(color: AppColors.secondaryColor),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16.r),
+                            child: CachedNetworkImage(
+                              imageUrl: newsImage ?? AppConstants.noImageUrl,
+                              width: 70.w,
+                              height: 70.w,
+                              fit: BoxFit.cover,
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(width: 14.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  title ?? '',
+                                  style: AppStyles.styleBold16(
+                                    context,
+                                  ).copyWith(color: AppColors.secondaryColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: 10.w),
-                      Container(
-                        width: 34.w,
-                        height: 34.w,
-                        decoration: BoxDecoration(
-                          color: AppColors.secondaryColor,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          _isExpanded
-                              ? Icons.keyboard_arrow_up_rounded
-                              : Icons.keyboard_arrow_down_rounded,
-                          color: Colors.white,
-                          size: 22.sp,
-                        ),
-                      ),
-                      if (_accountType == 'provider') ...[
-                        SizedBox(width: 10.w),
-                        BlocBuilder<NewsCubit, NewsState>(
-                          builder: (context, state) {
-                            if (state is DeleteNewsLoading &&
-                                state.reportId == widget.report.id) {
-                              return SizedBox(
+                      SizedBox(height: 10.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (_accountType == 'provider') ...[
+                            SizedBox(width: 10.w),
+                            GestureDetector(
+                              onTap: () {
+                                final cubit = context.read<NewsCubit>();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                      value: cubit,
+                                      child: AddEditNewsView(report: widget.report),
+                                    ),
+                                  ),
+                                ).then((_) => cubit.getReports());
+                              },
+                              child: Container(
                                 width: 34.w,
                                 height: 34.w,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: AppColors.offRedColor,
-                                  ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.greenColor,
+                                  shape: BoxShape.circle,
                                 ),
-                              );
-                            }
-                            return GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (dialogContext) => AlertDialog(
-                                    title: Text(
-                                      AppStrings.delete.tr(),
-                                      style: AppStyles.styleMedium18(context)
-                                          .copyWith(
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 20.sp,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                            BlocBuilder<NewsCubit, NewsState>(
+                              builder: (context, state) {
+                                if (state is DeleteNewsLoading &&
+                                    state.reportId == widget.report.id) {
+                                  return SizedBox(
+                                    width: 34.w,
+                                    height: 34.w,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: AppColors.offRedColor,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (dialogContext) => AlertDialog(
+                                        title: Text(
+                                          AppStrings.delete.tr(),
+                                          style: AppStyles.styleMedium18(context)
+                                              .copyWith(
                                             color: AppColors.primaryColor,
                                             fontWeight: FontWeight.w800,
                                           ),
-                                    ),
-                                    content: Text(
-                                      isArabic
-                                          ? "هل أنت متأكد من حذف هذا الخبر؟"
-                                          : "Are you sure you want to delete this news?",
-                                      style: AppStyles.styleMedium16(context),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () =>
-                                            Navigator.pop(dialogContext),
-                                        child: Text(
-                                          AppStrings.cancel.tr(),
-                                          style:
+                                        ),
+                                        content: Text(
+                                          isArabic
+                                              ? "هل أنت متأكد من حذف هذا الخبر؟"
+                                              : "Are you sure you want to delete this news?",
+                                          style: AppStyles.styleMedium16(context),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(dialogContext),
+                                            child: Text(
+                                              AppStrings.cancel.tr(),
+                                              style:
                                               AppStyles.styleMedium14(
                                                 context,
                                               ).copyWith(
                                                 fontWeight: FontWeight.w800,
                                               ),
-                                        ),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(dialogContext);
-                                          context.read<NewsCubit>().deleteNews(
-                                            widget.report.id!,
-                                            context,
-                                          );
-                                        },
-                                        child: Text(
-                                          AppStrings.delete.tr(),
-                                          style:
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(dialogContext);
+                                              context.read<NewsCubit>().deleteNews(
+                                                widget.report.id!,
+                                                context,
+                                              );
+                                            },
+                                            child: Text(
+                                              AppStrings.delete.tr(),
+                                              style:
                                               AppStyles.styleMedium14(
                                                 context,
                                               ).copyWith(
                                                 color: AppColors.offRedColor,
                                                 fontWeight: FontWeight.w800,
                                               ),
-                                        ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 34.w,
+                                    height: 34.w,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.offRedColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                      size: 20.sp,
+                                    ),
                                   ),
                                 );
                               },
-                              child: Container(
-                                width: 34.w,
-                                height: 34.w,
-                                decoration: BoxDecoration(
-                                  color: AppColors.offRedColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                  size: 20.sp,
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
+                            ),
+                          ],
+                          SizedBox(width: 10.w),
+                          Container(
+                            width: 34.w,
+                            height: 34.w,
+                            decoration: BoxDecoration(
+                              color: AppColors.secondaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              _isExpanded
+                                  ? Icons.keyboard_arrow_up_rounded
+                                  : Icons.keyboard_arrow_down_rounded,
+                              color: Colors.white,
+                              size: 22.sp,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -241,7 +279,7 @@ class _NewsCardState extends State<NewsCard> {
                         widget.report.id,
                       );
                       final reportDetails =
-                          state.reportDetails[widget.report.id];
+                      state.reportDetails[widget.report.id];
                       final error = state.errorReports[widget.report.id];
 
                       if (isLoading) {
