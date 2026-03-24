@@ -14,11 +14,11 @@ class DioConsumer extends ApiConsumer {
     dio.options.validateStatus = (status) {
       return status! < 500;
     };
-    dio.interceptors.add(PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseHeader: true,
-    ));
+    // dio.interceptors.add(PrettyDioLogger(
+    //   requestHeader: true,
+    //   requestBody: true,
+    //   responseHeader: true,
+    // ));
   }
 
   /// default headers if none passed
