@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:solala/core/services/service_locator.dart';
 
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_styles.dart';
@@ -20,6 +19,7 @@ class AddMemberDialog extends StatefulWidget {
   final String? existingGender;
   final String? existingRelation;
   final String? existingAvatar;
+  final String? existingDescription;
   final int? memberId;
 
   const AddMemberDialog({
@@ -30,6 +30,7 @@ class AddMemberDialog extends StatefulWidget {
     this.existingGender,
     this.existingRelation,
     this.existingAvatar,
+    this.existingDescription,
     this.memberId,
   });
 
@@ -45,6 +46,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
   late TextEditingController _birthPlaceController;
   late TextEditingController _phoneController;
   late TextEditingController _jobController;
+  late TextEditingController _descriptionController;
   String? _gender;
   File? _image;
   bool _imageChanged = false;
@@ -60,6 +62,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
     _birthPlaceController = TextEditingController();
     _phoneController = TextEditingController();
     _jobController = TextEditingController();
+    _descriptionController = TextEditingController(text: widget.existingDescription ?? '');
     _gender = widget.existingGender;
   }
 
@@ -70,6 +73,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
     _birthPlaceController.dispose();
     _phoneController.dispose();
     _jobController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -447,6 +451,15 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
 
                           const SizedBox(height: 16),
 
+                          _buildTextField(
+                            controller: _descriptionController,
+                            label: 'الوصف',
+                            icon: Icons.description_outlined,
+                            validator: (value) => null, // Optional
+                          ),
+
+                          const SizedBox(height: 16),
+
                           // Is Live Switch
                           _buildIsLiveSwitch(),
                         ],
@@ -506,6 +519,7 @@ class _AddMemberDialogState extends State<AddMemberDialog> {
                                   isLive: _isLive ? 1 : 0,
                                   phone: _phoneController.text,
                                   job: _jobController.text,
+                                  description: _descriptionController.text,
                                 );
                               }
                             }

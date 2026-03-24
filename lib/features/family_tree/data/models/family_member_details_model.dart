@@ -8,6 +8,7 @@ class FamilyMemberDetailsModel {
   final bool? isLive;
   final String? phone;
   final String? job;
+  final String? description;
   final String? avatar;
 
   FamilyMemberDetailsModel({
@@ -20,6 +21,7 @@ class FamilyMemberDetailsModel {
     this.isLive,
     this.phone,
     this.job,
+    this.description,
     this.avatar,
   });
 
@@ -34,6 +36,7 @@ class FamilyMemberDetailsModel {
       isLive: json['is_live'],
       phone: json['phone'],
       job: json['job'],
+      description: json['description'],
       avatar: json['avatar'],
     );
   }

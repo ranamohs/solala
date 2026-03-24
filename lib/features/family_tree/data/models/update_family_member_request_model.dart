@@ -10,6 +10,7 @@ class UpdateFamilyMemberRequestModel {
   final int? isLive;
   final String? phone;
   final String? job;
+  final String? description;
 
   UpdateFamilyMemberRequestModel({
     required this.name,
@@ -21,6 +22,7 @@ class UpdateFamilyMemberRequestModel {
     this.isLive,
     this.phone,
     this.job,
+    this.description,
   });
 
   Future<Map<String, dynamic>> toJson() async {
@@ -47,6 +49,9 @@ class UpdateFamilyMemberRequestModel {
     }
     if (job != null) {
       data['job'] = job;
+    }
+    if (description != null) {
+      data['description'] = description;
     }
     return data;
   }

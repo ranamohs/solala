@@ -45,6 +45,7 @@ class FamilyMember {
   int? isLive;
   String? phone;
   String? job;
+  String? description;
   List<FamilyMember>? children;
 
   FamilyMember({
@@ -58,6 +59,7 @@ class FamilyMember {
     this.isLive,
     this.phone,
     this.job,
+    this.description,
     this.children,
   });
 
@@ -84,6 +86,7 @@ class FamilyMember {
     }
     phone = json['phone'];
     job = json['job'];
+    description = json['description'];
     if (json['children'] != null) {
       children = <FamilyMember>[];
       json['children'].forEach((v) {

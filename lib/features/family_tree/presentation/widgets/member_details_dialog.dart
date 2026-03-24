@@ -106,6 +106,8 @@ class MemberDetailsDialog extends StatelessWidget {
                     _buildDetailRow(
                         context, AppStrings.phone.tr(), member.phone),
                     _buildDetailRow(context, AppStrings.job.tr(), member.job),
+                    _buildDetailRow(
+                        context, AppStrings.description.tr(), member.description),
                   ],
                 ),
               ),

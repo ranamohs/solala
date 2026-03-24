@@ -33,6 +33,7 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
   late TextEditingController _birthPlaceController;
   late TextEditingController _phoneController;
   late TextEditingController _jobController;
+  late TextEditingController _descriptionController;
   String? _gender;
   File? _image;
   DateTime? _selectedDate;
@@ -50,6 +51,8 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
         TextEditingController(text: widget.member.birthPlace ?? '');
     _phoneController = TextEditingController(text: widget.member.phone ?? '');
     _jobController = TextEditingController(text: widget.member.job ?? '');
+    _descriptionController =
+        TextEditingController(text: widget.member.description ?? '');
     _gender = widget.member.gender;
     _isLive = widget.member.isLive == 1;
     if (widget.member.birthDate != null && widget.member.birthDate!.isNotEmpty) {
@@ -65,6 +68,7 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
     _birthPlaceController.dispose();
     _phoneController.dispose();
     _jobController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
@@ -366,6 +370,13 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
                             validator: (value) => null,
                           ),
                           const SizedBox(height: 16),
+                          _buildTextField(
+                            controller: _descriptionController,
+                            label: 'الوصف',
+                            icon: Icons.description_outlined,
+                            validator: (value) => null,
+                          ),
+                          const SizedBox(height: 16),
                           _buildIsLiveSwitch(),
                         ],
                       ),
@@ -423,6 +434,7 @@ class _UpdateMemberDialogState extends State<UpdateMemberDialog> {
                                 isLive: _isLive ? 1 : 0,
                                 phone: _phoneController.text,
                                 job: _jobController.text,
+                                description: _descriptionController.text,
                               );
                             }
                           },

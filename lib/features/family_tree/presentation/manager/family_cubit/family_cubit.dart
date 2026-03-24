@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
-import 'package:equatable/equatable.dart';
 import 'package:solala/core/errors/failure.dart';
 import 'package:solala/features/family_tree/data/models/family_member_details_model.dart';
 
@@ -97,6 +96,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     int? isLive,
     String? phone,
     String? job,
+    String? description,
   }) async {
     emit(AddFamilyMemberLoading());
 
@@ -111,6 +111,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       isLive: isLive,
       phone: phone,
       job: job,
+      description: description,
     );
 
     if (isClosed) return;
@@ -131,6 +132,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
     int? isLive,
     String? phone,
     String? job,
+    String? description,
   }) async {
     emit(UpdateFamilyMemberLoading());
 
@@ -145,6 +147,7 @@ class FamilyTreeCubit extends Cubit<FamilyTreeState> {
       isLive: isLive,
       phone: phone,
       job: job,
+      description: description,
     );
 
     if (isClosed) return;

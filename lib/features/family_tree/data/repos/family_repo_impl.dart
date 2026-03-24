@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:solala/core/constants/app_strings.dart';
 import 'package:solala/core/constants/end_points.dart';
 import 'package:solala/core/databases/api/dio_consumer.dart';
@@ -132,9 +131,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     }
   }
 
-  static FamilyTreeModel _parseFamilyTreeModel(Map<String, dynamic> json) {
-    return FamilyTreeModel.fromJson(json);
-  }
+
 
   @override
   Future<Either<Failure, BasicModel>> createFamily(
@@ -217,6 +214,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     int? isLive,
     String? phone,
     String? job,
+    String? description,
   }) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -238,6 +236,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
         isLive: isLive,
         phone: phone,
         job: job,
+        description: description,
       );
 
       final response = await dioConsumer.post(
@@ -283,6 +282,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
     int? isLive,
     String? phone,
     String? job,
+    String? description,
   }) async {
     final isConnected = await networkCubit.networkInfo.isConnected;
 
@@ -303,6 +303,7 @@ class FamilyTreeRepoImpl implements FamilyTreeRepo {
         isLive: isLive,
         phone: phone,
         job: job,
+        description: description,
       );
 
       final response = await dioConsumer.post(
