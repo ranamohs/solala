@@ -178,5 +178,6 @@ class AppStrings {
   static const String update = 'update';
   static const String recentNews = 'recentNews';
   static const String oldNews = 'oldNews';
+  static const String today = 'today';
 
 }

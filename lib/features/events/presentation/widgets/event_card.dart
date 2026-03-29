@@ -159,7 +159,9 @@ class _EventCardState extends State<EventCard> {
                                 ),
                                 if (remainingDays != null && remainingDays >= 0)
                                   Text(
-                                    "${AppStrings.after.tr()} $remainingDays ${remainingDays > 2 ? AppStrings.days.tr() : AppStrings.day.tr()}",
+                                    remainingDays == 0
+                                        ? AppStrings.today.tr()
+                                        : "${AppStrings.after.tr()} $remainingDays ${remainingDays > 2 ? AppStrings.days.tr() : AppStrings.day.tr()}",
                                     style: AppStyles.styleMedium16(context)
                                         .copyWith(
                                         color: AppColors.offRedColor,

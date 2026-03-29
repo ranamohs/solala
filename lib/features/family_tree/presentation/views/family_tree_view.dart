@@ -472,8 +472,7 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 context,
               ).copyWith(color: AppColors.greyColor),
             ),
-            if (accountType == 'provider' ||
-                (familyId != null && familyId.isNotEmpty))
+            if (accountType == 'provider')
               Padding(
                 padding: EdgeInsets.only(top: 24.h),
                 child: PrimaryButton(
@@ -619,45 +618,45 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                 ),
               ),
             const SizedBox(width: 5),
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => BlocProvider.value(
-                        value: context.read<FamilyTreeCubit>(),
-                        child: AddMemberDialog(
-                          parentId: member.id == 0 ? null : member.id,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Icon(
-                    Icons.add_circle,
-                    color: AppColors.greenColor,
-                    size: 20,
-                  ),
-                ),
-                if (member.id != 0) ...[
-                  SizedBox(width: 5.w),
+            if (accountType == 'provider')
+              Row(
+                children: [
                   GestureDetector(
                     onTap: () {
                       showDialog(
                         context: context,
                         builder: (_) => BlocProvider.value(
                           value: context.read<FamilyTreeCubit>(),
-                          child: UpdateMemberDialog(member: member),
+                          child: AddMemberDialog(
+                            parentId: member.id == 0 ? null : member.id,
+                          ),
                         ),
                       );
                     },
                     child: Icon(
-                      Icons.edit,
-                      color: AppColors.primaryColor,
+                      Icons.add_circle,
+                      color: AppColors.greenColor,
                       size: 20,
                     ),
                   ),
-                  if (accountType == 'provider') ...[
+                  if (member.id != 0) ...[
+                    SizedBox(width: 5.w),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) => BlocProvider.value(
+                            value: context.read<FamilyTreeCubit>(),
+                            child: UpdateMemberDialog(member: member),
+                          ),
+                        );
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        color: AppColors.primaryColor,
+                        size: 20,
+                      ),
+                    ),
                     SizedBox(width: 5.w),
                     GestureDetector(
                       onTap: () {
@@ -767,8 +766,9 @@ class _FamilyTreeViewState extends State<FamilyTreeView> {
                     ),
                   ],
                 ],
-              ],
-            ),
+
+
+              ),
           ],
         ),
       ],

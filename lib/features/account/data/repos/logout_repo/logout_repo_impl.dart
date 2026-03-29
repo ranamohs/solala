@@ -19,9 +19,9 @@ class LogoutRepoImpl implements LogoutRepo {
 
   LogoutRepoImpl(
       {required this.dioConsumer,
-      required this.secureStorageHelper,
-      required this.networkCubit,
-      required this.userDataManager});
+        required this.secureStorageHelper,
+        required this.networkCubit,
+        required this.userDataManager});
 
   @override
   Future<BasicModel> logout() async {
@@ -50,30 +50,34 @@ class LogoutRepoImpl implements LogoutRepo {
 
       if (response is Map<String, dynamic>) {
         final model = BasicModel.fromJson(response);
-        if (model.status == true) {
-          await secureStorageHelper.deleteToken();
-          userDataManager.clearAllUserData();
-          return model;
-        } else {
-          return model;
-        }
+
+        await secureStorageHelper.deleteToken();
+        await userDataManager.clearAllUserData();
+        return model;
       } else {
+
+        await secureStorageHelper.deleteToken();
+        await userDataManager.clearAllUserData();
         return BasicModel(
           payload: null,
-          status: false,
+          status: true,
           message: LocalizedText(
-            ar: AppStrings.serverConnectionFailed.tr(),
-            en: AppStrings.serverConnectionFailed.tr(),
+            ar: AppStrings.success.tr(),
+            en: AppStrings.success.tr(),
           ),
         );
       }
     } catch (e) {
+
+      await secureStorageHelper.deleteToken();
+      await userDataManager.clearAllUserData();
+
       return BasicModel(
         payload: null,
-        status: false,
+        status: true,
         message: LocalizedText(
-          ar: AppStrings.unexpectedError.tr(),
-          en: AppStrings.unexpectedError.tr(),
+          ar: AppStrings.success.tr(),
+          en: AppStrings.success.tr(),
         ),
       );
     }
